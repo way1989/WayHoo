@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_addcity"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/copy_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="12dip"
+        android:text="@string/all_rights_reserved"
+        android:textColor="@android:color/white"
+        android:textSize="11sp" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50.0dip"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="70.0dip"
+                android:layout_height="70.0dip"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10.0dip"
+                android:padding="6dip"
+                android:text="@string/app_name"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/version_name"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="bottom"
+                android:paddingBottom="6dip"
+                android:text="@string/app_version"
+                android:layout_gravity="center_horizontal"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/refresh_list_footer_progressbar"
+                android:layout_width="16dip"
+                android:layout_height="16dip"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dip"
+                android:indeterminate="true"
+                android:indeterminateBehavior="repeat"
+                android:indeterminateDrawable="@drawable/common_loading4" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

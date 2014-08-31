@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <FrameLayout
+        android:id="@+id/top_part"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerInParent="true" >
+
+        <ImageView
+            android:id="@+id/weather_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_na" />
+
+        <ImageView
+            android:id="@+id/weather_background_blurred"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_na_blur" />
+    </FrameLayout>
+
+    <com.way.ui.view.TouchDispatchView
+        android:id="@+id/touch_intercept_layer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="@dimen/weather_topbar_padding"
+        android:background="@android:color/transparent" >
+
+        <ListView
+            android:id="@+id/drag_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/margin_sm"
+            android:layout_marginRight="@dimen/margin_sm"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0dip"
+            android:drawSelectorOnTop="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:listSelector="@android:color/transparent"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+        <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+            android:id="@+id/pull_refresh_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:scrollbars="none" >
+
+            <View
+                android:layout_width="0dip"
+                android:layout_height="0dip" />
+        </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+    </com.way.ui.view.TouchDispatchView>
+
+</RelativeLayout>

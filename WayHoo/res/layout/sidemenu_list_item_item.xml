@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MenuDrawer.Widget.Title"
+    android:layout_width="match_parent"
+android:background="@drawable/sidebar_item_background_light_selector" 
+    android:layout_height="wrap_content" />
+
+<!-- 
+-->

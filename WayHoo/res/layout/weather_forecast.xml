@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto"
+    style="@style/WeatherModule"
+    android:orientation="vertical" >
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/forecast_label"
+        style="@style/Label"
+        android:layout_marginTop="@dimen/negative_margin_md"
+        android:text="预报"
+        weather:typeface="fonts/Roboto-Thin.ttf" />
+
+    <ImageView
+        android:id="@+id/divider"
+        style="@style/Line.Solid"
+        android:layout_below="@id/forecast_label" />
+
+    <include
+        android:id="@+id/day1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
+        layout="@layout/weather_forecast_item" />
+
+    <ImageView
+        android:id="@+id/divider3"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/day1"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/day2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider3"
+              android:layout_marginTop="@dimen/margin_xxs"
+          android:layout_marginBottom="@dimen/margin_xxs"
+        layout="@layout/weather_forecast_item" />
+
+    <ImageView
+        android:id="@+id/divider4"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/day2"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/day3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider4"
+              android:layout_marginTop="@dimen/margin_xxs"
+          android:layout_marginBottom="@dimen/margin_xxs"
+        layout="@layout/weather_forecast_item" />
+
+    <ImageView
+        android:id="@+id/divider5"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/day3"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/day4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider5"
+              android:layout_marginTop="@dimen/margin_xxs"
+          android:layout_marginBottom="@dimen/margin_xxs"
+        layout="@layout/weather_forecast_item" />
+
+    <ImageView
+        android:id="@+id/divider6"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/day4"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/day5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider6"
+              android:layout_marginTop="@dimen/margin_xxs"
+          android:layout_marginBottom="@dimen/margin_xxs"
+        layout="@layout/weather_forecast_item" />
+
+    <ImageView
+        android:id="@+id/divider7"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/day5"
+        android:scaleType="fitXY" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/forecast_foot"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider7"
+        android:layout_marginBottom="@dimen/negative_margin_sm"
+        android:layout_marginTop="@dimen/margin_sm"
+        android:drawableRight="@drawable/wunderground_logo"
+        android:gravity="right"
+        android:paddingTop="0.0dip"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_md"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+</RelativeLayout>

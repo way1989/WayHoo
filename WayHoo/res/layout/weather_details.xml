@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto"
+    style="@style/WeatherModule" >
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/details_label"
+        style="@style/Label"
+        android:layout_marginTop="@dimen/negative_margin_md"
+        android:text="详细信息"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/divider"
+        style="@style/Line.Solid"
+        android:layout_below="@id/details_label"
+        android:scaleType="fitXY" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/weather_name_tv"
+        style="@style/Label"
+        android:layout_height="42dip"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/divider"
+        android:gravity="center"
+        android:text="--"
+        android:paddingBottom="@dimen/padding_xs"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/feelslike_label"
+        style="@style/Label.Medium"
+        android:layout_height="42dip"
+        android:layout_alignBottom="@id/weather_name_tv"
+        android:layout_alignTop="@id/weather_name_tv"
+        android:layout_below="@id/divider"
+        android:layout_marginLeft="@dimen/margin_md"
+        android:layout_marginRight="5.0dip"
+        android:layout_toRightOf="@id/details_icon"
+        android:gravity="center"
+        android:text="天气"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/dotline1"
+        style="@style/Line.Dotted"
+        android:layout_alignLeft="@id/feelslike_label"
+        android:layout_below="@id/feelslike_label" />
+
+    <ImageView
+        android:id="@+id/details_icon"
+        android:layout_width="@dimen/details_icon_size"
+        android:layout_height="@dimen/details_icon_size"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/dotline1"
+        android:layout_below="@id/divider"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_xs"
+        android:layout_marginTop="0.0dip"
+        android:src="@drawable/ic_default_big" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/feelsTemp_tv"
+        style="@style/Label"
+        android:layout_height="42dip"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/dotline1"
+        android:layout_marginLeft="5.0dip"
+        android:gravity="center"
+         android:text="--°"
+        android:paddingBottom="@dimen/padding_xs"
+        android:paddingTop="@dimen/padding_xs"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/humidity_label"
+        style="@style/Label.Medium"
+        android:layout_height="42dip"
+        android:layout_alignBottom="@id/feelsTemp_tv"
+        android:layout_alignLeft="@id/feelslike_label"
+        android:layout_alignTop="@id/feelsTemp_tv"
+        android:layout_below="@id/dotline1"
+        android:layout_marginRight="5.0dip"
+        android:gravity="center"
+        android:text="体感温度"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/dotline2"
+        style="@style/Line.Dotted"
+        android:layout_alignLeft="@id/feelslike_label"
+        android:layout_below="@id/feelsTemp_tv" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/humidity_tv"
+        style="@style/Label"
+        android:layout_height="42dip"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/dotline2"
+        android:layout_marginLeft="5.0dip"
+        android:gravity="center"
+        android:text="--%"
+        android:paddingBottom="@dimen/padding_xs"
+        android:paddingTop="@dimen/padding_xs"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/visibility_label"
+        style="@style/Label.Medium"
+        android:layout_height="42dip"
+        android:layout_alignBottom="@id/humidity_tv"
+        android:layout_alignLeft="@id/feelslike_label"
+        android:layout_alignTop="@id/humidity_tv"
+        android:layout_below="@id/dotline2"
+        android:layout_marginRight="5.0dip"
+        android:gravity="center"
+        android:text="湿度"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/dotline3"
+        style="@style/Line.Dotted"
+        android:layout_alignLeft="@id/feelslike_label"
+        android:layout_below="@id/humidity_tv" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/wind_tv"
+        style="@style/Label"
+        android:layout_height="42dip"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/dotline3"
+        android:layout_marginLeft="5.0dip"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_xs"
+        android:paddingTop="@dimen/padding_xs"
+        android:text="--"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/uv_label"
+        style="@style/Label.Medium"
+        android:layout_height="42dip"
+        android:layout_alignBottom="@id/wind_tv"
+        android:layout_alignLeft="@id/feelslike_label"
+        android:layout_alignTop="@id/wind_tv"
+        android:layout_below="@id/dotline3"
+        android:layout_marginRight="5.0dip"
+        android:gravity="center"
+        android:text="风力"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+     <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/wind_desc"
+        style="@style/Label.Medium"
+        android:layout_height="42dip"
+        android:layout_width="wrap_content"
+        android:layout_alignBottom="@id/wind_tv"
+        android:layout_alignTop="@id/wind_tv"
+        android:layout_below="@id/dotline3"
+        android:layout_marginRight="5.0dip"
+        android:layout_toLeftOf="@id/wind_tv"
+        android:gravity="center"
+        android:text="--"
+        weather:typeface="fonts/Roboto-Light.ttf" /> 
+
+    <ImageView
+        android:id="@+id/dotline4"
+        style="@style/Line.Dotted"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/wind_tv" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/weather_details_foot_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/dotline4"
+        android:layout_marginBottom="@dimen/negative_margin_sm"
+        android:layout_marginTop="@dimen/margin_sm"
+        android:gravity="center_vertical|right"
+        android:paddingTop="0.0dip"
+        android:text="中国天气网"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_md"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+</RelativeLayout>

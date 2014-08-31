@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/city_manager_bg"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_addcity"
+    android:descendantFocusability="blocksDescendants" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/top_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/city_manager_actionbar" />
+
+        <com.way.ui.view.DragSortGridView
+            android:id="@+id/my_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="5.0pt"
+            android:layout_marginLeft="5.0pt"
+            android:layout_marginRight="5.0pt"
+            android:layout_marginTop="5.0pt"
+            android:cacheColorHint="#00000000"
+            android:columnWidth="104.0dip"
+            android:fadingEdge="none"
+            android:fadingEdgeLength="0.0dip"
+            android:horizontalSpacing="5.0dip"
+            android:listSelector="#00000000"
+            android:numColumns="3"
+            android:paddingBottom="5.0sp"
+            android:paddingTop="5.0sp"
+            android:verticalSpacing="5.0dip" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tip_city"
+        style="@style/Label.Shadow.Medium"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="14.0dip"
+        android:visibility="gone"
+        android:text="长按可进入编辑模式" />
+
+</RelativeLayout>

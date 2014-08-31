@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/city_add_bg"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="top|center"
+    android:background="@drawable/bg_addcity"
+    android:gravity="center" >
+
+    <include
+        android:id="@id/top_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/city_query_actionbar" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/top_bar"
+        android:layout_marginTop="@dimen/abs__action_bar_default_height"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/queryCitySearch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:layout_marginTop="1.0dip"
+            android:addStatesFromChildren="true" >
+
+            <RelativeLayout
+                android:id="@+id/queryCitySearchlayout"
+                android:layout_width="fill_parent"
+                android:layout_height="38.0dip" >
+
+                <EditText
+                    android:id="@+id/queryCityText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="38.0dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/bg_search1"
+                    android:completionThreshold="1"
+                    android:dropDownHorizontalOffset="34.0dip"
+                    android:dropDownVerticalOffset="0.0dip"
+                    android:dropDownWidth="240.0dip"
+                    android:gravity="left|center"
+                    android:hint="@string/enter_city_name"
+                    android:paddingRight="35.0dip"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#ffaeb8c2"
+                    android:textSize="15.0sp" />
+
+                <ImageButton
+                    android:id="@+id/queryCityExit"
+                    android:layout_width="18.0dip"
+                    android:layout_height="18.0dip"
+                    android:layout_alignLeft="@id/queryCityText"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="2.0dip"
+                    android:layout_marginLeft="-30.0dip"
+                    android:layout_marginRight="8.0dip"
+                    android:layout_toRightOf="@id/queryCityText"
+                    android:background="@drawable/city_query_delete"
+                    android:gravity="center_vertical"
+                    android:visibility="invisible" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/location"
+                style="@style/Label.Shadow.Medium"
+                android:layout_width="80.0dip"
+                android:layout_height="20.0dip"
+                android:layout_below="@id/queryCitySearchlayout"
+                android:layout_marginLeft="8.0dip"
+                android:layout_marginRight="8.0dip"
+                android:layout_marginTop="16.0dip"
+                android:drawableLeft="@drawable/current_loc_active_26x26"
+                android:gravity="bottom"
+                android:text="当前位置:"
+                android:textSize="14.0sp" />
+
+            <TextView
+                android:id="@+id/location_text"
+                style="@style/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/queryCitySearchlayout"
+                android:layout_marginLeft="8.0dip"
+                android:layout_marginRight="6.0dip"
+                android:layout_marginTop="14.0dip"
+                android:layout_toLeftOf="@id/location"
+                android:layout_toRightOf="@id/location"
+                android:background="@drawable/item_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="88.0dip"
+                android:paddingRight="8.0dip"
+                android:singleLine="true"
+                android:text="点击开始定位"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/cityList"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="14.0dip"
+            android:layout_marginRight="14.0dip"
+            android:layout_marginTop="0.0dip"
+            android:cacheColorHint="@null"
+            android:divider="@drawable/dotted_line_624"
+            android:dividerHeight="1.0dip"
+            android:footerDividersEnabled="true"
+            android:listSelector="@drawable/listview_background"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/noCityText"
+            style="@style/Label.Shadow"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="12.0dip"
+            android:layout_marginRight="10.0dip"
+            android:gravity="top|center"
+            android:singleLine="true"
+            android:text="未找到该城市"
+            android:textColor="#ffffffff"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/hotCityText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8.0dip"
+            android:gravity="left|center"
+            android:paddingLeft="14.0dip"
+            android:paddingRight="10.0dip"
+            android:paddingTop="18.0dip"
+            android:text="热门城市"
+            android:textColor="#ffffffff"
+            android:textSize="14.0sp" />
+
+        <View
+            android:id="@+id/queryCityDivider"
+            android:layout_width="fill_parent"
+            android:layout_height="1.0dip"
+            android:layout_marginBottom="10.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:layout_marginTop="6.0dip"
+            android:background="@drawable/line_parting" />
+
+        <GridView
+            android:id="@+id/hotCityGrid"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right"
+            android:layout_marginLeft="1.0dip"
+            android:layout_marginRight="1.0dip"
+            android:drawSelectorOnTop="false"
+            android:fadingEdge="none"
+            android:gravity="center"
+            android:horizontalSpacing="-10.0dip"
+            android:listSelector="@drawable/item_background"
+            android:numColumns="4"
+            android:paddingBottom="5.0dip"
+            android:paddingLeft="0.0dip"
+            android:paddingRight="0.0dip"
+            android:paddingTop="2.0dip"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="insideInset"
+            android:verticalSpacing="20.0dip" />
+    </LinearLayout>
+
+</RelativeLayout>

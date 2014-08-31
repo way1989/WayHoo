@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/negative_margin_sm"
+    android:paddingTop="@dimen/margin_sm"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/index_icon_iv"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:layout_marginLeft="@dimen/margin_xs"
+        android:layout_marginTop="12.0dip"
+        android:src="@drawable/na" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/index_title_tv"
+        style="@style/Label.Shadow.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="36dip"
+        android:textSize="14sp"
+        android:layout_marginLeft="@dimen/margin_md"
+        android:layout_marginRight="5.0dip"
+        android:layout_toRightOf="@id/index_icon_iv"
+        android:gravity="center|left"
+        android:paddingBottom="@dimen/padding_xxs"
+        android:paddingTop="@dimen/padding_xxs"
+        android:text="----"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/dotline1"
+        style="@style/Line.Dotted"
+        android:layout_alignLeft="@id/index_title_tv"
+        android:layout_below="@id/index_title_tv" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/index_desc_tv"
+        style="@style/Label.Shadow.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="36dip"
+        android:layout_below="@id/dotline1"
+        android:layout_marginLeft="@dimen/margin_md"
+        android:layout_marginRight="5.0dip"
+        android:layout_toRightOf="@id/index_icon_iv"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/padding_xxs"
+        android:paddingTop="@dimen/padding_xxs"
+        android:text="--"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/dotline2"
+        style="@style/Line.Dotted"
+        android:layout_below="@id/index_desc_tv" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/index_detail_tv"
+        style="@style/Label.Shadow.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="36.0dip"
+        android:layout_below="@id/dotline2"
+        android:layout_marginLeft="@dimen/margin_xs"
+        android:layout_marginRight="@dimen/margin_xs"
+        android:gravity="center_vertical"
+        android:singleLine="false"
+        android:maxLines="2"
+        android:paddingBottom="@dimen/padding_xxs"
+        android:paddingTop="@dimen/padding_xxs"
+        android:text="--"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+</RelativeLayout>

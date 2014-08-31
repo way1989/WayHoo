@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto"
+    style="@style/WeatherModule" >
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/details_label"
+        style="@style/Label"
+        android:layout_marginTop="@dimen/negative_margin_md"
+        android:text="空气质量"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/divider"
+        style="@style/Line.Solid"
+        android:layout_below="@id/details_label"
+        android:scaleType="fitXY" />
+
+    <ImageView
+        android:id="@+id/aqi_icon"
+        android:layout_width="@dimen/details_icon_size"
+        android:layout_height="@dimen/details_icon_size"
+        android:layout_below="@id/divider"
+        android:layout_marginLeft="@dimen/margin_xs"
+        android:layout_marginTop="25.0dip"
+        android:src="@drawable/na" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/aqi_level"
+        style="@style/Label"
+        android:layout_width="match_parent"
+        android:layout_height="60.0dip"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/divider"
+        android:layout_marginLeft="@dimen/margin_md"
+        android:layout_marginRight="5.0dip"
+        android:layout_toRightOf="@id/aqi_icon"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_xs"
+        android:paddingTop="@dimen/padding_xs"
+        android:text="----"
+        android:textSize="30sp"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/dotline1"
+        style="@style/Line.Dotted"
+        android:layout_alignLeft="@id/aqi_level"
+        android:layout_below="@id/aqi_level" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/aqi"
+        style="@style/Label"
+        android:layout_width="wrap_content"
+        android:layout_height="42dip"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/dotline1"
+        android:layout_marginLeft="5.0dip"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_xs"
+        android:paddingTop="@dimen/padding_xs"
+        android:text="--"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/aqi_label"
+        style="@style/Label.Medium"
+        android:layout_height="42dip"
+        android:layout_alignLeft="@id/aqi_level"
+        android:layout_below="@id/dotline1"
+        android:layout_marginRight="5.0dip"
+        android:gravity="center"
+        android:text="AQI"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/dotline2"
+        style="@style/Line.Dotted"
+        android:layout_alignLeft="@id/aqi_label"
+        android:layout_below="@id/aqi_label" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/pm25"
+        style="@style/Label"
+        android:layout_width="wrap_content"
+        android:layout_height="42dip"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/dotline2"
+        android:layout_marginLeft="5.0dip"
+        android:gravity="center"
+        android:paddingBottom="@dimen/padding_xs"
+        android:paddingTop="@dimen/padding_xs"
+        android:text="--"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/pm25_label"
+        style="@style/Label.Medium"
+        android:layout_height="42dip"
+        android:layout_alignLeft="@id/aqi_level"
+        android:layout_below="@id/dotline2"
+        android:layout_marginRight="5.0dip"
+        android:gravity="center"
+        android:text="PM2.5"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/dotline3"
+        style="@style/Line.Dotted"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/pm25_label" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/aqi_desc"
+        style="@style/Label.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dotline3"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginRight="5.0dip"
+        android:maxLines="2"
+        android:singleLine="false"
+         android:gravity="center_vertical"
+        android:paddingBottom="@dimen/padding_xs"
+        android:paddingTop="@dimen/padding_xs"
+        android:text="--"
+        android:textSize="15sp"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/dotline4"
+        style="@style/Line.Dotted"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/aqi_desc" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/weather_aqi_foot_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/dotline4"
+        android:layout_marginBottom="@dimen/negative_margin_sm"
+        android:layout_marginTop="@dimen/margin_sm"
+        android:gravity="center_vertical|right"
+        android:paddingTop="0.0dip"
+        android:text="中国环境检测总站"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_md"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+</RelativeLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="city_manager_tiny_height">122.0dip</dimen>
+    
+    <dimen name="weather_topbar_padding">48.0dip</dimen>
+    <dimen name="weather_weather_info_flippertext_textsize">28.0sp</dimen>
+    <dimen name="weather_temperature_desc">14.0sp</dimen>
+    <dimen name="weather_local_time">11.0sp</dimen>
+    <dimen name="weather_last_update_time_stamp_textsize">11.0sp</dimen>
+    <dimen name="flickr_icon_padding_bottom">0.0dip</dimen>
+    <dimen name="temp_high_icon_padding_bottom">0.0dip</dimen>
+    <dimen name="temp_icon_padding">14.0dip</dimen>
+    <dimen name="high_low_text_margin_bottom">-5.0dip</dimen>
+    <dimen name="current_condition_icon_margin_bottom">2.0dip</dimen>
+    <dimen name="extended_forecast_small_top_name">14.0sp</dimen>
+    <dimen name="extended_forecast_small_top_value">24.0sp</dimen>
+    <dimen name="extended_forecast_small_top_extra">11.0sp</dimen>
+    <dimen name="padding_xxs">4.0dip</dimen>
+    <dimen name="padding_xs">6.0dip</dimen>
+    <dimen name="padding_sm">10.0dip</dimen>
+    <dimen name="padding_md">16.0dip</dimen>
+    <dimen name="padding_lg">22.0dip</dimen>
+    <dimen name="padding_lg2">20.0dip</dimen>
+    <dimen name="margin_xxs">4.0dip</dimen>
+    <dimen name="margin_xs">6.0dip</dimen>
+    <dimen name="margin_sm">8.0dip</dimen>
+    <dimen name="margin_md">16.0dip</dimen>
+    <dimen name="margin_lg">22.0dip</dimen>
+    <dimen name="negative_margin_lg">-16.0dip</dimen>
+    <dimen name="negative_margin_sm">-10.0dip</dimen>
+    <dimen name="negative_margin_md">-4.0dip</dimen>
+    <dimen name="negative_margin_xs">-3.0dip</dimen>
+    <dimen name="text_sm">7.0sp</dimen>
+    <dimen name="text_md">11.0sp</dimen>
+    <dimen name="text_lg">17.0sp</dimen>
+    <dimen name="text_xl">125.0sp</dimen>
+    <dimen name="temp_high_icon_margin_left">23.0dip</dimen>
+
+</resources>

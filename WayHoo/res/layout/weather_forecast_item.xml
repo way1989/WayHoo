@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/daily_forecast_item_height"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_xs" >
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/forecast_week_tv"
+        style="@style/Label.Shadow"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center_vertical"
+        android:text="---"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <ImageView
+        android:id="@+id/forecast_icon"
+        android:layout_width="0dip"
+        android:layout_height="32.0dip"
+        android:layout_weight="1"
+        android:src="@drawable/ic_default_big" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/forecast_low_temp_tv"
+        style="@style/Label.Shadow"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center|right"
+        android:textColor="#00aacc"
+        android:text="--°"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/forecast_high_temp_tv"
+        style="@style/Label.Shadow"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center|right"
+        android:text="--°"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+</LinearLayout>

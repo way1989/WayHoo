@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abs__action_bar_default_height"
+        android:background="@android:color/transparent" >
+
+        <ImageView
+            android:id="@+id/sidebarButton"
+            android:layout_width="48dip"
+            android:layout_height="48dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="8dip"
+            android:minHeight="@dimen/topbar_icon_size"
+            android:minWidth="@dimen/topbar_icon_size"
+            android:padding="12dip"
+            android:src="@drawable/topbar_icon_side_selector" />
+            android:scaleType="centerCrop"
+
+        <ImageView
+            android:id="@+id/shareButton"
+            android:layout_width="48dip"
+            android:layout_height="48dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="8dip"
+            android:minHeight="@dimen/topbar_icon_size"
+            android:minWidth="@dimen/topbar_icon_size"
+            android:padding="12dip"
+            android:src="@drawable/topbar_icon_share_selector" />
+            android:scaleType="centerCrop"
+
+        <!--
+             <com.viewpagerindicator.TitlePageIndicator
+            android:id="@+id/titles"
+            style="@style/Label.Shadow"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@id/addLocationButton"
+            android:layout_toRightOf="@id/sidebarButton"
+            android:background="@color/transparent"
+            android:textColor="@android:color/transparent"
+            weather:footerIndicatorStyle="none"
+            weather:footerLineHeight="0dp"
+            weather:selectedColor="@android:color/white"
+            weather:titlePadding="0dp" />
+        -->
+
+        <com.way.ui.view.WeatherTypefacedTextView
+            android:id="@+id/location_city_textview"
+            style="@style/Label.Shadow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/main_city_name_bg"
+            android:gravity="center"
+            android:text="--"
+            weather:typeface="fonts/Roboto-Light.ttf" />
+
+        <com.viewpagerindicator.CirclePageIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/location_city_textview"
+            android:layout_centerHorizontal="true"
+            android:padding="2dip"
+            weather:radius="2.5dp"
+            weather:strokeWidth="0.8dp" />
+
+        <ImageView
+            android:id="@+id/curr_loc_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/location_city_textview"
+            android:layout_alignTop="@id/location_city_textview"
+            android:layout_marginTop="-2.0dip"
+            android:layout_toLeftOf="@id/location_city_textview"
+            android:layout_toStartOf="@id/location_city_textview"
+            android:paddingRight="3.0dip"
+            android:paddingTop="3.0dip"
+            android:src="@drawable/current_loc_active_26x26"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</merge>

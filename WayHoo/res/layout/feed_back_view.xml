@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_addcity"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@id/top_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/city_query_actionbar" />
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10.0dip"
+        android:layout_marginTop="@dimen/abs__action_bar_default_height"
+        android:layout_weight="1"
+        android:background="@drawable/settings_bg_city_item_up"
+        android:fillViewport="true" >
+
+        <EditText
+            android:id="@+id/fee_back_edit"
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:background="@null"
+            android:gravity="left|top"
+            android:hint="亲，给点建议吧！么么哒！"
+            android:inputType="textMultiLine"
+            android:paddingBottom="4.0dip"
+            android:paddingLeft="4.0dip"
+            android:paddingRight="4.0dip"
+            android:paddingTop="4.0dip"
+            android:textSize="16.0sp" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/feed_back_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:background="@drawable/cityselector_locate_btn_bg"
+        android:text="提  交" />
+
+</LinearLayout>

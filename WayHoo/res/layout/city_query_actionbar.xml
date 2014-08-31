@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abs__action_bar_default_height"
+        android:background="@android:color/transparent" >
+
+       <ImageView
+            android:id="@+id/back_image"
+            android:layout_width="48dip"
+            android:layout_height="48dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="8dip"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="@dimen/topbar_icon_size"
+            android:minWidth="@dimen/topbar_icon_size"
+            android:padding="12dip"
+            android:src="@drawable/setting_top_back" />
+
+        <TextView
+            android:id="@+id/city_title"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            style="@style/Label.Shadow"
+            android:text="选择城市"
+            android:textSize="20.0sp" />
+
+    </RelativeLayout>
+
+</merge>

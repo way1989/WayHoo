@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <FrameLayout
+        android:id="@+id/fl_inner"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:paddingBottom="@dimen/header_footer_top_bottom_padding"
+        android:paddingLeft="@dimen/header_footer_left_right_padding"
+        android:paddingRight="@dimen/header_footer_left_right_padding"
+        android:paddingTop="@dimen/header_footer_top_bottom_padding" >
+
+        <ImageView
+            android:id="@+id/pull_to_refresh_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+
+        <com.handmark.pulltorefresh.library.internal.RefreshImageView
+            android:id="@+id/pull_to_refresh_image_progress"
+            android:layout_width="42dip"
+            android:layout_height="42dip"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+
+        <ProgressBar
+            android:id="@+id/pull_to_refresh_progress"
+            style="@style/Circle_Progress"
+            android:layout_width="42dip"
+            android:layout_height="42dip"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</merge>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dip"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="20dip"
+    android:background="#80000000"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/sadcloud"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dip"
+        android:src="@drawable/sadcloud" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/sadcloud"
+        android:layout_alignRight="@id/sadcloud"
+        android:layout_marginBottom="10dip"
+        android:layout_marginRight="10dip"
+        android:src="@drawable/tear" />
+
+    <TextView
+        android:id="@+id/sad_title"
+        style="@style/Label.Shadow"
+        android:layout_marginLeft="20dip"
+        android:layout_marginTop="25dip"
+        android:layout_toRightOf="@id/sadcloud"
+        android:text="抱歉" />
+
+    <TextView
+        style="@style/Label.Shadow.Medium"
+        android:layout_below="@id/sad_title"
+        android:layout_marginLeft="20dip"
+        android:layout_toRightOf="@id/sadcloud"
+        android:text="天气信息不可用" />
+
+</RelativeLayout>

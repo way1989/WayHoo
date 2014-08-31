@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="main_info_background_normal" type="drawable">#ffd9e5f0</item>
+    <item name="list_background_press" type="drawable">#ffcfdae3</item>
+    <item name="list_background_normal" type="drawable">#ffd9e5f0</item>
+    <item name="click_unselect_background" type="drawable">#00000000</item>
+    <item name="click_select_background" type="drawable">#ff0271ab</item>
+    <item name="transparent_background" type="drawable">#00000000</item>
+    <item name="screen_background_black" type="drawable">#ff000000</item>
+    <item name="translucent_background" type="drawable">#ce000000</item>
+    <item name="widget_translucent_background" type="drawable">#be01101c</item>
+    <item name="btn_background_on" type="drawable">#ffd9e5f0</item>
+    <item name="btn_background" type="drawable">#ff7fcaff</item>
+    <item name="problem_background_normal" type="drawable">#ffffffff</item>
+    <item name="problem_background_pressed" type="drawable">#ff2ab9ff</item>
+    <item name="review_content_bg_color" type="drawable">#ffe1ecf3</item>
+    <item name="netdisk_actionbar_btn_select_background" type="drawable">#ff0271ab</item>
+    <item name="transparent" type="drawable">#00000000</item>
+    <item name="home_setting_background" type="drawable">#48ffffff</item>
+    <item name="main_setting_background" type="drawable">#ff323538</item>
+    <item name="setting_item_selected" type="drawable">#33000000</item>
+    
+    
+    <item name="sidemenu_category" type="drawable">#90000000</item>
+    <item name="sidemenu_item_normal" type="drawable">#30000000</item>
+
+</resources>

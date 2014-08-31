@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="44.0dip"
+    android:orientation="horizontal"
+    android:paddingLeft="30.0sp" >
+
+    <TextView
+        android:id="@+id/citylst_name"
+        android:layout_width="wrap_content"
+        android:layout_height="40.0dip"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="4.0dip"
+        android:layout_marginTop="4.0dip"
+        android:gravity="center_vertical"
+        android:paddingLeft="0.0sp"
+        android:paddingRight="0.0sp"
+        android:text="城市"
+        android:textColor="@android:color/white"
+        android:textSize="18.0sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40.0dip"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:paddingLeft="4.0sp"
+        android:paddingRight="4.0sp"
+        android:text="-"
+        android:textColor="#ffaeb8c2"
+        android:textSize="18.0sp" />
+
+    <TextView
+        android:id="@+id/citylst_city"
+        android:layout_width="wrap_content"
+        android:layout_height="40.0dip"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="4.0dip"
+        android:layout_marginTop="4.0dip"
+        android:gravity="center_vertical"
+        android:paddingLeft="4.0sp"
+        android:paddingRight="4.0sp"
+        android:singleLine="true"
+        android:text="市"
+        android:textColor="#ffaeb8c2"
+        android:textSize="16.0sp" />
+
+    <TextView
+        android:id="@+id/citylst_separator"
+        android:layout_width="wrap_content"
+        android:layout_height="40.0dip"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:paddingLeft="4.0sp"
+        android:paddingRight="4.0sp"
+        android:text="-"
+        android:textColor="#ffaeb8c2"
+        android:textSize="18.0sp" />
+
+    <TextView
+        android:id="@+id/citylst_province"
+        android:layout_width="wrap_content"
+        android:layout_height="40.0dip"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="4.0dip"
+        android:layout_marginTop="4.0dip"
+        android:gravity="center_vertical"
+        android:paddingLeft="4.0sp"
+        android:paddingRight="4.0sp"
+        android:singleLine="true"
+        android:text="省"
+        android:textColor="#ffaeb8c2"
+        android:textSize="16.0sp" />
+
+</LinearLayout>

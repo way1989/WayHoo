@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/city_manager_tiny_height"
+        android:layout_marginBottom="5.0dip"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginRight="5.0dip"
+        android:layout_marginTop="12.0dip"
+        android:background="@drawable/item_prs"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/city_manager_name_tv"
+            style="@style/Label.Shadow"
+            android:layout_height="25.0dip"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6.0dip"
+            android:drawableLeft="@drawable/current_loc_active_26x26"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="深圳"
+            android:textColor="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/city_manager_icon_iv"
+            android:layout_width="56.0dip"
+            android:layout_height="56.0dip"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="8.0dip"
+            android:layout_marginTop="12.0dip"
+            android:src="@drawable/xy_weather_ic_default"
+            android:contentDescription="weather_default_weather_desc" />
+
+        <ProgressBar
+            android:id="@+id/city_manager_progressbar"
+            android:layout_width="56.0dip"
+            android:layout_height="56.0dip"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="8.0dip"
+            android:layout_marginTop="12.0dip"
+            android:visibility="gone" />
+
+        <com.way.ui.view.WeatherTypefacedTextView
+            android:id="@+id/city_manager_temp_tv"
+            style="@style/Label"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10.0dip"
+            android:text="23~33°"
+            android:textColor="@android:color/white"
+            weather:typeface="fonts/Roboto-Light.ttf" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/city_delete_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="0.0dip"
+        android:layout_marginTop="0.0dip"
+        android:src="@drawable/city_edit_prs"
+        android:visibility="gone" />
+
+</RelativeLayout>

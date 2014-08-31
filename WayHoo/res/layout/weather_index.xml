@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:weather="http://schemas.android.com/apk/res-auto"
+    style="@style/WeatherModule"
+    android:layout_marginBottom="10.0dip"
+    android:orientation="vertical" >
+
+    <com.way.ui.view.WeatherTypefacedTextView
+         android:id="@+id/index_label"
+        style="@style/Label"
+        android:layout_marginTop="@dimen/negative_margin_md"
+        android:text="指数"
+        weather:typeface="fonts/Roboto-Thin.ttf" />
+
+    <ImageView
+        android:id="@+id/divider"
+        style="@style/Line.Solid"
+        android:layout_below="@id/index_label" />
+
+    <include
+        android:id="@+id/wind_index"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
+        layout="@layout/weather_index_item" />
+
+    <ImageView
+        android:id="@+id/divider3"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/wind_index"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/ua_index"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider3"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
+        layout="@layout/weather_index_item" />
+
+    <ImageView
+        android:id="@+id/divider4"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/ua_index"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/clothe_index"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider4"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
+        layout="@layout/weather_index_item" />
+
+    <ImageView
+        android:id="@+id/divider5"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/clothe_index"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/comfort_index"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider5"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
+        layout="@layout/weather_index_item" />
+
+    <ImageView
+        android:id="@+id/divider6"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/comfort_index"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/car_index"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider6"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
+        layout="@layout/weather_index_item" />
+
+    <ImageView
+        android:id="@+id/divider7"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/car_index"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/insolation_index"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider7"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
+        layout="@layout/weather_index_item" />
+
+    <ImageView
+        android:id="@+id/divider8"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/insolation_index"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/sport_index"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider8"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
+        layout="@layout/weather_index_item" />
+
+    <ImageView
+        android:id="@+id/travel_divider"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/sport_index"
+        android:scaleType="fitXY" />
+
+    <include
+        android:id="@+id/travel_index"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/travel_divider"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
+        layout="@layout/weather_index_item" />
+
+    <ImageView
+        android:id="@+id/divider10"
+        style="@style/Line.Dotted"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/travel_index"
+        android:scaleType="fitXY" />
+
+    <com.way.ui.view.WeatherTypefacedTextView
+        android:id="@+id/forecast_foot"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider10"
+        android:layout_marginBottom="@dimen/negative_margin_sm"
+        android:layout_marginTop="@dimen/margin_sm"
+        android:drawableRight="@drawable/wunderground_logo"
+        android:gravity="right"
+        android:paddingTop="0.0dip"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_md"
+        weather:typeface="fonts/Roboto-Light.ttf" />
+
+</RelativeLayout>

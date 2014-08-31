@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/selected"
+    android:oneshot="false" >
+
+    <item
+        android:drawable="@drawable/refresh_27x27_1"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_2"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_3"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_4"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_5"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_6"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_7"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_8"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_9"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_10"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_11"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_12"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_13"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_14"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_15"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_16"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_17"
+        android:duration="25"/>
+    <item
+        android:drawable="@drawable/refresh_27x27_18"
+        android:duration="25"/>
+
+</animation-list>

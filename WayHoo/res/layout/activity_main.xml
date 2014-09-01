@@ -5,12 +5,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_addcity" >
 
-    <com.way.ui.view.WeatherTypefacedTextView
+    <Button
+        android:id="@+id/add_city_btn"
         style="@style/Label.Shadow"
         android:layout_gravity="center"
+        android:background="@drawable/cityselector_locate_btn_bg"
         android:gravity="center"
-        android:text="亲！您还没设置任何城市哦！"
-        weather:typeface="fonts/Roboto-Light.ttf" />
+        android:text="添加城市"
+        android:visibility="gone" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main_viewpager"
@@ -22,7 +24,13 @@
     <include
         android:id="@+id/splash_view"
         layout="@layout/splash" />
-	<!-- 
+
+    <View
+        android:id="@+id/show_last_case"
+        android:layout_width="0dip"
+        android:layout_height="0dip"
+        android:layout_gravity="center|bottom" />
+    <!--
     <ImageView
         android:id="@+id/gradient_top"
         android:layout_width="match_parent"
@@ -30,5 +38,6 @@
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         android:src="@drawable/bg_shade" />
- -->
+    -->
+
 </FrameLayout>

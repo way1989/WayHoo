@@ -4,8 +4,8 @@
 本应用是以变形金刚作为主题元素的实用型Android天气软件，界面高仿雅虎天气，数据来自中国天气网！
 
 ##下载apk:
-		* [腾讯应用市场](http://sj.qq.com/myapp/detail.htm?apkName=com.way.yahoo)
-		* [百度应用市场](http://sj.qq.com/myapp/detail.htm?apkName=com.way.yahoo)
+		* [腾讯应用市场](http://sj.qq.com/myapp/detail.htm?apkName=com.way.yahoo "应用宝")
+		* [百度应用市场](http://sj.qq.com/myapp/detail.htm?apkName=com.way.yahoo "百度手机助手")
 
 # **威震天气 Android 客户端项目简析** #
 

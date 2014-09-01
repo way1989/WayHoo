@@ -1,7 +1,13 @@
-WayHoo
+威震天气
 ======
 
 本应用是以变形金刚作为主题元素的实用型Android天气软件，界面高仿雅虎天气，数据来自中国天气网！
+
+##下载apk
+
+开放市场:
+	* [腾讯应用市场](http://sj.qq.com/myapp/detail.htm?apkName=com.way.yahoo "应用宝")
+	* [百度应用市场](http://sj.qq.com/myapp/detail.htm?apkName=com.way.yahoo "百度手机助手")
 
 # **威震天气 Android 客户端项目简析** #
 
@@ -24,15 +30,15 @@ way:
 
 ## 测试截图
 
-![Screenshot 1](https://raw.githubusercontent.com/way1989/WayHoo/master/screenshots/1.png "Screenshot 1")
+![Screenshot 1](http://git.oschina.net/way/WayHoo/raw/master/screenshots/1.png "Screenshot 1")
 
-![Screenshot 2](https://raw.githubusercontent.com/way1989/WayHoo/master/screenshots/2.png "Screenshot 2")
+![Screenshot 2](http://git.oschina.net/way/WayHoo/raw/master/screenshots/2.png "Screenshot 2")
 
-![Screenshot 3](https://raw.githubusercontent.com/way1989/WayHoo/master/screenshots/3.png "Screenshot 3")
+![Screenshot 3](http://git.oschina.net/way/WayHoo/raw/master/screenshots/3.png "Screenshot 3")
 
-![Screenshot 4](https://raw.githubusercontent.com/way1989/WayHoo/master/screenshots/4.png "Screenshot 4")
+![Screenshot 4](http://git.oschina.net/way/WayHoo/raw/master/screenshots/4.png "Screenshot 4")
 
-![Screenshot 5](https://raw.githubusercontent.com/way1989/WayHoo/master/screenshots/5.png "Screenshot 5")
+![Screenshot 5](http://git.oschina.net/way/WayHoo/raw/master/screenshots/5.png "Screenshot 5")
 
-![Screenshot 6](https://raw.githubusercontent.com/way1989/WayHoo/master/screenshots/6.png "Screenshot 6")
+![Screenshot 6](http://git.oschina.net/way/WayHoo/raw/master/screenshots/6.png "Screenshot 6")
 

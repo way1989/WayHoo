@@ -1,14 +1,15 @@
 package com.way.fragment;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.way.adapter.WeatherListAdapter;
 import com.way.beans.City;
-import com.way.common.util.L;
 import com.way.common.util.SystemUtils;
 import com.way.common.util.TimeUtils;
 import com.way.common.util.WeatherIconUtils;
@@ -44,7 +44,8 @@ import com.way.weather.plugin.spider.WeatherSpider;
 import com.way.yahoo.App;
 import com.way.yahoo.R;
 
-@SuppressLint({ "NewApi", "ValidFragment" })
+@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+@SuppressLint("ValidFragment")
 public class WeatherFragment extends Fragment implements OnRefreshListener,
 		OnPullEventListener {
 	public static final String ARG_CITY = "city";
@@ -121,7 +122,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 				.findViewById(R.id.weather_background);
 		mBlurredImageView = (ImageView) view
 				.findViewById(R.id.weather_background_blurred);
-		mBlurredImageView.setImageAlpha((int) (0 * 255));// 设置默认模糊背景为透明
+		mBlurredImageView.getDrawable().setAlpha(0 * 255);// 设置默认模糊背景为透明
 
 		mPullRefreshScrollView = (PullToRefreshScrollView) view
 				.findViewById(R.id.pull_refresh_scrollview);
@@ -246,7 +247,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		// + ",  mHeaderHeight = " + mHeaderHeight + ", ratio = " + ratio);
 		int newAlpha = Math.round(ratio * 255);
 		// Apply on the ImageView if needed
-		mBlurredImageView.setImageAlpha(newAlpha);
+		mBlurredImageView.getDrawable().setAlpha(newAlpha);
 
 		// 控制背景滑动距离
 		int dampedScroll = Math.round(scrollPosition * 0.125f);
@@ -313,12 +314,11 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 						Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		RealTime realTime = weatherInfo.getRealTime();
 		AQI aqi = weatherInfo.getAqi();
 		Forecast forecast = weatherInfo.getForecast();
 		Index index = weatherInfo.getIndex();
-
 
 		int type = realTime.getAnimation_type();
 		if (isFroce) {

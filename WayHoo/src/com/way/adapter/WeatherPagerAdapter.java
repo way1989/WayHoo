@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Fragment;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
 import com.way.beans.City;
 import com.way.fragment.WeatherFragment;
+import com.way.yahoo.BaseActivity;
 
 @SuppressLint("NewApi")
 public class WeatherPagerAdapter extends FragmentStatePagerAdapter {
+	private final BaseActivity mActivity;
 	private final ArrayList<ItemInfo> mItemInfos;
 
 	static final class ItemInfo {
@@ -25,8 +26,9 @@ public class WeatherPagerAdapter extends FragmentStatePagerAdapter {
 		}
 	}
 
-	public WeatherPagerAdapter(Activity activity) {
+	public WeatherPagerAdapter(BaseActivity activity) {
 		super(activity.getFragmentManager());
+		this.mActivity = activity;
 		mItemInfos = new ArrayList<ItemInfo>();
 	}
 
@@ -55,7 +57,7 @@ public class WeatherPagerAdapter extends FragmentStatePagerAdapter {
 	public Fragment getItem(int position) {
 		ItemInfo info = mItemInfos.get(position);
 		if (info.fragment == null) {
-			info.fragment = new WeatherFragment(info.city);
+			info.fragment = new WeatherFragment(mActivity, info.city);
 		}
 		return info.fragment;
 	}

@@ -211,15 +211,15 @@ public class CityProvider extends ContentProvider {
 		SQLiteDatabase db = mSqLiteDatabase;
 		// 可以更新热门城市表和临时城市表
 		switch (match) {
-		case HOTCITYS:
-			count = db.update(HOTCITY_TABLE_NAME, values, selection,
-					selectionArgs);
-			break;
-		case HOTCITY_ID:
-			String hotSegment = uri.getPathSegments().get(1);
-			rowId = Long.parseLong(hotSegment);
-			count = db.update(HOTCITY_TABLE_NAME, values, "_id=" + rowId, null);
-			break;
+//		case HOTCITYS:
+//			count = db.update(HOTCITY_TABLE_NAME, values, selection,
+//					selectionArgs);
+//			break;
+//		case HOTCITY_ID:
+//			String hotSegment = uri.getPathSegments().get(1);
+//			rowId = Long.parseLong(hotSegment);
+//			count = db.update(HOTCITY_TABLE_NAME, values, "_id=" + rowId, null);
+//			break;
 		case TMPCITYS:
 			count = db.update(TMPCITY_TABLE_NAME, values, selection,
 					selectionArgs);
@@ -254,7 +254,6 @@ public class CityProvider extends ContentProvider {
 		public static final String POST_ID = "postID";
 
 		public static final String REFRESH_TIME = "refreshTime";// 临时城市列表刷新时间
-		public static final String ISSELECTED = "isSelected";
 		public static final String ISLOCATION = "isLocation";
 
 		public static final String DEFAULT_SORT_ORDER = "_id ASC"; // 默认按照_id排序

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Circle_Progress" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateDrawable">@drawable/circle_progress_indeterminate</item>
+        <item name="android:minHeight">42dip</item>
+        <item name="android:maxHeight">42dip</item>
+    </style>
+
+</resources>

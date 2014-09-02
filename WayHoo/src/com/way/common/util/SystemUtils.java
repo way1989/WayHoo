@@ -65,9 +65,7 @@ public class SystemUtils {
 			String name = c.getString(c.getColumnIndex(CityConstants.NAME));
 			String postID = c
 					.getString(c.getColumnIndex(CityConstants.POST_ID));
-			int isSelected = c.getInt(c
-					.getColumnIndex(CityConstants.ISSELECTED));
-			City item = new City(name, postID, isSelected);
+			City item = new City(name, postID);
 			list.add(item);
 		}
 		c.close();

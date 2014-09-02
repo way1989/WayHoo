@@ -137,9 +137,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 			List<City> cities = params[0];
 			try {
 				for (City city : cities) {
-					WeatherInfo info = WeatherSpider.getInstance()
-							.getWeatherInfo(MainActivity.this,
-									city.getPostID(), false);
+					WeatherInfo info = getWeatherInfo(city.getPostID(), false);
 					App.mMainMap.put(city.getPostID(), info);
 				}
 			} catch (Exception e) {
@@ -166,6 +164,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 			updateUI();
 		} else {
 			// 需要定位
+			visibleAddCityBtn();
 		}
 		invisibleSplash();
 	}
@@ -178,26 +177,33 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 				mMainViewPager.getCurrentItem());
 	}
 
-	private void updateUI() {
+	private void visibleAddCityBtn() {
+		mMainViewPager.removeAllViews();
+		mTitleTextView.setText("--");
+		mLocationIV.setVisibility(View.GONE);
+		mAddCityBtn.setVisibility(View.VISIBLE);
+		mShareBtn.setEnabled(false);
+	}
 
-		// mFragmentAdapter = new WeatherPagerAdapter(MainActivity.this);
+	private void updateUI() {
+		// 修复一个bug，当所有城市被删除之后，再进来不刷新界面
+		if (mFragmentAdapter.getCount() == 0) {
+			mFragmentAdapter = new WeatherPagerAdapter(this);
+			mMainViewPager.setAdapter(mFragmentAdapter);
+			mCirclePageIndicator.setViewPager(mMainViewPager);
+			mCirclePageIndicator.setOnPageChangeListener(this);
+		}
 		mFragmentAdapter.addAllItems(mTmpCities);
-		// mMainViewPager.setAdapter(mFragmentAdapter);
-		// mCirclePageIndicator.setViewPager(mMainViewPager);
 		L.i("MainActivity updateUI...");
-		// getTmpCities();
 		mMenuAdapter.addContent(mTmpCities);
 		mCirclePageIndicator.notifyDataSetChanged();
 		// 第一次进来没有数据
 		if (mTmpCities.isEmpty()) {
-			mMainViewPager.removeAllViews();
-			mTitleTextView.setText("--");
-			mLocationIV.setVisibility(View.GONE);
-			mAddCityBtn.setVisibility(View.VISIBLE);
-			mShareBtn.setEnabled(false);
+			visibleAddCityBtn();
 			return;
 		}
-		mAddCityBtn.setVisibility(View.GONE);
+		if (mAddCityBtn.getVisibility() == View.VISIBLE)
+			mAddCityBtn.setVisibility(View.GONE);
 		if (mTmpCities.size() > 1)
 			mCirclePageIndicator.setVisibility(View.VISIBLE);
 		else

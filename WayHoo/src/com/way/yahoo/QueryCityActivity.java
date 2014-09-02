@@ -30,9 +30,7 @@ import android.widget.Toast;
 import com.way.adapter.QueryCityAdapter;
 import com.way.beans.City;
 import com.way.common.util.L;
-import com.way.common.util.LocationUtils;
 import com.way.common.util.LocationUtils.CityNameStatus;
-import com.way.common.util.NetUtil;
 import com.way.common.util.PreferenceUtils;
 import com.way.common.util.SystemUtils;
 import com.way.common.util.T;
@@ -54,7 +52,6 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 	private ListView mQueryCityListView;
 	// private TextView mEmptyCityView;
 	private GridView mHotCityGridView;
-	private LocationUtils mLocationUtils;
 	private List<City> mTmpCitys;
 	private List<City> mHotCitys;
 	private List<City> mCities;
@@ -131,27 +128,11 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 		switch (parent.getId()) {
 		case R.id.cityList:
 			City city = mSearchCityAdapter.getItem(position);
-			boolean isExists = false;
-			// for (City c : mTmpCitys)
-			// if (TextUtils.equals(city.getPostID(), c.getPostID())) {
-			// isExists = true;
-			// break;
-			// }
-			// if (isExists) {
-			// Toast.makeText(this, R.string.city_exists,
-			// Toast.LENGTH_SHORT).show();
-			// return;// 已经存在此城市，直接返回
-			// }
 			L.i("liweiping", city.getName());
 			addToTmpCityTable(city);
 			break;
 		case R.id.hotCityGrid:
 			City hotCity = mHotCitys.get(position);
-			if (hotCity.getIsSelected()) {
-				Toast.makeText(this, R.string.city_exists, Toast.LENGTH_SHORT)
-						.show();
-				return;
-			}
 			L.i("liweiping", hotCity.getName());
 			addToTmpCityTable(hotCity);
 			break;
@@ -161,16 +142,11 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 	}
 
 	private void addToTmpCityTable(City city) {
-		boolean isExists = false;
-		for (City c : mTmpCitys)
-			if (TextUtils.equals(city.getPostID(), c.getPostID())) {
-				isExists = true;
-				break;
-			}
-		if (isExists) {
+		// 已经存在此城市，提示一下，直接返回
+		if (mTmpCitys.contains(city)) {
 			Toast.makeText(this, R.string.city_exists, Toast.LENGTH_SHORT)
 					.show();
-			return;// 已经存在此城市，直接返回
+			return;
 		}
 		// 存储
 		ContentValues tmpContentValues = new ContentValues();
@@ -182,11 +158,11 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 				tmpContentValues);
 
 		// 更新热门城市表已选择
-		ContentValues hotContentValues = new ContentValues();
-		hotContentValues.put(CityConstants.ISSELECTED, 1);
-		mContentResolver.update(CityProvider.HOTCITY_CONTENT_URI,
-				hotContentValues, CityConstants.POST_ID + "=?",
-				new String[] { city.getPostID() });
+		// ContentValues hotContentValues = new ContentValues();
+		// hotContentValues.put(CityConstants.ISSELECTED, 1);
+		// mContentResolver.update(CityProvider.HOTCITY_CONTENT_URI,
+		// hotContentValues, CityConstants.POST_ID + "=?",
+		// new String[] { city.getPostID() });
 		Intent i = new Intent();
 		i.putExtra(CITY_EXTRA_KEY, city);
 		setResult(RESULT_OK, i);
@@ -220,7 +196,6 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 		super.onStop();
 		stopLocation();
 	}
-
 
 	@Override
 	protected void stopLocation() {
@@ -380,7 +355,7 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 				viewHoler = (ViewHoler) convertView.getTag();
 			}
 			viewHoler.hotCityTV.setText(hotCity.getName());
-			if (hotCity.getIsSelected()) {
+			if (mTmpCitys.contains(hotCity)) {
 				viewHoler.selectedIV.setVisibility(View.VISIBLE);
 			} else {
 				viewHoler.selectedIV.setVisibility(View.GONE);

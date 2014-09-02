@@ -12,7 +12,6 @@ public class City implements Parcelable {
 	private String phoneCode;
 	private String areaCode;
 	private String postID;
-	private int isSelected;
 	private long refreshTime;
 	private int isLocation;
 
@@ -27,11 +26,10 @@ public class City implements Parcelable {
 		this.isLocation = isLocation;
 	}
 
-	public City(String name, String postID, int isSelected) {
+	public City(String name, String postID) {
 		super();
 		this.name = name;
 		this.postID = postID;
-		this.isSelected = isSelected;
 	}
 
 	public City(String province, String city, String name, String pinyin,
@@ -111,14 +109,6 @@ public class City implements Parcelable {
 		this.postID = postID;
 	}
 
-	public boolean getIsSelected() {
-		return isSelected == 0 ? false : true;
-	}
-
-	public void setIsSelected(int isSelected) {
-		this.isSelected = isSelected;
-	}
-
 	public boolean getIsLocation() {
 		return isLocation == 0 ? false : true;
 	}
@@ -161,8 +151,8 @@ public class City implements Parcelable {
 		return "City [province=" + province + ", city=" + city + ", name="
 				+ name + ", pinyin=" + pinyin + ", py=" + py + ", phoneCode="
 				+ phoneCode + ", areaCode=" + areaCode + ", postID=" + postID
-				+ ", isSelected=" + isSelected + ", refreshTime=" + refreshTime
-				+ ", isLocation=" + isLocation + "]";
+				+ ", refreshTime=" + refreshTime + ", isLocation=" + isLocation
+				+ "]";
 	}
 
 	@Override
@@ -180,7 +170,6 @@ public class City implements Parcelable {
 		dest.writeString(phoneCode);
 		dest.writeString(areaCode);
 		dest.writeString(postID);
-		dest.writeInt(isSelected);
 		dest.writeLong(refreshTime);
 		dest.writeInt(isLocation);
 	}
@@ -198,7 +187,6 @@ public class City implements Parcelable {
 			city.phoneCode = source.readString();
 			city.areaCode = source.readString();
 			city.postID = source.readString();
-			city.isSelected = source.readInt();
 			city.refreshTime = source.readLong();
 			city.isLocation = source.readInt();
 			return city;

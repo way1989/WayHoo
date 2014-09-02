@@ -17,6 +17,8 @@ import com.way.common.util.SystemUtils;
 import com.way.db.CityProvider;
 import com.way.db.CityProvider.CityConstants;
 import com.way.ui.swipeback.SwipeBackActivity;
+import com.way.weather.plugin.bean.WeatherInfo;
+import com.way.weather.plugin.spider.WeatherSpider;
 
 public class BaseActivity extends SwipeBackActivity {
 	public static final String AUTO_LOCATION_CITY_KEY = "auto_location";
@@ -75,7 +77,7 @@ public class BaseActivity extends SwipeBackActivity {
 	}
 
 	protected void addOrUpdateLocationCity(City city) {
-		//先删除已定位城市
+		// 先删除已定位城市
 		mContentResolver.delete(CityProvider.TMPCITY_CONTENT_URI,
 				CityConstants.ISLOCATION + "=?", new String[] { "1" });
 
@@ -87,12 +89,31 @@ public class BaseActivity extends SwipeBackActivity {
 		tmpContentValues.put(CityConstants.ISLOCATION, 1);// 手动选择的城市存储为0
 		mContentResolver.insert(CityProvider.TMPCITY_CONTENT_URI,
 				tmpContentValues);
+	}
 
-		// 更新热门城市表已选择
-		ContentValues hotContentValues = new ContentValues();
-		hotContentValues.put(CityConstants.ISSELECTED, 1);
-		mContentResolver.update(CityProvider.HOTCITY_CONTENT_URI,
-				hotContentValues, CityConstants.POST_ID + "=?",
-				new String[] { city.getPostID() });
+	public WeatherInfo getWeatherInfo(String postID, boolean isForce) {
+		try {
+			WeatherInfo weatherInfo = WeatherSpider.getInstance()
+					.getWeatherInfo(BaseActivity.this, postID, isForce);
+			if (WeatherSpider.isEmpty(weatherInfo)) {
+				Toast.makeText(this, R.string.get_weatherifo_fail,
+						Toast.LENGTH_SHORT).show();
+				return null;
+			}
+			// 将刷新时间存储到数据库
+			if (weatherInfo.getIsNewDatas() && isForce) {
+				ContentValues contentValues = new ContentValues();
+				contentValues.put(CityConstants.REFRESH_TIME,
+						System.currentTimeMillis());
+				mContentResolver.update(CityProvider.TMPCITY_CONTENT_URI,
+						contentValues, CityConstants.POST_ID + "=?",
+						new String[] { postID });
+			}
+			App.mMainMap.put(postID, weatherInfo);// 保存到全局变量
+			return weatherInfo;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

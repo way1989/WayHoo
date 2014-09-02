@@ -42,6 +42,8 @@ import com.way.weather.plugin.bean.RealTime;
 import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.weather.plugin.spider.WeatherSpider;
 import com.way.yahoo.App;
+import com.way.yahoo.BaseActivity;
+import com.way.yahoo.MainActivity;
 import com.way.yahoo.R;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -71,14 +73,14 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	private TextView mCurWeatherCopyTV;
 
 	private ContentResolver mContentResolver;
-
-	private WeatherSpider mWeatherSpider;
+	private BaseActivity mActivity;
 	private City mCurCity;
 
 	public WeatherFragment() {
 	}
 
-	public WeatherFragment(City city) {
+	public WeatherFragment(BaseActivity activity, City city) {
+		mActivity = activity;
 		mCurCity = city;
 	}
 
@@ -86,7 +88,6 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContentResolver = getActivity().getContentResolver();
-		mWeatherSpider = WeatherSpider.getInstance();
 	}
 
 	private View mView;
@@ -274,8 +275,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		protected WeatherInfo doInBackground(Void... params) {
 			// Simulates a background job.
 			try {
-				return mWeatherSpider.getWeatherInfo(getActivity(),
-						mCurCity.getPostID(), true);
+				return mActivity.getWeatherInfo(mCurCity.getPostID(), true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -321,15 +321,6 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		Index index = weatherInfo.getIndex();
 
 		int type = realTime.getAnimation_type();
-		if (isFroce) {
-			// 将刷新时间存储到数据库
-			ContentValues contentValues = new ContentValues();
-			contentValues.put(CityConstants.REFRESH_TIME,
-					System.currentTimeMillis());
-			mContentResolver.update(CityProvider.TMPCITY_CONTENT_URI,
-					contentValues, CityConstants.POST_ID + "=?",
-					new String[] { mCurCity.getPostID() });
-		}
 		mNormalImageView.setImageResource(WeatherIconUtils
 				.getWeatherNromalBg(type));
 		mBlurredImageView.setImageResource(WeatherIconUtils

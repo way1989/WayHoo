@@ -215,13 +215,13 @@ public class ManagerCityActivity extends BaseActivity implements
 		mContentResolver
 				.delete(CityProvider.TMPCITY_CONTENT_URI, CityConstants.POST_ID
 						+ "=?", new String[] { city.getPostID() });
-		ContentValues contentValues = new ContentValues();
 
 		// 更新已选择的热门城市表
-		contentValues.put(CityConstants.ISSELECTED, 0);
-		mContentResolver.update(CityProvider.HOTCITY_CONTENT_URI,
-				contentValues, CityConstants.POST_ID + "=?",
-				new String[] { city.getPostID() });
+		// ContentValues contentValues = new ContentValues();
+		// contentValues.put(CityConstants.ISSELECTED, 0);
+		// mContentResolver.update(CityProvider.HOTCITY_CONTENT_URI,
+		// contentValues, CityConstants.POST_ID + "=?",
+		// new String[] { city.getPostID() });
 		WeatherSpider.deleteCacheFile(this, city.getPostID());
 		updateUI(false);
 		if (mTmpCitys.isEmpty())// 如果全部被删除完了，更新一下编辑状态
@@ -510,7 +510,7 @@ public class ManagerCityActivity extends BaseActivity implements
 		@Override
 		protected WeatherInfo doInBackground(Void... params) {
 			if (mTaskCity != null) {
-				WeatherInfo result = getWeatherInfo(mTaskCity);
+				WeatherInfo result = getWeatherInfo(mTaskCity.getPostID(), true);
 				return result;
 			} else {
 				List<City> tmpCities = new ArrayList<City>();
@@ -518,7 +518,7 @@ public class ManagerCityActivity extends BaseActivity implements
 				for (City city : tmpCities) {
 					mTaskIndex++;
 					if (city != null)
-						getWeatherInfo(city);
+						getWeatherInfo(city.getPostID(), true);
 					publishProgress(mTaskIndex);// 下载完数据之后再更新界面
 				}
 			}
@@ -528,10 +528,6 @@ public class ManagerCityActivity extends BaseActivity implements
 		@Override
 		protected void onPostExecute(WeatherInfo result) {
 			super.onPostExecute(result);
-			if (mTaskCity != null) {
-				City item = getNewCity(mTaskCity);
-				mTmpCitys.set(mTaskIndex, item);
-			}
 			mTaskIndex = -1;
 			mAdapter.setRefreshingIndex(mTaskIndex);// 重置
 			L.i("liweiping", "onPostExecute reset refreshing index = -1");
@@ -543,57 +539,7 @@ public class ManagerCityActivity extends BaseActivity implements
 		protected void onProgressUpdate(Integer... values) {
 			super.onProgressUpdate(values);
 			L.i("liweiping", "refreshing index = " + values[0]);
-			if (values[0] < mTmpCitys.size() && values[0] > 0) {
-				City item = getNewCity(mTmpCitys.get(values[0] - 1));
-				mTmpCitys.set(values[0] - 1, item);
-			}
 			mAdapter.setRefreshingIndex(values[0]);
 		}
 	}
-
-	private WeatherInfo getWeatherInfo(City city) {
-		try {
-			WeatherInfo weatherInfo = WeatherSpider.getInstance()
-					.getWeatherInfo(ManagerCityActivity.this, city.getPostID(),
-							true);
-			if (WeatherSpider.isEmpty(weatherInfo)) {
-				Toast.makeText(this, R.string.get_weatherifo_fail,
-						Toast.LENGTH_SHORT).show();
-				return null;
-			}
-			// 将刷新时间存储到数据库
-			ContentValues contentValues = new ContentValues();
-			contentValues.put(CityConstants.REFRESH_TIME,
-					System.currentTimeMillis());
-			int result = mContentResolver.update(
-					CityProvider.TMPCITY_CONTENT_URI, contentValues,
-					CityConstants.POST_ID + "=?",
-					new String[] { city.getPostID() });
-			App.mMainMap.put(city.getPostID(), weatherInfo);// 保存到全局变量
-			return weatherInfo;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	private City getNewCity(City city) {
-		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
-				null, CityConstants.POST_ID + "=?",
-				new String[] { city.getPostID() }, null);
-		if (c.moveToFirst()) {
-			String name = c.getString(c.getColumnIndex(CityConstants.NAME));
-			String postID = c
-					.getString(c.getColumnIndex(CityConstants.POST_ID));
-			long refreshTime = c.getLong(c
-					.getColumnIndex(CityConstants.REFRESH_TIME));
-			int isLocation = c.getInt(c
-					.getColumnIndex(CityConstants.ISLOCATION));
-			City item = new City(name, postID, refreshTime, isLocation);
-			c.close();
-			return item;
-		}
-		return null;
-	}
-
 }

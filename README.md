@@ -13,9 +13,10 @@
 
 *注：本文假设你已经有Android开发环境*
 
-启动Eclipse，点击菜单新建一个Android工程，然后将本项目代码覆盖过去，请确保你当前的Android SDK是最新版。<br>
-如果编译出错，请修改项目根目录下的 project.properties 文件。<br>
-推荐使用Android 4.0 以上版本的SDK,请使用JDK1.6编译：
+①.启动Eclipse，点击菜单新建一个名为WayHoo的ndroid工程，然后将本项目代码覆盖过去，请确保你当前的Android SDK是最新版。<br>
+②.将libs目录下库解压，相应的导入Eclipse，并作为主工程的库文件。<br>
+③.如果编译出错，请修改项目根目录下的 project.properties 文件。<br>
+④.请使用Android 4.0 以上版本的SDK，JDK1.6编译：
 
 > target=android-19
 
@@ -41,4 +42,3 @@ way:
 ![Screenshot 5](http://git.oschina.net/way/WayHoo/raw/master/screenshots/5.png "Screenshot 5")
 
 ![Screenshot 6](http://git.oschina.net/way/WayHoo/raw/master/screenshots/6.png "Screenshot 6")
-

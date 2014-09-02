@@ -13,8 +13,8 @@
 
 *注：本文假设你已经有Android开发环境*
 
-①.启动Eclipse，点击菜单新建一个名为WayHoo的ndroid工程，然后将本项目代码覆盖过去，请确保你当前的Android SDK是最新版。<br>
-②.将libs目录下库解压，相应的导入Eclipse，并作为主工程的库文件，以免缺少一些必要的资源或类。<br>
+①.启动Eclipse，将名为WayHoo导入作为主工程，并确保你当前的Android SDK是最新版。<br>
+②.将libs目录下相应的库导入Eclipse，并作为主工程的库工程，以免缺少一些必要的资源或类。<br>
 ③.如果编译出错，请修改项目根目录下的 project.properties 文件。<br>
 ④.请使用Android 4.0 以上版本的SDK，JDK1.6编译：
 

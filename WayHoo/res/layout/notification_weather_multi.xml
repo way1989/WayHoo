@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="64.0dip"
+    android:paddingLeft="2.0dip"
+    android:paddingRight="8.0dip" >
+
+    <RelativeLayout
+        android:id="@+id/first_line_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true" >
+
+        <LinearLayout
+            android:id="@+id/weather_notification_left_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/notification_weather_image"
+                android:layout_width="60.0dip"
+                android:layout_height="60.0dip"
+                android:layout_marginRight="2.0dip"
+                android:src="@drawable/ic_default_big" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/divider"
+            android:layout_width="1.0px"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4.0dip"
+            android:layout_marginRight="9.0dip"
+            android:layout_marginTop="8.0dip"
+            android:layout_toRightOf="@id/weather_notification_left_layout"
+            android:src="#33ffffff" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/divider" >
+
+            <ImageView
+                android:id="@+id/notification_weather_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/notification_weather_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6.0dip"
+                android:layout_marginTop="7.0dip"
+                android:layout_toRightOf="@id/notification_weather_temp"
+                android:gravity="center_horizontal"
+                android:singleLine="true"
+                android:text="晴"
+                android:textColor="#e5ffffff"
+                android:textSize="14.0dip" />
+
+            <TextView
+                android:id="@+id/notification_weather_low_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/notification_weather_desc"
+                android:layout_marginLeft="6.0dip"
+                android:layout_marginTop="2.0dip"
+                android:layout_toRightOf="@id/notification_weather_temp"
+                android:singleLine="true"
+                android:text="0°"
+                android:textColor="#e5ffffff"
+                android:textSize="10.0dip" />
+
+            <TextView
+                android:id="@+id/notification_weather_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/notification_weather_temp"
+                android:layout_marginTop="2.0dip"
+                android:text=""
+                android:textColor="#7fffffff"
+                android:textSize="10.0dip" />
+
+            <ImageView
+                android:layout_width="10.0dip"
+                android:layout_height="10.0dip"
+                android:layout_alignBottom="@id/notification_weather_time"
+                android:layout_marginLeft="2.0dip"
+                android:layout_toRightOf="@id/notification_weather_time"
+                android:src="@drawable/notify_log_view" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" >
+
+                <RelativeLayout
+                    android:id="@+id/notification_city_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/notification_weather_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="4.0dip"
+                        android:maxLength="6"
+                        android:singleLine="true"
+                        android:text="深圳"
+                        android:textColor="#e5ffffff"
+                        android:textSize="16.0dip" />
+
+                    <ImageView
+                        android:id="@+id/notifiy_location_icon_view"
+                        android:layout_width="10.0dip"
+                        android:layout_height="10.0dip"
+                        android:layout_marginRight="4.0dip"
+                        android:layout_marginTop="10.0dip"
+                        android:layout_toLeftOf="@id/notification_weather_city"
+                        android:src="@drawable/current_loc_active_26x26"
+                        android:visibility="invisible" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/notification_aqi_bg_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16.0dip"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/notification_city_layout"
+                    android:layout_marginTop="6.0dip"
+                    android:background="@drawable/bg_pm25_01"
+                    android:minWidth="44.0dip" >
+
+                    <TextView
+                        android:id="@+id/notification_weather_pm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16.0dip"
+                        android:layout_marginLeft="2.0dip"
+                        android:singleLine="true"
+                        android:text="60"
+                        android:textColor="@android:color/white"
+                        android:textSize="10.0dip" />
+
+                    <ImageView
+                        android:id="@+id/notification_weather_aqi_divider"
+                        android:layout_width="1.0px"
+                        android:layout_height="12.0dip"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="2.0dip"
+                        android:layout_marginRight="2.0dip"
+                        android:layout_toRightOf="@id/notification_weather_pm"
+                        android:background="#4cffffff" />
+
+                    <TextView
+                        android:id="@+id/notification_weather_pm_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="16.0dip"
+                        android:layout_toRightOf="@id/notification_weather_aqi_divider"
+                        android:minWidth="14.0dip"
+                        android:singleLine="true"
+                        android:text="优"
+                        android:textColor="@android:color/white"
+                        android:textSize="10.0dip" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/second_line_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first_line_layout"
+        android:layout_marginTop="5.0dip"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <RelativeLayout
+            android:id="@+id/one_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:id="@+id/one_layout_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/one_weather_image"
+                    android:layout_width="24.0dip"
+                    android:layout_height="24.0dip"
+                    android:src="@drawable/ic_default_big" />
+
+                <TextView
+                    android:id="@+id/one_weather_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4.0dip"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="晴"
+                    android:textColor="#ffffffff"
+                    android:textSize="10.0dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:layout_toRightOf="@id/one_layout_weather"
+                android:layout_weight="1.0"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/one_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="晴"
+                    android:textColor="#7fffffff"
+                    android:textSize="14.0dip" />
+
+                <TextView
+                    android:id="@+id/one_weather_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6.0dip"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="晴"
+                    android:textColor="#ffffffff"
+                    android:textSize="14.0dip" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/two_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:id="@+id/two_layout_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/two_weather_image"
+                    android:layout_width="24.0dip"
+                    android:layout_height="24.0dip"
+                    android:src="@drawable/ic_default_big" />
+
+                <TextView
+                    android:id="@+id/two_weather_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4.0dip"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="晴"
+                    android:textColor="#ffffffff"
+                    android:textSize="10.0dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:layout_toRightOf="@id/two_layout_weather"
+                android:layout_weight="1.0"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/two_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="晴"
+                    android:textColor="#7fffffff"
+                    android:textSize="14.0dip" />
+
+                <TextView
+                    android:id="@+id/two_weather_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6.0dip"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="晴"
+                    android:textColor="#ffffffff"
+                    android:textSize="14.0dip" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/three_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="right" >
+
+            <LinearLayout
+                android:id="@+id/three_layout_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/three_weather_image"
+                    android:layout_width="24.0dip"
+                    android:layout_height="24.0dip"
+                    android:src="@drawable/ic_default_big" />
+
+                <TextView
+                    android:id="@+id/three_weather_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4.0dip"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="晴"
+                    android:textColor="#ffffffff"
+                    android:textSize="10.0dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:layout_toRightOf="@id/three_layout_weather"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/three_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="晴"
+                    android:textColor="#7fffffff"
+                    android:textSize="14.0dip" />
+
+                <TextView
+                    android:id="@+id/three_weather_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6.0dip"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="晴"
+                    android:textColor="#ffffffff"
+                    android:textSize="14.0dip" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

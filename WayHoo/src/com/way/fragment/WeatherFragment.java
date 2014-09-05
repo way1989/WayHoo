@@ -1,11 +1,15 @@
 package com.way.fragment;
 
+import java.io.InputStream;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.ContentResolver;
-import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Build;
@@ -43,7 +47,6 @@ import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.weather.plugin.spider.WeatherSpider;
 import com.way.yahoo.App;
 import com.way.yahoo.BaseActivity;
-import com.way.yahoo.MainActivity;
 import com.way.yahoo.R;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -321,10 +324,14 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		Index index = weatherInfo.getIndex();
 
 		int type = realTime.getAnimation_type();
-		mNormalImageView.setImageResource(WeatherIconUtils
-				.getWeatherNromalBg(type));
-		mBlurredImageView.setImageResource(WeatherIconUtils
-				.getWeatherBlurBg(type));
+		// mNormalImageView.setImageResource(WeatherIconUtils
+		// .getWeatherNromalBg(type));
+		// mBlurredImageView.setImageResource(WeatherIconUtils
+		// .getWeatherBlurBg(type));
+		mNormalImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
+				WeatherIconUtils.getRawNromalBg(type)));
+		mBlurredImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
+				WeatherIconUtils.getRawBlurBg(type)));
 		mCurWeatherIV.setImageResource(WeatherIconUtils.getWeatherIcon(type));
 		mCurWeatherTV.setText(realTime.getWeather_name());
 		mCurFeelsTempTV.setText(realTime.getTemp() + "");

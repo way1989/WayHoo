@@ -39,7 +39,7 @@
     <string name="share_fail">亲！sorry，分享失败了！</string>
     <string name="please_wait">亲，请稍后...</string>
     <string name="share_to">亲，您想分享到？</string>
-    <string name="app_version">V1.0.2</string>
+    <string name="app_version">V1.0.3</string>
     <string name="app_information">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;\
         亲！么么！本应用是以变形金刚作为主题元素的一款轻型实用天气软件哦!如果您想了解更多,\
         欢迎访问我的博客主页:http://blog.csdn.net/way_ping_li,\
@@ -48,6 +48,7 @@
     <string name="all_rights_reserved">Copyright © 2012-2014 way. All Rights Reserved.</string>
     <string name="get_weatherinfo_scuessed">亲，恭喜您，刷新成功</string>
     <string name="service_have_not_bind">亲！服务还未绑定成功，请稍后哦！</string>
+    <string name="widget_loading_tips">正在加载,请稍侯...</string>
     <!-- lunar -->
     <string name="nongli">农历</string>
     <string name="nian">年</string>

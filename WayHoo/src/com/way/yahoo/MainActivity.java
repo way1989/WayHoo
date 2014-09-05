@@ -42,13 +42,12 @@ import com.way.beans.Category;
 import com.way.beans.City;
 import com.way.beans.Item;
 import com.way.common.util.L;
-import com.way.common.util.LocationUtils.CityNameStatus;
+import com.way.common.util.LocationUtils.LocationListener;
 import com.way.common.util.PreferenceUtils;
 import com.way.common.util.SystemUtils;
 import com.way.common.util.T;
 import com.way.common.util.TimeUtils;
 import com.way.weather.plugin.bean.WeatherInfo;
-import com.way.weather.plugin.spider.WeatherSpider;
 
 @SuppressLint("NewApi")
 public class MainActivity extends BaseActivity implements OnClickListener,
@@ -89,6 +88,21 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		initMenuDrawer();
 		mMenuDrawer.setContentView(R.layout.activity_main);
 		initViews();
+	}
+
+	/**
+	 * 连续按两次返回键就退出
+	 */
+	private long firstTime;
+
+	@Override
+	public void onBackPressed() {
+		if (System.currentTimeMillis() - firstTime < 3000) {
+			finish();
+		} else {
+			firstTime = System.currentTimeMillis();
+			T.showShort(this, R.string.press_again_exit);
+		}
 	}
 
 	private void initDatas() {
@@ -428,7 +442,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		}
 	}
 
-	CityNameStatus mCityNameStatus = new CityNameStatus() {
+	LocationListener mCityNameStatus = new LocationListener() {
 
 		@Override
 		public void detecting() {
@@ -436,7 +450,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		}
 
 		@Override
-		public void update(String name) {
+		public void succeed(String name) {
 			City city = getLocationCityFromDB(name);
 			if (TextUtils.isEmpty(city.getPostID())) {
 				Toast.makeText(MainActivity.this, R.string.no_this_city,
@@ -455,6 +469,12 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 				mTmpCities = getTmpCities();
 				new MyTask().execute(mTmpCities);
 			}
+		}
+
+		@Override
+		public void failed() {
+			Toast.makeText(MainActivity.this, R.string.getlocation_fail,
+					Toast.LENGTH_SHORT).show();
 		}
 
 	};

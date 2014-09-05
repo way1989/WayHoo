@@ -23,11 +23,11 @@
     <dimen name="padding_lg2">20.0dip</dimen>
     <dimen name="margin_xxs">4.0dip</dimen>
     <dimen name="margin_xs">6.0dip</dimen>
-    <dimen name="margin_sm">8.0dip</dimen>
+    <dimen name="margin_sm">4.0dip</dimen>
     <dimen name="margin_md">16.0dip</dimen>
     <dimen name="margin_lg">22.0dip</dimen>
     <dimen name="negative_margin_lg">-16.0dip</dimen>
-    <dimen name="negative_margin_sm">-10.0dip</dimen>
+    <dimen name="negative_margin_sm">-2.0dip</dimen>
     <dimen name="negative_margin_md">-4.0dip</dimen>
     <dimen name="negative_margin_xs">-3.0dip</dimen>
     <dimen name="text_sm">7.0sp</dimen>

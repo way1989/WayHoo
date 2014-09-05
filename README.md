@@ -6,8 +6,9 @@
 ##下载apk
 
 开放市场:
-	* [腾讯应用市场](http://sj.qq.com/myapp/detail.htm?apkName=com.way.yahoo "应用宝")
-	* [百度应用市场](http://shouji.baidu.com/soft/item?docid=6930651&from=as&f=search_app_%E5%A8%81%E9%9C%87%E5%A4%A9%E6%B0%94%40list_1_title%401%40header_all_input "百度手机助手")
+	 [腾讯应用市场](http://sj.qq.com/myapp/detail.htm?apkName=com.way.yahoo "应用宝")
+	 
+	 [百度应用市场](http://shouji.baidu.com/soft/item?docid=6930651&from=as&f=search_app_%E5%A8%81%E9%9C%87%E5%A4%A9%E6%B0%94%40list_1_title%401%40header_all_input "百度手机助手")
 
 # **威震天气 Android 客户端项目简析** #
 

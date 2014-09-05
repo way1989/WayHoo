@@ -63,6 +63,13 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="Shade">
+        <item name="android:shadowColor">#ff434343</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">2.0</item>
+    </style>
+
     <style name="Label">
         <item name="android:textSize">@dimen/text_lg</item>
         <item name="android:textColor">@android:color/white</item>
@@ -117,7 +124,6 @@
     <style name="Label.Medium" parent="@style/Label">
         <item name="android:textSize">@dimen/text_md</item>
     </style>
-
 
     <style name="YahooText" parent="@android:style/TextAppearance" />
 
@@ -190,6 +196,10 @@
         <item name="android:indeterminateDrawable">@drawable/common_loading4</item>
         <item name="android:minWidth">48.0dip</item>
         <item name="android:minHeight">48.0dip</item>
+    </style>
+
+    <style name="weather_widget_refresh_style" parent="@android:style/Widget.ProgressBar.Small">
+        <item name="android:indeterminateDrawable">@drawable/refresh_icon_anim</item>
     </style>
 
     <style name="MenuDrawer" />

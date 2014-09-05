@@ -10,17 +10,23 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
 public class LocationUtils {
+	private static final int MAX_TRY_COUNT = 5;
 	private LocationClient mLocationClient = null;
-	private CityNameStatus mCityNameStatus;
+	private LocationListener mListener;
+	private int mTryCount;
 
-	public static abstract interface CityNameStatus {
+	public static abstract interface LocationListener {
 		public abstract void detecting();
 
-		public abstract void update(String city);
+		public abstract void succeed(String city);
+
+		public abstract void failed();
 	}
 
-	public LocationUtils(Context context, CityNameStatus cityNameStatus) {
-		mCityNameStatus = cityNameStatus;
+	public LocationUtils(Context context, LocationListener listener) {
+		if (listener == null)
+			new NullPointerException("LocationListener can't be null");
+		mListener = listener;
 		mLocationClient = new LocationClient(context,
 				getLocationClientOption(context));
 		mLocationClient.registerLocationListener(mLocationListener);
@@ -29,13 +35,14 @@ public class LocationUtils {
 	// 开始定位
 	public void startLocation() {
 		mLocationClient.start();
-		mCityNameStatus.detecting();
+		mListener.detecting();
+		mTryCount = 0;
 	}
 
 	// 结束定位
 	public void stopLocation() {
 		mLocationClient.stop();
-
+		mTryCount = 0;
 	}
 
 	public boolean isStarted() {
@@ -47,7 +54,7 @@ public class LocationUtils {
 		option.setOpenGps(true);
 		option.setLocationMode(LocationMode.Hight_Accuracy);// 设置定位模式
 		option.setCoorType("gcj02");// 返回的定位结果是百度经纬度，默认值gcj02
-		option.setScanSpan(2000);// 设置发起定位请求的间隔时间为2000ms
+		option.setScanSpan(1000);// 设置发起定位请求的间隔时间为1000ms
 		option.setProdName(context.getPackageName());
 		option.setIsNeedAddress(true);
 		return option;
@@ -60,14 +67,19 @@ public class LocationUtils {
 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
-			if (location == null || TextUtils.isEmpty(location.getCity()))
+			if (location == null || location.getLocType() != 161
+					|| TextUtils.isEmpty(location.getCity())) {
+				mTryCount++;
+				if (mTryCount >= MAX_TRY_COUNT) {
+					mListener.failed();
+					stopLocation();
+				}
 				return;
-			if (location.getLocType() != 161)
-				return;
+			}
 
 			String city = location.getCity().replace("市", "");
-			mCityNameStatus.update(city);
-			mLocationClient.stop();// 停止定位
+			mListener.succeed(city);
+			stopLocation();// 停止定位
 		}
 
 	};

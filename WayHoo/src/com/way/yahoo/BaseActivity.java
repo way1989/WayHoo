@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.way.beans.City;
 import com.way.common.util.LocationUtils;
-import com.way.common.util.LocationUtils.CityNameStatus;
+import com.way.common.util.LocationUtils.LocationListener;
 import com.way.common.util.NetUtil;
 import com.way.common.util.SystemUtils;
 import com.way.db.CityProvider;
@@ -48,7 +48,7 @@ public class BaseActivity extends SwipeBackActivity {
 		return SystemUtils.getTmpCities(tmpCityCursor);
 	}
 
-	protected void startLocation(CityNameStatus cityNameStatus) {
+	protected void startLocation(LocationListener cityNameStatus) {
 		if (NetUtil.getNetworkState(this) == NetUtil.NETWORN_NONE) {
 			Toast.makeText(this, R.string.net_error, Toast.LENGTH_SHORT).show();
 			return;
@@ -101,7 +101,7 @@ public class BaseActivity extends SwipeBackActivity {
 				return null;
 			}
 			// 将刷新时间存储到数据库
-			if (weatherInfo.getIsNewDatas() && isForce) {
+			if (weatherInfo.getIsNewDatas()) {
 				ContentValues contentValues = new ContentValues();
 				contentValues.put(CityConstants.REFRESH_TIME,
 						System.currentTimeMillis());

@@ -30,7 +30,7 @@ import android.widget.Toast;
 import com.way.adapter.QueryCityAdapter;
 import com.way.beans.City;
 import com.way.common.util.L;
-import com.way.common.util.LocationUtils.CityNameStatus;
+import com.way.common.util.LocationUtils.LocationListener;
 import com.way.common.util.PreferenceUtils;
 import com.way.common.util.SystemUtils;
 import com.way.common.util.T;
@@ -272,10 +272,17 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 		}
 	};
 
-	CityNameStatus mCityNameStatus = new CityNameStatus() {
+	LocationListener mCityNameStatus = new LocationListener() {
 
 		@Override
-		public void update(String name) {
+		public void detecting() {
+			L.i("liweiping", "detecting...");
+			showCountDownView();
+		}
+
+		@Override
+		public void succeed(String name) {
+			// TODO Auto-generated method stub
 			L.i("liweiping", name);
 			dismissCountDownView();
 
@@ -298,9 +305,9 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 		}
 
 		@Override
-		public void detecting() {
-			L.i("liweiping", "detecting...");
-			showCountDownView();
+		public void failed() {
+			Toast.makeText(QueryCityActivity.this, R.string.getlocation_fail,
+					Toast.LENGTH_SHORT).show();
 		}
 
 	};

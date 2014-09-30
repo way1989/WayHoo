@@ -6,17 +6,21 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 import net.simonvt.menudrawer.MenuDrawer;
+import net.simonvt.menudrawer.MenuDrawer.OnDrawerStateChangeListener;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,6 +51,8 @@ import com.way.common.util.PreferenceUtils;
 import com.way.common.util.SystemUtils;
 import com.way.common.util.T;
 import com.way.common.util.TimeUtils;
+import com.way.util.blur.jni.BitmapUtils;
+import com.way.util.blur.jni.FrostedGlassUtil;
 import com.way.weather.plugin.bean.WeatherInfo;
 
 @SuppressLint("NewApi")
@@ -65,6 +71,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 	private int mPagerOffsetPixels;
 	private int mPagerPosition;
 	private TextView mTitleTextView;
+	private ImageView mBlurImageView;
 	private ImageView mShareBtn;
 	private ImageView mLocationIV;
 	private Button mAddCityBtn;
@@ -119,6 +126,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 	private void initViews() {
 		setSwipeBackEnable(false);
 		mSplashView = findViewById(R.id.splash_view);
+		mBlurImageView = (ImageView) findViewById(R.id.blur_overlay_img);
 		mRootView = (FrameLayout) findViewById(R.id.root_view);
 		mAddCityBtn = (Button) findViewById(R.id.add_city_btn);
 		mAddCityBtn.setOnClickListener(this);
@@ -374,14 +382,13 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 	private void initMenuDrawer() {
 		// 覆盖在View之前的侧边栏菜单
 		mMenuDrawer = MenuDrawer.attach(this, MenuDrawer.Type.OVERLAY);
-		mMenuDrawer.setMenuSize(Math.round(0.7f * SystemUtils
+		mMenuDrawer.setMenuSize(Math.round(0.6f * SystemUtils
 				.getDisplayWidth(this)));
 		// View之后的侧边栏菜单
 		// mMenuDrawer = MenuDrawer.attach(this, MenuDrawer.Type.BEHIND,
 		// Position.LEFT, MenuDrawer.MENU_DRAG_CONTENT);
 		mMenuListView = (ListView) LayoutInflater.from(this).inflate(
 				R.layout.sidemenu_listview, null);
-
 		mMenuDrawer.setMenuView(mMenuListView);
 		mMenuDrawer.setTouchMode(MenuDrawer.TOUCH_MODE_FULLSCREEN);
 		mMenuDrawer
@@ -395,13 +402,54 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 						return false;
 					}
 				});
-
+		mMenuDrawer.setOnDrawerStateChangeListener(new OnDrawerStateChangeListener() {
+			
+			@Override
+			public void onDrawerStateChange(int oldState, int newState) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onDrawerSlide(float openRatio, int offsetPixels) {
+				// TODO Auto-generated method stub
+				changeBlurImageViewAlpha(openRatio);
+			}
+		});
 		mMenuAdapter = new SideMenuAdapter(this);
 		// mMenuAdapter.addContent(mTmpCities);
 		mMenuListView.setAdapter(mMenuAdapter);
 		mMenuListView.setOnItemClickListener(mItemClickListener);
 	}
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void changeBlurImageViewAlpha(float slideOffset) {
+		if(slideOffset <= 0){
+			mBlurImageView.setImageBitmap(null);
+			mBlurImageView.setVisibility(View.GONE);
+			return;
+		}
+		if (mBlurImageView.getVisibility() != View.VISIBLE) {
+			setBlurImage();
+		}
+		mBlurImageView.setAlpha(slideOffset);
+	}
 
+	private void setBlurImage() {
+		mBlurImageView.setImageBitmap(null);
+		mBlurImageView.setVisibility(View.VISIBLE);
+		// do the downscaling for faster processing
+		long beginBlur = System.currentTimeMillis();
+		Bitmap downScaled = BitmapUtils.drawViewToBitmap(mRootView,
+				mRootView.getWidth(), mRootView.getHeight(), 10);
+		// apply the blur using the renderscript
+		FrostedGlassUtil.getInstance().stackBlur(downScaled, 4);
+//		FrostedGlassUtil.getInstance().boxBlur(downScaled, 4);
+//		FrostedGlassUtil.getInstance().colorWaterPaint(downScaled, 4);
+//		FrostedGlassUtil.getInstance().oilPaint(downScaled, 4);
+		long engBlur = System.currentTimeMillis();
+		L.i("stackBlur cost " + (engBlur - beginBlur) + "ms");
+		mBlurImageView.setImageBitmap(downScaled);
+	}
 	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,

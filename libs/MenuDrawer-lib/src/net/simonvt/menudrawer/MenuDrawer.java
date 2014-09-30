@@ -2,6 +2,7 @@ package net.simonvt.menudrawer;
 
 import net.simonvt.menudrawer.compat.ActionBarHelper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -25,6 +26,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 
+@SuppressLint("NewApi")
 public abstract class MenuDrawer extends ViewGroup {
 
     /**
@@ -607,7 +609,7 @@ public abstract class MenuDrawer extends ViewGroup {
         mContentContainer.setId(R.id.md__content);
         mContentContainer.setBackgroundDrawable(contentBackground);
 
-        mMenuOverlay = new ColorDrawable(0xFF000000);
+        mMenuOverlay = new ColorDrawable(0x00000000);//fix by liweiping 20140930
 
         mIndicatorScroller = new FloatScroller(SMOOTH_INTERPOLATOR);
     }

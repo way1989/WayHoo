@@ -87,7 +87,6 @@
     <dimen name="padding_lg2">22.0dip</dimen>
     <dimen name="margin_xxs">4.0dip</dimen>
     <dimen name="margin_xs">8.0dip</dimen>
-    <dimen name="margin_sm">10.0dip</dimen>
     <dimen name="margin_md">18.0dip</dimen>
     <dimen name="margin_lg">24.0dip</dimen>
     <dimen name="negative_margin_lg">-18.0dip</dimen>

@@ -101,11 +101,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/divider7"
-        android:layout_marginBottom="@dimen/negative_margin_sm"
+                android:paddingBottom="@dimen/margin_sm"
         android:layout_marginTop="@dimen/margin_sm"
         android:drawableRight="@drawable/wunderground_logo"
         android:gravity="right"
-        android:paddingTop="0.0dip"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_md"
         weather:typeface="fonts/Roboto-Light.ttf" />

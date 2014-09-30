@@ -31,7 +31,7 @@ way:
 
 
 ## 测试截图
-###高斯模糊效果应用
+
 ![Screenshot 7](http://git.oschina.net/way/WayHoo/raw/master/screenshots/0.png "Screenshot 7")
 
 ![Screenshot 1](http://git.oschina.net/way/WayHoo/raw/master/screenshots/1.png "Screenshot 1")

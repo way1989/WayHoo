@@ -3,12 +3,14 @@
     android:id="@+id/menu_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/biz_pc_main_bg_transformers_left"
     android:cacheColorHint="@android:color/transparent"
-    android:divider="@drawable/dotted_line_624"
+    android:background="#c0000000"
+    android:choiceMode="singleChoice"
+    android:divider="@color/sidebar_item_separator_dark" 
+    android:dividerHeight="1.0dip"
     />
 <!--
-    android:divider="@color/sidebar_item_separator_dark" 
+    android:divider="@drawable/dotted_line_624"
+    android:background="@drawable/biz_pc_main_bg_transformers_left"
     android:background="@color/sidebar_footer_background_dark"
-    android:dividerHeight="1.0dip"
 -->

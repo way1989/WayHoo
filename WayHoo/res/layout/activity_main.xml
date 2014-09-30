@@ -31,12 +31,11 @@
         android:layout_height="0dip"
         android:layout_gravity="center|bottom" />
 
-    <View
-        android:id="@+id/flash_overlay"
+    <ImageView
+        android:id="@+id/blur_overlay_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
-        android:background="@android:color/white"
         android:visibility="gone" />
 
 </FrameLayout>

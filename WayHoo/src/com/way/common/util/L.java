@@ -1,5 +1,7 @@
 package com.way.common.util;
 
+import com.way.yahoo.BuildConfig;
+
 import android.util.Log;
 
 /**
@@ -9,7 +11,7 @@ import android.util.Log;
  * 
  */
 public class L {
-	public static boolean isDebug = true;// 是否需要打印bug，可以在application的onCreate函数里面初始化
+	public static boolean isDebug = BuildConfig.DEBUG;// 是否需要打印bug，可以在application的onCreate函数里面初始化
 	private static final String TAG = "way";
 
 	// 下面四个是默认tag的函数

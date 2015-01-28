@@ -60,7 +60,7 @@
         android:id="@+id/index_detail_tv"
         style="@style/Label.Shadow.Medium"
         android:layout_width="match_parent"
-        android:layout_height="36.0dip"
+        android:layout_height="40.0dip"
         android:layout_below="@id/dotline2"
         android:layout_marginLeft="@dimen/margin_xs"
         android:layout_marginRight="@dimen/margin_xs"

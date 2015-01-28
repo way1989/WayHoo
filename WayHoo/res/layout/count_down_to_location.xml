@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:textSize="160sp" />
+        android:textSize="60sp" />
 
     <TextView
         android:id="@+id/count_down_title"

@@ -8,8 +8,8 @@
     <string name="pull_to_refresh_pull_sub_label_none">从未</string>
     <string name="enter_city_name">请输入城市名称、拼音、区号或邮编</string>
     <!-- time -->
-    <string name="year">年前</string>
-    <string name="month">月前</string>
+    <string name="year_before">年前</string>
+    <string name="month_before">月前</string>
     <string name="day">天前</string>
     <string name="hour">小时前</string>
     <string name="min">分钟前</string>
@@ -39,13 +39,13 @@
     <string name="share_fail">亲！sorry，分享失败了！</string>
     <string name="please_wait">亲，请稍后...</string>
     <string name="share_to">亲，您想分享到？</string>
-    <string name="app_version">V1.0.4</string>
+    <string name="app_version">V1.0.5</string>
     <string name="app_information">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;\
         亲！么么！本应用是以变形金刚作为主题元素的一款轻型实用天气软件哦!如果您想了解更多,\
         欢迎访问我的博客主页:http://blog.csdn.net/way_ping_li,\
         由于时间仓促，错误与疏忽之处在所难免,\
         如果各位亲能给出宝贵的建议与指点,那将是极好的哦！么么哒！</string>
-    <string name="all_rights_reserved">Copyright © 2012-2014 way. All Rights Reserved.</string>
+    <string name="all_rights_reserved">Copyright © 2012-2015 way. All Rights Reserved.</string>
     <string name="get_weatherinfo_scuessed">亲，恭喜您，刷新成功</string>
     <string name="service_have_not_bind">亲！服务还未绑定成功，请稍后哦！</string>
     <string name="widget_loading_tips">正在加载,请稍侯...</string>
@@ -156,5 +156,8 @@
     <string name="teacher_day">教师节</string>
     <string name="national_day">国庆节</string>
     <string name="christmas_day">圣诞节</string>
-
+    <string name="crash_dialog_title">威震天气出错啦</string>
+    <string name="crash_dialog_text">因不可预料的错误导致程序崩溃，请点击确定将错误信息发送给我们，以便尽快修复此问题</string>
+    <string name="crash_dialog_comment_prompt">请描述一下出错时的场景：</string>
+    <string name="crash_dialog_ok_toast">非常感谢！</string>
 </resources>

@@ -21,6 +21,7 @@ public class FeedBackActivity extends SwipeBackActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.feed_back_view);
+		
 		((TextView) findViewById(R.id.city_title)).setText("信息反馈");
 		findViewById(R.id.back_image).setOnClickListener(new OnClickListener() {
 

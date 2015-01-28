@@ -5,8 +5,8 @@
     android:versionName="@string/app_version" >
 
     <uses-sdk
-        android:minSdkVersion="13"
-        android:targetSdkVersion="20" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
     <!-- 这个权限用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 这个权限用于访问GPS定位 -->
@@ -27,8 +27,6 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <!-- 允许应用读取低级别的系统日志文件 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <!-- 此权限用来显示反馈崩溃信息对话框 -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name="com.way.yahoo.App"
@@ -70,8 +68,15 @@
             android:name="com.way.yahoo.FeedBackActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SecondAppTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-
+            android:windowSoftInputMode="stateHidden|adjustPan"
+             />
+            android:windowSoftInputMode="stateHidden|adjustResize"
+      <activity
+            android:name="org.acra.CrashReportDialog"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="true"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

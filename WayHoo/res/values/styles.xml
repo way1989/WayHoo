@@ -1,14 +1,15 @@
 <resources>
 
-    <style name="AppBaseTheme" parent="android:Theme.NoTitleBar"></style>
-
-    <style name="AppTheme" parent="@style/AppBaseTheme"></style>
+    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 
     <style name="SecondAppTheme" parent="@style/AppTheme">
         <item name="android:windowIsTranslucent">true</item>
     </style>
     <!-- 从下往上弹出风格的dialog -->
-    <style name="menu_dialog" parent="@android:style/Theme.Dialog">
+    <style name="menu_dialog" parent="@android:style/Theme.DeviceDefault.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -21,7 +22,7 @@
         <item name="android:windowAnimationStyle">@style/bottom_anim_style</item>
     </style>
     <!-- 从上往下弹出的dialog -->
-    <style name="search_dialog" parent="@android:style/Theme.Dialog">
+    <style name="search_dialog" parent="@android:style/Theme.DeviceDefault.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -45,7 +46,7 @@
     </style>
 
     <!-- 使用系统动画风格的dialog -->
-    <style name="load_dialog" parent="@android:style/Theme.Dialog">
+    <style name="load_dialog" parent="@android:style/Theme.DeviceDefault.Dialog">
 
         <!-- 设置完全透明 -->
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -174,12 +175,6 @@
     <style name="ForecastHourly">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="Circle_Progress" parent="android:Widget.ProgressBar.Horizontal">
-        <item name="android:indeterminateDrawable">@drawable/circle_progress_indeterminate</item>
-        <item name="android:minHeight">42dip</item>
-        <item name="android:maxHeight">42dip</item>
     </style>
 
     <style name="RefreshProgress">

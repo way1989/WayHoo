@@ -20,11 +20,9 @@ import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -33,12 +31,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.way.adapter.SideMenuAdapter;
 import com.way.adapter.WeatherPagerAdapter;
@@ -104,6 +99,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
 	@Override
 	public void onBackPressed() {
+		if(mMenuDrawer.isMenuVisible()){
+			mMenuDrawer.closeMenu(true);
+			return;
+		}
 		if (System.currentTimeMillis() - firstTime < 3000) {
 			finish();
 		} else {
@@ -402,28 +401,30 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 						return false;
 					}
 				});
-		mMenuDrawer.setOnDrawerStateChangeListener(new OnDrawerStateChangeListener() {
-			
-			@Override
-			public void onDrawerStateChange(int oldState, int newState) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onDrawerSlide(float openRatio, int offsetPixels) {
-				// TODO Auto-generated method stub
-				changeBlurImageViewAlpha(openRatio);
-			}
-		});
+		mMenuDrawer
+				.setOnDrawerStateChangeListener(new OnDrawerStateChangeListener() {
+
+					@Override
+					public void onDrawerStateChange(int oldState, int newState) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onDrawerSlide(float openRatio, int offsetPixels) {
+						// TODO Auto-generated method stub
+						changeBlurImageViewAlpha(openRatio);
+					}
+				});
 		mMenuAdapter = new SideMenuAdapter(this);
 		// mMenuAdapter.addContent(mTmpCities);
 		mMenuListView.setAdapter(mMenuAdapter);
 		mMenuListView.setOnItemClickListener(mItemClickListener);
 	}
+
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void changeBlurImageViewAlpha(float slideOffset) {
-		if(slideOffset <= 0){
+		if (slideOffset <= 0) {
 			mBlurImageView.setImageBitmap(null);
 			mBlurImageView.setVisibility(View.GONE);
 			return;
@@ -443,13 +444,14 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 				mRootView.getWidth(), mRootView.getHeight(), 10);
 		// apply the blur using the renderscript
 		FrostedGlassUtil.getInstance().stackBlur(downScaled, 4);
-//		FrostedGlassUtil.getInstance().boxBlur(downScaled, 4);
-//		FrostedGlassUtil.getInstance().colorWaterPaint(downScaled, 4);
-//		FrostedGlassUtil.getInstance().oilPaint(downScaled, 4);
+		// FrostedGlassUtil.getInstance().boxBlur(downScaled, 4);
+		// FrostedGlassUtil.getInstance().colorWaterPaint(downScaled, 4);
+		// FrostedGlassUtil.getInstance().oilPaint(downScaled, 4);
 		long engBlur = System.currentTimeMillis();
 		L.i("stackBlur cost " + (engBlur - beginBlur) + "ms");
 		mBlurImageView.setImageBitmap(downScaled);
 	}
+
 	private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -526,8 +528,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		}
 
 	};
-	private ShowcaseView mShowcaseView;
-	private int counter = 0;
 	// 进入下一个Activity
 	Runnable splashGone = new Runnable() {
 
@@ -550,66 +550,9 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 				@Override
 				public void onAnimationEnd(Animation animation) {
 					mSplashView.setVisibility(View.GONE);
-					if (PreferenceUtils.getPrefBoolean(MainActivity.this,
-							"showcase", true)) {
-						mShowcaseView = new ShowcaseView.Builder(
-								MainActivity.this)
-								.setTarget(
-										new ViewTarget(
-												findViewById(R.id.sidebarButton)))
-								.setContentTitle("点击查看更多设置")
-								.setOnClickListener(showcaseOnClick).build();
-						mShowcaseView.setButtonText("下一个");
-						mMainViewPager.setAlpha(0.2f);
-					}
 				}
 			});
 			mSplashView.startAnimation(anim);
 		}
 	};
-
-	OnClickListener showcaseOnClick = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			switch (counter) {
-			case 0:
-				mShowcaseView.setContentTitle("点击进入城市管理");
-				mShowcaseView.setShowcase(new ViewTarget(mTitleTextView), true);
-				break;
-			case 1:
-				mShowcaseView.setContentTitle("点击分享天气信息");
-				mShowcaseView.setShowcase(new ViewTarget(mShareBtn), true);
-				break;
-			case 2:
-				mShowcaseView.setContentTitle("向上滑动查看更多");
-				mShowcaseView.setShowcase(new ViewTarget(
-						findViewById(R.id.show_last_case)), true);
-				mShowcaseView.setButtonPosition(getLastShowCaseBtnLocation());
-				mShowcaseView.setButtonText("确定");
-				break;
-			case 3:
-				PreferenceUtils.setPrefBoolean(MainActivity.this, "showcase",
-						false);
-				mMainViewPager.setAlpha(1.0f);
-				mShowcaseView.hide();
-				break;
-			default:
-				break;
-			}
-			counter++;
-		}
-	};
-
-	private RelativeLayout.LayoutParams getLastShowCaseBtnLocation() {
-		RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(
-				ViewGroup.LayoutParams.WRAP_CONTENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		lps.addRule(RelativeLayout.CENTER_IN_PARENT);
-		lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		int margin = ((Number) (getResources().getDisplayMetrics().density * 12))
-				.intValue();
-		lps.setMargins(0, 0, margin, 0);
-		return lps;
-	}
 }

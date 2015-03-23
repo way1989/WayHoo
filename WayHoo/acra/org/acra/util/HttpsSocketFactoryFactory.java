@@ -1,7 +1,8 @@
 package org.acra.util;
 
-import android.content.Context;
 import org.apache.http.conn.scheme.SocketFactory;
+
+import android.content.Context;
 
 /**
  * Factory that creates an instance of a Https SocketFactory.

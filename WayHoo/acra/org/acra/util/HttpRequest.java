@@ -16,7 +16,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.Map;
 
-import android.content.Context;
 import org.acra.ACRA;
 import org.acra.sender.HttpSender.Method;
 import org.acra.sender.HttpSender.Type;
@@ -46,6 +45,8 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+
+import android.content.Context;
 
 public final class HttpRequest {
 

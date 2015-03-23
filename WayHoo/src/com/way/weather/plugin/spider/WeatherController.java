@@ -11,11 +11,11 @@ import org.json.JSONObject;
 
 import com.way.weather.plugin.bean.AQI;
 import com.way.weather.plugin.bean.Alerts;
+import com.way.weather.plugin.bean.Alerts.Alert;
 import com.way.weather.plugin.bean.Forecast;
 import com.way.weather.plugin.bean.Index;
 import com.way.weather.plugin.bean.IndexDetail;
 import com.way.weather.plugin.bean.RealTime;
-import com.way.weather.plugin.bean.Alerts.Alert;
 import com.way.weather.plugin.util.Tools;
 
 public class WeatherController {

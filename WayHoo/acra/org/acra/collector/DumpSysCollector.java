@@ -15,15 +15,16 @@
  */
 package org.acra.collector;
 
-import android.util.Log;
-import org.acra.ACRA;
-import org.acra.ACRAConstants;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.acra.ACRA;
+import org.acra.ACRAConstants;
+
+import android.util.Log;
 
 /**
  * Collects results of the <code>dumpsys</code> command.

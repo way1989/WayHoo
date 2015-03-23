@@ -17,9 +17,9 @@ package org.acra.sender;
 
 import org.acra.ACRA;
 import org.acra.ACRAConstants;
-import org.acra.collector.CrashReportData;
 import org.acra.ReportField;
 import org.acra.annotation.ReportsCrashes;
+import org.acra.collector.CrashReportData;
 
 import android.content.Context;
 import android.content.Intent;

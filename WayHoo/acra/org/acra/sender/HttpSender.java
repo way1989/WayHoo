@@ -22,7 +22,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.content.Context;
 import org.acra.ACRA;
 import org.acra.ACRAConfiguration;
 import org.acra.ACRAConstants;
@@ -32,6 +31,7 @@ import org.acra.collector.CrashReportData;
 import org.acra.util.HttpRequest;
 import org.acra.util.JSONReportBuilder.JSONReportException;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 

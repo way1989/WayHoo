@@ -19,9 +19,6 @@
 
 package org.acra;
 
-import android.content.Context;
-import org.acra.collector.CrashReportData;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -31,6 +28,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.util.Map;
+
+import org.acra.collector.CrashReportData;
+
+import android.content.Context;
 
 /**
  * Stores a crash reports data with {@link org.acra.ReportField} enum values as keys.

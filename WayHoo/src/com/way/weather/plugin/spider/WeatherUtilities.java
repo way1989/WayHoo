@@ -1,13 +1,11 @@
 package com.way.weather.plugin.spider;
 
 import java.util.Locale;
-import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 public class WeatherUtilities {
 	private static String checkLanguageSuport(String language) {

@@ -3,13 +3,10 @@ package com.way.yahoo;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,17 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.way.beans.City;
-import com.way.beans.MainItem;
 import com.way.common.util.L;
 import com.way.common.util.NetUtil;
-import com.way.common.util.SystemUtils;
 import com.way.common.util.WeatherIconUtils;
 import com.way.db.CityProvider;
 import com.way.db.CityProvider.CityConstants;
-import com.way.ui.swipeback.SwipeBackActivity;
 import com.way.ui.view.DragSortGridView;
-import com.way.weather.plugin.bean.Forecast;
-import com.way.weather.plugin.bean.RealTime;
 import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.weather.plugin.spider.WeatherSpider;
 

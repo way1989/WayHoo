@@ -27,8 +27,6 @@ import android.app.Activity;
 import android.app.Application.ActivityLifecycleCallbacks;
 import android.os.Bundle;
 
-import java.util.concurrent.Callable;
-
 /**
  * Wraps an {@link ActivityLifecycleCallbacksCompat} into an {@link ActivityLifecycleCallbacks}.
  */

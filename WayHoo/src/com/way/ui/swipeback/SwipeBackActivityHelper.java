@@ -3,8 +3,11 @@ package com.way.ui.swipeback;
 
 import java.lang.reflect.Method;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -77,11 +80,23 @@ public class SwipeBackActivityHelper {
      * This call has no effect on non-translucent activities or on activities
      * with the {@link android.R.attr#windowIsFloating} attribute.
      */
-    public void convertActivityFromTranslucent() {
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	public void convertActivityFromTranslucent() {
         try {
-            Method method = Activity.class.getDeclaredMethod("convertFromTranslucent", null);
-            method.setAccessible(true);
-            method.invoke(mActivity, null);
+//            Method method = Activity.class.getDeclaredMethod("convertFromTranslucent", null);
+//            method.setAccessible(true);
+//            method.invoke(mActivity, null);
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+				Method method = Activity.class.getDeclaredMethod(
+						"convertToTranslucent");
+				method.setAccessible(true);
+				method.invoke(mActivity, new Object[] { null });
+			} else {
+				Method method = Activity.class.getDeclaredMethod(
+						"convertToTranslucent", null, ActivityOptions.class);
+				method.setAccessible(true);
+				method.invoke(mActivity, new Object[] { null, null });
+			}
         } catch (Throwable t) {
         }
     }

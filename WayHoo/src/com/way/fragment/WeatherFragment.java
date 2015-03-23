@@ -1,15 +1,10 @@
 package com.way.fragment;
 
-import java.io.InputStream;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Build;

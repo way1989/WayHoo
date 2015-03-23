@@ -1,8 +1,9 @@
 package org.acra.util;
 
-import android.content.Context;
 import org.apache.http.conn.scheme.SocketFactory;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+
+import android.content.Context;
 
 /**
  * Default implementation of a HttpSocketFactoryFactory.

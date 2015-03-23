@@ -59,16 +59,17 @@
                     android:id="@+id/queryCityExit"
                     android:layout_width="18.0dip"
                     android:layout_height="18.0dip"
-                    android:layout_alignLeft="@id/queryCityText"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginBottom="2.0dip"
-                    android:layout_marginLeft="-30.0dip"
                     android:layout_marginRight="8.0dip"
-                    android:layout_toRightOf="@id/queryCityText"
                     android:background="@drawable/city_query_delete"
                     android:gravity="center_vertical"
-                    android:visibility="invisible" />
+                    android:visibility="invisible" 
+                    />
+                    android:layout_marginLeft="-30.0dip"
+                    android:layout_toRightOf="@id/queryCityText"
+                    android:layout_alignLeft="@id/queryCityText"
             </RelativeLayout>
 
             <TextView

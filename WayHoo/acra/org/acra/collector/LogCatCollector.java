@@ -15,11 +15,7 @@
  */
 package org.acra.collector;
 
-import android.util.Log;
-import org.acra.ACRA;
-import org.acra.ACRAConstants;
-import org.acra.annotation.ReportsCrashes;
-import org.acra.util.BoundedLinkedList;
+import static org.acra.ACRA.LOG_TAG;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +26,12 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.acra.ACRA.LOG_TAG;
+import org.acra.ACRA;
+import org.acra.ACRAConstants;
+import org.acra.annotation.ReportsCrashes;
+import org.acra.util.BoundedLinkedList;
+
+import android.util.Log;
 
 /**
  * Executes logcat commands and collects it's output.

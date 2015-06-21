@@ -1,13 +1,10 @@
 package com.way.fragment;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +41,6 @@ import com.way.yahoo.App;
 import com.way.yahoo.BaseActivity;
 import com.way.yahoo.R;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-@SuppressLint("ValidFragment")
 public class WeatherFragment extends Fragment implements OnRefreshListener,
 		OnPullEventListener {
 	public static final String ARG_CITY = "city";
@@ -88,26 +83,161 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		mContentResolver = getActivity().getContentResolver();
 	}
 
-	private View mView;
+	private View mRootView;
+    //分别表示当前Fragment是否可见,是否已准备(表示已经走过onCreateView方法)以及是否数据已加载
+    private boolean isVisible = false;
+    private boolean isPrepared = false;
+    private boolean isLoaded = false;
+    private AsynTaskState mAsynState = AsynTaskState.INIT;
+    /**
+     * 异步数据处理的状态枚举
+     */
+    private enum AsynTaskState {
 
+        /**
+         * 初始化，应该进行异步数据加载，应继续使用Loading布局
+         */
+        INIT,
+
+        /**
+         * 处理中，继续使用Loading布局
+         */
+        PROCESSING,
+
+        /**
+         * 处理完成，可以加载UI，执行加载内容布局
+         */
+        RPOCESSED,
+
+        /**
+         * 加载完成，继续使用内容布局
+         */
+        COMPLETE
+
+    }
+    /**
+     * 不提供覆写，需监听可见性的子类可覆写{@link #onFragmentVisible()}和
+     * {@link #onFragmentInvisible()}方法
+     *
+     * @param isVisibleToUser 当前Fragment的可见性
+     */
+    @Override
+    public final void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        isVisible = isVisibleToUser;
+        if (getUserVisibleHint()) {
+            onLoadedData();
+            //onFragmentVisible();
+        } else {
+            //onFragmentInvisible();
+        }
+    }
+    /**
+     * 在Fragment可见时进行判断是否载入数据
+     */
+    private void onLoadedData() {
+        if (!isPrepared)
+            return;
+        if (isLoaded) {
+        	updateWeatherView();
+        } else {
+            switch (mAsynState) {
+                case INIT:
+                    mAsynState = AsynTaskState.PROCESSING;
+                    mGetDataTask = new GetDataTask();
+    				mGetDataTask.execute();
+    				mPullRefreshScrollView.setRefreshing();
+                    break;
+                case PROCESSING:
+                	mPullRefreshScrollView.setRefreshing();
+                    break;
+                case RPOCESSED:
+                	mPullRefreshScrollView.setRefreshing();
+                    break;
+                case COMPLETE:
+                	updateWeatherView();
+                    break;
+            }
+        }
+    }
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// if(mView != null){
-		// if(mView.getParent() != null){
-		// ((ViewGroup)mView.getParent()).removeView(mView);
-		// }
-		// return mView;
-		// }
-		mView = inflater.inflate(R.layout.weather_fragment, container, false);
+		if(mRootView == null){
+			mRootView = inflater.inflate(R.layout.weather_fragment, container, false);
+			initViews(mRootView);
+			if(isVisible){
+				mGetDataTask = new GetDataTask();
+				mGetDataTask.execute();
+				mPullRefreshScrollView.setRefreshing();
+			}else{
+				
+			}
+            isPrepared = true;
+            isLoaded = false;
+		}else{
+			ViewGroup mRootParent = (ViewGroup) mRootView.getParent();
+			if (mRootParent != null) {
+				mRootParent.removeView(mRootView);
+			}
+			if(isLoaded){
+				updateWeatherView();
+			}else{
+				if (isVisible) {
+					switch (mAsynState) {
+					case INIT:
+						mAsynState = AsynTaskState.PROCESSING;
+						mGetDataTask = new GetDataTask();
+						mGetDataTask.execute();
+						mPullRefreshScrollView.setRefreshing();
+						break;
+					case PROCESSING:
+						mPullRefreshScrollView.setRefreshing();
+						break;
+					case RPOCESSED:
+						mPullRefreshScrollView.setRefreshing();
+						break;
+					case COMPLETE:
+						updateWeatherView();
+						break;
+					}
+				} else {
+				}
+			}
+		}
 		// L.i("liweiping","Fragment onCreateView");
-		return mView;
+		return mRootView;
 	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		if (isNeedDestroy()) {
+			mRootView = null;
+			isVisible = false;
+			isPrepared = false;
+			isLoaded = false;
+
+			mAsynState = AsynTaskState.INIT;
+		}
+	}
+    /**
+     * 如果此Fragment占用的数据量过大，可覆写此方法返回true，
+     * 表示需要当Fragment无效时进行数据清理，然后覆写{@link #onClearDataset()}方法
+     * 对占用内存的数据进行清理和对视图控件引用的释放(否则内存不会释放)，
+     * 这样此Fragment再次回到台前时会重新加载所有的数据
+     *
+     * @return true表示子类选择了数据销毁，当Fragment不可见的时候，这样下次Fragment可见时会重新加载数据
+     */
+    protected boolean isNeedDestroy() {
+        return false;
+    }
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		initViews(view);
+		//initViews(view);
 	}
 
 	/**
@@ -121,7 +251,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 				.findViewById(R.id.weather_background);
 		mBlurredImageView = (ImageView) view
 				.findViewById(R.id.weather_background_blurred);
-		mBlurredImageView.getDrawable().setAlpha(0 * 255);// 设置默认模糊背景为透明
+		mBlurredImageView.setAlpha(0f);// 设置默认模糊背景为透明
 
 		mPullRefreshScrollView = (PullToRefreshScrollView) view
 				.findViewById(R.id.pull_refresh_scrollview);
@@ -184,13 +314,13 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		mCurFeelsTempTV = (TextView) view.findViewById(R.id.temperature);
 		mCurWeatherCopyTV = (TextView) view.findViewById(R.id.copyright);
 
-		updateWeatherView(App.mMainMap.get(mCurCity.getPostID()), false);
+		//updateWeatherView(App.mMainMap.get(mCurCity.getPostID()), false);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		mListView.setSelection(0);// 选中第一个view，当fragment被回收后再重新创建时恢复状态
+		//mListView.setSelection(0);// 选中第一个view，当fragment被回收后再重新创建时恢复状态
 	}
 
 	// ListView滑动监听，更新背景模糊度和移动距离
@@ -244,9 +374,8 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		// L.i("liweiping", "-mHeaderView.getTop() = " +
 		// (-mHeaderView.getTop())
 		// + ",  mHeaderHeight = " + mHeaderHeight + ", ratio = " + ratio);
-		int newAlpha = Math.round(ratio * 255);
 		// Apply on the ImageView if needed
-		mBlurredImageView.getDrawable().setAlpha(newAlpha);
+		mBlurredImageView.setAlpha(ratio);
 
 		// 控制背景滑动距离
 		int dampedScroll = Math.round(scrollPosition * 0.125f);
@@ -267,10 +396,12 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			super.onPreExecute();
 			// Call setRefreshing when the list begin to refresh.
 			mPullRefreshScrollView.setRefreshing(true);
+			mAsynState = AsynTaskState.PROCESSING;
 		}
 
 		@Override
 		protected WeatherInfo doInBackground(Void... params) {
+			
 			// Simulates a background job.
 			try {
 				return mActivity.getWeatherInfo(mCurCity.getPostID(), true);
@@ -283,36 +414,39 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		@Override
 		protected void onPostExecute(WeatherInfo result) {
 			super.onPostExecute(result);
+			mAsynState = AsynTaskState.RPOCESSED;
 			// Do some stuff here
 			// Call onRefreshComplete when the list has been refreshed.
 			mPullRefreshScrollView.onRefreshComplete();
 			if (!WeatherSpider.isEmpty(result)) {
+				mWeatherInfo = result;
 				if (getActivity() != null)
 					Toast.makeText(getActivity(), "刷新成功:" + mCurCity.getName(),
 							Toast.LENGTH_SHORT).show();
-				updateWeatherView(result, true);
+				updateWeatherView();
 				App.mMainMap.put(mCurCity.getPostID(), result);// 保存到全局变量
 			} else {
 				if (getActivity() != null)
 					Toast.makeText(getActivity(), "刷新失败:" + mCurCity.getName(),
 							Toast.LENGTH_SHORT).show();
 			}
-
+			mAsynState = AsynTaskState.COMPLETE;
 		}
 
 	}
+	private WeatherInfo mWeatherInfo;
 
 	/**
 	 * 更新天气信息界面
 	 */
-	private void updateWeatherView(WeatherInfo weatherInfo, boolean isFroce) {
-		if (WeatherSpider.isEmpty(weatherInfo)) {
+	private void updateWeatherView() {
+		if (WeatherSpider.isEmpty(mWeatherInfo)) {
 			if (getActivity() != null)
 				Toast.makeText(getActivity(), R.string.get_weatherifo_fail,
 						Toast.LENGTH_SHORT).show();
 			return;
 		}
-
+		WeatherInfo weatherInfo = mWeatherInfo;
 		RealTime realTime = weatherInfo.getRealTime();
 		AQI aqi = weatherInfo.getAqi();
 		Forecast forecast = weatherInfo.getForecast();

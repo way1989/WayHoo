@@ -33,7 +33,7 @@ way:
 ## 测试截图
 
 ###高斯模糊效果图
-![Screenshot 0](http://git.oschina.net/way/WayHoo/raw/master/screenshots/0.png "Screenshot 0")
+![Screenshot 0](https://raw.githubusercontent.com/way1989/WayHoo/master/screenshots/0.png "Screenshot 0")
 
 ![Screenshot 1](http://git.oschina.net/way/WayHoo/raw/master/screenshots/1.png "Screenshot 1")
 

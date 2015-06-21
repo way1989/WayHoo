@@ -266,15 +266,14 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		// HeaderView高度=屏幕高度-标题栏高度-状态栏高度
 		mHeaderHeight = displayHeight
 				- getResources().getDimensionPixelSize(
-						R.dimen.abs__action_bar_default_height)
-				- SystemUtils.getStatusBarHeight(getActivity());
+						R.dimen.abs__action_bar_default_height);
+				//- SystemUtils.getStatusBarHeight(getActivity());
 		mListHeaderView.setLayoutParams(new LayoutParams(
 				LayoutParams.MATCH_PARENT, mHeaderHeight));
 		// 计算背景View的高度，适当比屏幕高度多一点，
 		// 之所以多1/8是为了后面滑动ListView时背景能跟随滑动。
 		int backgroundHeight = displayHeight
-				- SystemUtils.getStatusBarHeight(getActivity()) + mHeaderHeight
-				/ 8;
+				+ mHeaderHeight / 8;
 		mNormalImageView.setLayoutParams(new FrameLayout.LayoutParams(
 				FrameLayout.LayoutParams.MATCH_PARENT, backgroundHeight));
 		mBlurredImageView.setLayoutParams(new FrameLayout.LayoutParams(

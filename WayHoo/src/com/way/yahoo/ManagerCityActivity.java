@@ -134,7 +134,7 @@ public class ManagerCityActivity extends BaseActivity implements
 			getAllWeather();
 		} else {
 			mAdapter.setRefreshingIndex(-1);
-			App.getVolleyRequestQueue().stop();
+			App.getVolleyRequestQueue().cancelAll("All");
 		}
 
 	}
@@ -595,7 +595,7 @@ public class ManagerCityActivity extends BaseActivity implements
 					mAdapter.setRefreshingIndex(mIndex);// 重置
 				}
 			});
-			sr.setTag(postID);
+			sr.setTag("All");
 			App.getVolleyRequestQueue().add(sr);
 		}
 	}

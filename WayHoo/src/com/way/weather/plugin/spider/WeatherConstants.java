@@ -1006,6 +1006,7 @@ public class WeatherConstants {
 		INDEX_DESC_TW_MAP.put("晨练指数", EXERCISE_INDEX_DESC_TW_MAP);
 		INDEX_DESC_TW_MAP.put("舒适度指数", COMFORT_INDEX_DESC_TW_MAP);
 		INDEX_EN_MAP = new HashMap();
+		INDEX_EN_MAP.put("风力指数", "Wind index");
 		INDEX_EN_MAP.put("穿衣指数", "Clothing");
 		INDEX_EN_MAP.put("48小时穿衣指数", "48 hours Clothing");
 		INDEX_EN_MAP.put("洗车指数", "Car wash index");
@@ -1016,6 +1017,7 @@ public class WeatherConstants {
 		INDEX_EN_MAP.put("晨练指数", "Morning exercise");
 		INDEX_EN_MAP.put("舒适度指数", "Comfort");
 		INDEX_CN_MAP = new HashMap();
+		INDEX_CN_MAP.put("风力指数", "风力指数");
 		INDEX_CN_MAP.put("穿衣指数", "穿衣指数");
 		INDEX_CN_MAP.put("48小时穿衣指数", "48小时穿衣指数");
 		INDEX_CN_MAP.put("洗车指数", "洗车指数");
@@ -1026,6 +1028,7 @@ public class WeatherConstants {
 		INDEX_CN_MAP.put("晨练指数", "晨练指数");
 		INDEX_CN_MAP.put("舒适度指数", "舒适度指数");
 		INDEX_TW_MAP = new HashMap();
+		INDEX_TW_MAP.put("风力指数", "風力指數");
 		INDEX_TW_MAP.put("穿衣指数", "穿衣指數");
 		INDEX_TW_MAP.put("48小时穿衣指数", "48小时穿衣指數");
 		INDEX_TW_MAP.put("洗车指数", "洗車指數");

@@ -66,7 +66,7 @@ public class CityProvider extends ContentProvider {
 		db.execSQL("CREATE table IF NOT EXISTS "
 				+ TMPCITY_TABLE_NAME
 				+ " (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, postID TEXT,"
-				+ " refreshTime TEXT, isLocation TEXT)");
+				+ " refreshTime TEXT, isLocation TEXT, pubTime TEXT, weatherInfo TEXT)");
 	}
 
 	@Override
@@ -254,6 +254,8 @@ public class CityProvider extends ContentProvider {
 		public static final String POST_ID = "postID";
 
 		public static final String REFRESH_TIME = "refreshTime";// 临时城市列表刷新时间
+		public static final String PUB_TIME = "pubTime";// 临时城市列表刷新时间
+		public static final String WEATHER_INFO = "weatherInfo";// 临时城市列表刷新时间
 		public static final String ISLOCATION = "isLocation";
 
 		public static final String DEFAULT_SORT_ORDER = "_id ASC"; // 默认按照_id排序

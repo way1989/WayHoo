@@ -21,16 +21,6 @@
 
     <include layout="@layout/activity_main_actionbar" />
 
-    <include
-        android:id="@+id/splash_view"
-        layout="@layout/splash" />
-
-    <View
-        android:id="@+id/show_last_case"
-        android:layout_width="0dip"
-        android:layout_height="0dip"
-        android:layout_gravity="center|bottom" />
-
     <ImageView
         android:id="@+id/blur_overlay_img"
         android:layout_width="match_parent"

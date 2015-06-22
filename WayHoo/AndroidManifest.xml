@@ -34,15 +34,20 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.way.yahoo.MainActivity"
+            android:name="com.way.yahoo.SplashActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.way.yahoo.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.way.yahoo.ManagerCityActivity"
@@ -68,15 +73,15 @@
             android:name="com.way.yahoo.FeedBackActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SecondAppTheme"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-             />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
             android:windowSoftInputMode="stateHidden|adjustResize"
-      <activity
+        <activity
             android:name="org.acra.CrashReportDialog"
             android:excludeFromRecents="true"
             android:finishOnTaskLaunch="true"
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

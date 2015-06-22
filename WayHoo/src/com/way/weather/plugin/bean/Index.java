@@ -1,17 +1,8 @@
 package com.way.weather.plugin.bean;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class Index implements Parcelable ,Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Index {
 	private String city_code;
 	private List<IndexDetail> index;
 
@@ -35,33 +26,5 @@ public class Index implements Parcelable ,Serializable {
 	public String toString() {
 		return "Index [city_code=" + city_code + ", index=" + index + "]";
 	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(city_code);
-		dest.writeList(index);
-	}
-
-	public static final Parcelable.Creator<Index> CREATOR = new Creator<Index>() {
-
-		@Override
-		public Index[] newArray(int size) {
-			return new Index[size];
-		}
-
-		@Override
-		public Index createFromParcel(Parcel source) {
-			Index item = new Index();
-			item.city_code = source.readString();
-			item.index = new ArrayList<IndexDetail>();
-			source.readList(item.index, getClass().getClassLoader());
-			return item;
-		}
-	};
 
 }

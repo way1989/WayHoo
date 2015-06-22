@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
 
+import org.json.JSONException;
+
 import net.simonvt.menudrawer.MenuDrawer;
 import net.simonvt.menudrawer.MenuDrawer.OnDrawerStateChangeListener;
 import android.annotation.SuppressLint;
@@ -20,12 +22,10 @@ import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -41,7 +41,6 @@ import com.way.beans.Category;
 import com.way.beans.City;
 import com.way.beans.Item;
 import com.way.common.util.L;
-import com.way.common.util.LocationUtils.LocationListener;
 import com.way.common.util.PreferenceUtils;
 import com.way.common.util.SystemUtils;
 import com.way.common.util.T;
@@ -49,6 +48,7 @@ import com.way.common.util.TimeUtils;
 import com.way.util.blur.jni.BitmapUtils;
 import com.way.util.blur.jni.FrostedGlassUtil;
 import com.way.weather.plugin.bean.WeatherInfo;
+import com.way.weather.plugin.spider.WeatherSpider;
 
 @SuppressLint("NewApi")
 public class MainActivity extends BaseActivity implements OnClickListener,
@@ -58,9 +58,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 	private String mAqiShareStr = "空气质量指数(AQI):%s μg/m³,等级[%s];PM2.5浓度值:%s μg/m³。%s ";// aqi、等级、pm2.5、建议
 	private String mShareEndStr = "（请关注博客：http://blog.csdn.net/way_ping_li）";
 	private MenuDrawer mMenuDrawer;
-	private View mSplashView;
-	private static final int SHOW_TIME_MIN = 3000;// 最小显示时间
-	private long mStartTime;// 开始时间
 	private Handler mHandler;
 	private SideMenuAdapter mMenuAdapter;
 	private int mPagerOffsetPixels;
@@ -112,19 +109,19 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 	}
 
 	private void initDatas() {
-		mStartTime = System.currentTimeMillis();// 记录开始时间，
 		mHandler = new Handler();
 		// mTmpCities = getTmpCities();
 		// 第一次进来无定位城市
 		if (TextUtils.isEmpty(PreferenceUtils.getPrefString(this,
 				AUTO_LOCATION_CITY_KEY, ""))) {
-			startLocation(mCityNameStatus);
+			//startLocation(mCityNameStatus);
+			Intent i = new Intent(MainActivity.this, QueryCityActivity.class);
+			startActivity(i);
 		}
 	}
 
 	private void initViews() {
 		setSwipeBackEnable(false);
-		mSplashView = findViewById(R.id.splash_view);
 		mBlurImageView = (ImageView) findViewById(R.id.blur_overlay_img);
 		mRootView = (FrameLayout) findViewById(R.id.root_view);
 		mAddCityBtn = (Button) findViewById(R.id.add_city_btn);
@@ -137,6 +134,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		// mMainViewPager.setOffscreenPageLimit(2);
 		mFragmentAdapter = new WeatherPagerAdapter(this);
 		mMainViewPager.setAdapter(mFragmentAdapter);
+		mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
 		mCirclePageIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
 		mCirclePageIndicator.setViewPager(mMainViewPager);
 		mCirclePageIndicator.setOnPageChangeListener(this);
@@ -147,47 +145,16 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		mShareBtn.setOnClickListener(this);
 	}
 
-	private class MyTask extends AsyncTask<List<City>, Void, Void> {
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}
-
-		@Override
-		protected Void doInBackground(List<City>... params) {
-			List<City> cities = params[0];
-			try {
-				for (City city : cities) {
-					WeatherInfo info = getWeatherInfo(city.getPostID(), false);
-					App.mMainMap.put(city.getPostID(), info);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			updateUI();
-		}
-
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
 		mTmpCities = getTmpCities();
-		if (App.mMainMap.isEmpty() && !mTmpCities.isEmpty()) {
-			new MyTask().execute(mTmpCities);
-		} else if (!App.mMainMap.isEmpty()) {
+		if (!mTmpCities.isEmpty()) {
 			updateUI();
 		} else {
 			// 需要定位
 			visibleAddCityBtn();
 		}
-		invisibleSplash();
 	}
 
 	@Override
@@ -208,14 +175,16 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
 	private void updateUI() {
 		// 修复一个bug，当所有城市被删除之后，再进来不刷新界面
-		if (mFragmentAdapter.getCount() == 0) {
-			mFragmentAdapter = new WeatherPagerAdapter(this);
-			mMainViewPager.setAdapter(mFragmentAdapter);
-			mCirclePageIndicator.setViewPager(mMainViewPager);
-			mCirclePageIndicator.setOnPageChangeListener(this);
-		}
+//		if (mFragmentAdapter.getCount() == 0) {
+//			mFragmentAdapter = new WeatherPagerAdapter(this);
+//			mMainViewPager.setAdapter(mFragmentAdapter);
+//			mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
+//			mCirclePageIndicator.setViewPager(mMainViewPager);
+//			mCirclePageIndicator.setOnPageChangeListener(this);
+//		}
 		mFragmentAdapter.addAllItems(mTmpCities);
 		L.i("MainActivity updateUI...");
+		mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
 		mMenuAdapter.addContent(mTmpCities);
 		mCirclePageIndicator.notifyDataSetChanged();
 		// 第一次进来没有数据
@@ -242,14 +211,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 			mLocationIV.setVisibility(View.GONE);
 	}
 
-	private void invisibleSplash() {
-		long loadingTime = System.currentTimeMillis() - mStartTime;// 计算一下总共花费的时间
-		if (loadingTime < SHOW_TIME_MIN) {// 如果比最小显示时间还短，就延时进入MainActivity，否则直接进入
-			mHandler.postDelayed(splashGone, SHOW_TIME_MIN - loadingTime);
-		} else {
-			mHandler.post(splashGone);
-		}
-	}
 
 	@Override
 	public void onClick(View v) {
@@ -305,13 +266,24 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 			protected void onPostExecute(File result) {
 				super.onPostExecute(result);
 				dialog.dismiss();
-				if (result == null || App.mMainMap.isEmpty()) {
+				if (result == null) {
 					Toast.makeText(MainActivity.this, R.string.share_fail,
 							Toast.LENGTH_SHORT).show();
 					return;
 				}
-				WeatherInfo info = App.mMainMap.get(mTmpCities.get(
-						mMainViewPager.getCurrentItem()).getPostID());
+				WeatherInfo info = null;
+				City city = mTmpCities.get(
+						mMainViewPager.getCurrentItem());
+				if(city == null)
+					return;
+				try {
+					info = WeatherSpider
+						.getWeatherInfo(MainActivity.this, city.getPostID(), city.getWeatherInfoStr());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}catch (Exception e){
+					e.printStackTrace();
+				}
 				if (info == null || info.getRealTime() == null
 						|| info.getRealTime().getAnimation_type() < 0) {
 					Toast.makeText(MainActivity.this, R.string.share_fail,
@@ -492,67 +464,4 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		}
 	}
 
-	LocationListener mCityNameStatus = new LocationListener() {
-
-		@Override
-		public void detecting() {
-			// do nothing
-		}
-
-		@Override
-		public void succeed(String name) {
-			City city = getLocationCityFromDB(name);
-			if (TextUtils.isEmpty(city.getPostID())) {
-				Toast.makeText(MainActivity.this, R.string.no_this_city,
-						Toast.LENGTH_SHORT).show();
-			} else {
-				PreferenceUtils.setPrefString(MainActivity.this,
-						AUTO_LOCATION_CITY_KEY, name);
-				L.i("liweiping", "location" + city.toString());
-				addOrUpdateLocationCity(city);
-				T.showShort(
-						MainActivity.this,
-						String.format(
-								getResources().getString(
-										R.string.get_location_scuess), name));
-
-				mTmpCities = getTmpCities();
-				new MyTask().execute(mTmpCities);
-			}
-		}
-
-		@Override
-		public void failed() {
-			Toast.makeText(MainActivity.this, R.string.getlocation_fail,
-					Toast.LENGTH_SHORT).show();
-		}
-
-	};
-	// 进入下一个Activity
-	Runnable splashGone = new Runnable() {
-
-		@Override
-		public void run() {
-			if (mSplashView.getVisibility() != View.VISIBLE)
-				return;
-			Animation anim = AnimationUtils.loadAnimation(MainActivity.this,
-					R.anim.push_right_out);
-			anim.setAnimationListener(new AnimationListener() {
-
-				@Override
-				public void onAnimationStart(Animation animation) {
-				}
-
-				@Override
-				public void onAnimationRepeat(Animation animation) {
-				}
-
-				@Override
-				public void onAnimationEnd(Animation animation) {
-					mSplashView.setVisibility(View.GONE);
-				}
-			});
-			mSplashView.startAnimation(anim);
-		}
-	};
 }

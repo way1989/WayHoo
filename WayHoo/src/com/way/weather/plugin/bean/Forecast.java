@@ -1,182 +1,171 @@
 package com.way.weather.plugin.bean;
 
-import java.io.Serializable;
 import java.util.Arrays;
-
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.way.weather.plugin.util.Constants;
 
-public class Forecast implements Parcelable ,Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	public static final int DayNum = 6;
-	private Integer[] humiditys = new Integer[DayNum];
+public class Forecast {
+	public static final int DAY_NUM = 6;
 	private String pid;
-	private Integer[] pressures = new Integer[DayNum];
 	private Long pub_time;
-	private Long[] sunrise = new Long[DayNum];
-	private Long[] sunset = new Long[DayNum];
-	private Integer[] tmpHighs = new Integer[DayNum];
-	private Integer[] tmpLows = new Integer[DayNum];
-	private String[] weatherNames = new String[DayNum];
-	private String[] weatherNamesFrom = new String[DayNum];
-	private String[] weatherNamesTo = new String[DayNum];
-	private String[] winds = new String[DayNum];
+	private Integer[] humiditys = new Integer[DAY_NUM];
+	private Integer[] pressures = new Integer[DAY_NUM];
+	private Long[] sunrise = new Long[DAY_NUM];
+	private Long[] sunset = new Long[DAY_NUM];
+	private Integer[] tmpHighs = new Integer[DAY_NUM];
+	private Integer[] tmpLows = new Integer[DAY_NUM];
+	private String[] weatherNames = new String[DAY_NUM];
+	private String[] weatherNamesFrom = new String[DAY_NUM];
+	private String[] weatherNamesTo = new String[DAY_NUM];
+	private String[] winds = new String[DAY_NUM];
 
-	private int[] types = new int[6];
+	private int[] types = new int[DAY_NUM];
 
 	public int getHumidity(int position) {
-		if ((position > 5) || (position < 0)
-				|| (this.humiditys[position] == null))
+		if (position >= DAY_NUM || position < 0
+				|| this.humiditys[position] == null)
 			return Constants.NO_VALUE_FLAG;
-		return this.humiditys[position].intValue();
+		return humiditys[position];
 	}
 
 	public String getPid() {
-		return this.pid;
+		return pid;
 	}
 
 	public int getPressure(int position) {
-		if ((position > 5) || (position < 0)
-				|| (this.pressures[position] == null))
+		if (position >= DAY_NUM || position < 0 || pressures[position] == null)
 			return Constants.NO_VALUE_FLAG;
-		return this.pressures[position].intValue();
+		return pressures[position];
 	}
 
-	public Long getPubtime() {
-		return this.pub_time;
+	public long getPubtime() {
+		return pub_time;
 	}
 
-	public String getSunrise(int position) {
-		if ((position > 5) || (position < 0))
-			return "";
-		return this.sunrise[position].toString();
+	public long getSunrise(int position) {
+		if (position >= DAY_NUM || position < 0)
+			return Constants.NO_VALUE_FLAG;
+		return sunrise[position];
 	}
 
-	public String getSunset(int position) {
-		if ((position > 5) || (position < 0))
-			return "";
-		return this.sunset[position].toString();
+	public long getSunset(int position) {
+		if (position >= DAY_NUM || position < 0)
+			return Constants.NO_VALUE_FLAG;
+		return sunset[position];
 	}
 
 	public int getTmpHigh(int position) {
-		if ((position > 5) || (position < 0)
-				|| (this.tmpHighs[position] == null))
+		if (position >= DAY_NUM || position < 0 || tmpHighs[position] == null)
 			return Constants.NO_VALUE_FLAG;
-		return this.tmpHighs[position].intValue();
+		return tmpHighs[position];
 	}
 
 	public int getTmpLow(int position) {
-		if ((position > 5) || (position < 0)
-				|| (this.tmpLows[position] == null))
+		if (position >= DAY_NUM || position < 0 || tmpLows[position] == null)
 			return Constants.NO_VALUE_FLAG;
-		return this.tmpLows[position].intValue();
+		return tmpLows[position];
 	}
 
 	public String getWeatherNames(int position) {
-		if ((position > 5) || (position < 0))
+		if (position >= DAY_NUM || position < 0)
 			return "";
-		return this.weatherNames[position];
+		return weatherNames[position];
 	}
 
 	public String getWeatherNamesFrom(int position) {
-		if ((position > 5) || (position < 0))
+		if (position >= DAY_NUM || position < 0)
 			return "";
-		return this.weatherNamesFrom[position];
+		return weatherNamesFrom[position];
 	}
 
 	public String getWeatherNamesTo(int position) {
-		if ((position > 5) || (position < 0))
+		if (position >= DAY_NUM || position < 0)
 			return "";
-		return this.weatherNamesTo[position];
+		return weatherNamesTo[position];
 	}
 
 	public String getWinds(int position) {
-		if ((position > 5) || (position < 0))
+		if (position >= DAY_NUM || position < 0)
 			return "";
-		return this.winds[position];
+		return winds[position];
 	}
 
-	public void setHumiditys(int position, int value) {
-		if ((position > 5) || (position < 0))
+	public void setHumiditys(int position, int humidity) {
+		if (position >= DAY_NUM || position < 0)
 			return;
-		this.humiditys[position] = Integer.valueOf(value);
+		this.humiditys[position] = humidity;
 	}
 
 	public void setPid(String pid) {
 		this.pid = pid;
 	}
 
-	public void setPressures(int position, int value) {
-		if ((position > 5) || (position < 0))
+	public void setPressures(int position, int pressure) {
+		if (position >= DAY_NUM || position < 0)
 			return;
-		this.pressures[position] = Integer.valueOf(value);
+		this.pressures[position] = pressure;
 	}
 
 	public void setPubtime(Long pubtime) {
 		this.pub_time = pubtime;
 	}
 
-	public void setSunrise(int position, Long time) {
-		if ((position > 5) || (position < 0))
+	public void setSunrise(int position, long sunrise) {
+		if (position >= DAY_NUM || position < 0)
 			return;
-		this.sunrise[position] = time;
+		this.sunrise[position] = sunrise;
 	}
 
-	public void setSunset(int position, Long time) {
-		if ((position > 5) || (position < 0))
+	public void setSunset(int position, long sunset) {
+		if (position >= DAY_NUM || position < 0)
 			return;
-		this.sunset[position] = time;
+		this.sunset[position] = sunset;
 	}
 
-	public void setTmpHighs(int position, int value) {
-		if ((position > 5) || (position < 0))
+	public void setTmpHighs(int position, int tmpHigh) {
+		if (position >= DAY_NUM || position < 0)
 			return;
-		this.tmpHighs[position] = Integer.valueOf(value);
+		this.tmpHighs[position] = tmpHigh;
 	}
 
-	public void setTmpLows(int position, int value) {
-		if ((position > 5) || (position < 0))
+	public void setTmpLows(int position, int tmpLow) {
+		if (position >= DAY_NUM || position < 0)
 			return;
-		this.tmpLows[position] = Integer.valueOf(value);
+		this.tmpLows[position] = tmpLow;
 	}
 
-	public void setWeatherNames(int position, String value) {
-		if ((position > 5) || (position < 0))
+	public void setWeatherNames(int position, String weatherName) {
+		if (position >= DAY_NUM || position < 0)
 			return;
-		this.weatherNames[position] = value;
+		this.weatherNames[position] = weatherName;
 	}
 
-	public void setWeatherNamesFrom(int position, String weatherName) {
-		if ((position > 5) || (position < 0))
+	public void setWeatherNamesFrom(int position, String weatherNameFrom) {
+		if (position >= DAY_NUM || position < 0)
 			return;
-		this.weatherNamesFrom[position] = weatherName;
+		this.weatherNamesFrom[position] = weatherNameFrom;
 	}
 
-	public void setWeatherNamesTo(int position, String weatherName) {
-		if ((position > 5) || (position < 0))
+	public void setWeatherNamesTo(int position, String weatherNameTo) {
+		if (position >= DAY_NUM || position < 0)
 			return;
-		this.weatherNamesTo[position] = weatherName;
+		this.weatherNamesTo[position] = weatherNameTo;
 	}
 
 	public void setWinds(int position, String wind) {
-		if ((position > 5) || (position < 0))
+		if (position >= DAY_NUM || position < 0)
 			return;
 		this.winds[position] = wind;
 	}
 
 	public int getType(int position) {
-		if (position > 5 || position < 0)
+		if (position >= DAY_NUM || position < 0)
 			return Constants.NO_VALUE_FLAG;
 		return types[position];
 	}
 
 	public void setType(int position, int type) {
-		if (position > 5 || position < 0)
+		if (position >= DAY_NUM || position < 0)
 			return;
 		this.types[position] = type;
 	}
@@ -197,63 +186,4 @@ public class Forecast implements Parcelable ,Serializable {
 				+ "]";
 	}
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeArray(humiditys);
-		dest.writeString(pid);
-		dest.writeArray(pressures);
-		dest.writeLong(pub_time);
-		dest.writeArray(sunrise);
-		dest.writeArray(sunset);
-		dest.writeArray(tmpHighs);
-		dest.writeArray(tmpLows);
-		dest.writeStringArray(weatherNames);
-		dest.writeStringArray(weatherNamesFrom);
-		dest.writeStringArray(weatherNamesTo);
-		dest.writeStringArray(winds);
-		dest.writeIntArray(types);
-	}
-
-	public static final Parcelable.Creator<Forecast> CREATOR = new Creator<Forecast>() {
-
-		@Override
-		public Forecast[] newArray(int size) {
-			return new Forecast[size];
-		}
-
-		@Override
-		public Forecast createFromParcel(Parcel source) {
-			Forecast item = new Forecast();
-			item.humiditys = (Integer[]) source.readArray(getClass()
-					.getClassLoader());
-			item.pid = source.readString();
-			item.pressures = (Integer[]) source.readArray(getClass()
-					.getClassLoader());
-			item.pub_time = source.readLong();
-			item.sunrise = (Long[]) source.readArray(getClass()
-					.getClassLoader());
-			item.sunset = (Long[]) source
-					.readArray(getClass().getClassLoader());
-			item.tmpHighs = (Integer[]) source.readArray(getClass()
-					.getClassLoader());
-			item.tmpLows = (Integer[]) source.readArray(getClass()
-					.getClassLoader());
-			item.weatherNames = new String[DayNum];
-			source.readStringArray(item.weatherNames);
-			item.weatherNamesFrom = new String[DayNum];
-			source.readStringArray(item.weatherNamesFrom);
-			item.weatherNamesTo = new String[DayNum];
-			source.readStringArray(item.weatherNamesTo);
-			item.winds = new String[DayNum];
-			source.readStringArray(item.winds);
-			item.types = new int[DayNum];
-			source.readIntArray(item.types);
-			return item;
-		}
-	};
 }

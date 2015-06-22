@@ -14,16 +14,20 @@ public class City implements Parcelable {
 	private String postID;
 	private long refreshTime;
 	private int isLocation;
+	private long pubTime;
+	private String weatherInfoStr;
 
 	public City() {
 	}
 
-	public City(String name, String postID, long refreshTime, int isLocation) {
+	public City(String name, String postID, long refreshTime, int isLocation, long pubTime, String weatherInfoStr) {
 		super();
 		this.name = name;
 		this.postID = postID;
 		this.refreshTime = refreshTime;
 		this.isLocation = isLocation;
+		this.pubTime = pubTime;
+		this.weatherInfoStr = weatherInfoStr;
 	}
 
 	public City(String name, String postID) {
@@ -123,6 +127,22 @@ public class City implements Parcelable {
 
 	public void setRefreshTime(long refreshTime) {
 		this.refreshTime = refreshTime;
+	}
+
+	public long getPubTime() {
+		return pubTime;
+	}
+
+	public void setPubTime(long pubTime) {
+		this.pubTime = pubTime;
+	}
+
+	public String getWeatherInfoStr() {
+		return weatherInfoStr;
+	}
+
+	public void setWeatherInfoStr(String weatherInfoStr) {
+		this.weatherInfoStr = weatherInfoStr;
 	}
 
 	@Override

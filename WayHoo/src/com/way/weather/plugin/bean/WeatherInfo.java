@@ -1,16 +1,7 @@
 package com.way.weather.plugin.bean;
 
-import java.io.Serializable;
+public class WeatherInfo {
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class WeatherInfo implements Parcelable ,Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int isNewDatas;
 	private RealTime realTime;
 	private Forecast forecast;
 	private AQI aqi;
@@ -71,54 +62,11 @@ public class WeatherInfo implements Parcelable ,Serializable {
 		this.alerts = alerts;
 	}
 
-	public boolean getIsNewDatas() {
-		return isNewDatas == 0 ? false : true;
-	}
-
-	public void setIsNewDatas(int isNewDatas) {
-		this.isNewDatas = isNewDatas;
-	}
-
 	@Override
 	public String toString() {
-		return "WeatherInfo [isNewDatas=" + isNewDatas + ", realTime="
-				+ realTime + ", forecast=" + forecast + ", aqi=" + aqi
-				+ ", index=" + index + ", alerts=" + alerts + "]";
+		return "WeatherInfo [realTime=" + realTime + ", forecast=" + forecast
+				+ ", aqi=" + aqi + ", index=" + index + ", alerts=" + alerts
+				+ "]";
 	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeParcelable(realTime, PARCELABLE_WRITE_RETURN_VALUE);
-		dest.writeParcelable(forecast, PARCELABLE_WRITE_RETURN_VALUE);
-		dest.writeParcelable(aqi, PARCELABLE_WRITE_RETURN_VALUE);
-		dest.writeParcelable(index, PARCELABLE_WRITE_RETURN_VALUE);
-		dest.writeParcelable(alerts, PARCELABLE_WRITE_RETURN_VALUE);
-		dest.writeInt(isNewDatas);
-	}
-
-	public static final Parcelable.Creator<WeatherInfo> CREATOR = new Creator<WeatherInfo>() {
-
-		@Override
-		public WeatherInfo[] newArray(int size) {
-			return new WeatherInfo[size];
-		}
-
-		@Override
-		public WeatherInfo createFromParcel(Parcel source) {
-			WeatherInfo info = new WeatherInfo();
-			info.realTime = source.readParcelable(getClass().getClassLoader());
-			info.forecast = source.readParcelable(getClass().getClassLoader());
-			info.aqi = source.readParcelable(getClass().getClassLoader());
-			info.index = source.readParcelable(getClass().getClassLoader());
-			info.alerts = source.readParcelable(getClass().getClassLoader());
-			info.isNewDatas = source.readInt();
-			return info;
-		}
-	};
 
 }

@@ -26,19 +26,19 @@ public class WeatherUtilities {
 		if (strs.length > 1) {
 			String[] arrayOfString3 = strs[0].split("到");
 			if (arrayOfString3.length > 1)
-				type = (Integer) WeatherConstants.WEATHER_ANIMATION_MAP
+				type =  WeatherConstants.WEATHER_ANIMATION_MAP
 						.get(arrayOfString3[1]);
 			else {
-				type = (Integer) WeatherConstants.WEATHER_ANIMATION_MAP
+				type =  WeatherConstants.WEATHER_ANIMATION_MAP
 						.get(strs[0]);
 			}
 		} else {
 			String[] arrayOfString2 = weatherStr.split("到");
 			if (arrayOfString2.length > 1)
-				type = (Integer) WeatherConstants.WEATHER_ANIMATION_MAP
+				type =  WeatherConstants.WEATHER_ANIMATION_MAP
 						.get(arrayOfString2[1]);
 			else
-				type = (Integer) WeatherConstants.WEATHER_ANIMATION_MAP
+				type =  WeatherConstants.WEATHER_ANIMATION_MAP
 						.get(weatherStr);
 		}
 		return type;

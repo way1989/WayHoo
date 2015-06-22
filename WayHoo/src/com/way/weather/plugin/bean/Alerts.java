@@ -1,16 +1,8 @@
 package com.way.weather.plugin.bean;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class Alerts implements Parcelable,Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Alerts {
 	private ArrayList<Alert> arryAlert;
 	private String pid;
 
@@ -35,35 +27,7 @@ public class Alerts implements Parcelable,Serializable {
 		return "Alerts [arryAlert=" + arryAlert + ", pid=" + pid + "]";
 	}
 
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeList(arryAlert);
-		dest.writeString(pid);
-	}
-
-	public static final Parcelable.Creator<Alerts> CREATOR = new Creator<Alerts>() {
-
-		@Override
-		public Alerts[] newArray(int size) {
-			return new Alerts[size];
-		}
-
-		@Override
-		public Alerts createFromParcel(Parcel source) {
-			Alerts alerts = new Alerts();
-			alerts.arryAlert = new ArrayList<Alerts.Alert>();
-			source.readList(alerts.arryAlert, getClass().getClassLoader());
-			return alerts;
-		}
-	};
-
-	public static class Alert implements Parcelable {
+	public static class Alert {
 		private String abnormal;
 		private String detail;
 		private String holiday;
@@ -125,41 +89,6 @@ public class Alerts implements Parcelable,Serializable {
 					+ ", holiday=" + holiday + ", level=" + level
 					+ ", pubTime=" + pubTime + ", title=" + title + "]";
 		}
-
-		@Override
-		public int describeContents() {
-			return 0;
-		}
-
-		@Override
-		public void writeToParcel(Parcel dest, int flags) {
-			dest.writeString(abnormal);
-			dest.writeString(detail);
-			dest.writeString(holiday);
-			dest.writeString(level);
-			dest.writeLong(pubTime);
-			dest.writeString(title);
-		}
-
-		public static final Parcelable.Creator<Alert> CREATOR = new Creator<Alerts.Alert>() {
-
-			@Override
-			public Alert[] newArray(int size) {
-				return new Alert[size];
-			}
-
-			@Override
-			public Alert createFromParcel(Parcel source) {
-				Alert alert = new Alert();
-				alert.abnormal = source.readString();
-				alert.detail = source.readString();
-				alert.holiday = source.readString();
-				alert.level = source.readString();
-				alert.pubTime = source.readLong();
-				alert.title = source.readString();
-				return alert;
-			}
-		};
 
 	}
 

@@ -1,19 +1,25 @@
 package com.way.yahoo;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.app.Application;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.way.common.util.SystemUtils;
-import com.way.weather.plugin.bean.WeatherInfo;
+
 public class App extends Application {
-	public static Map<String, WeatherInfo> mMainMap;
+	private static App mApplication;
+	private static RequestQueue mVolleyRequestQueue;
+
+	public static synchronized RequestQueue getVolleyRequestQueue() {
+		if (mVolleyRequestQueue == null)
+			mVolleyRequestQueue = Volley.newRequestQueue(mApplication);
+		return mVolleyRequestQueue;
+	}
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		mApplication = this;
 		SystemUtils.copyDB(this);// 程序第一次运行将数据库copy过去
-		mMainMap = new HashMap<String, WeatherInfo>();
 	}
 }

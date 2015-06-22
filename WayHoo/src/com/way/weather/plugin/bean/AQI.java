@@ -1,15 +1,7 @@
 package com.way.weather.plugin.bean;
 
-import java.io.Serializable;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class AQI implements Parcelable ,Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class AQI {
 	private int aqi;
 	private String aqi_desc;
 	private String aqi_level;
@@ -137,54 +129,4 @@ public class AQI implements Parcelable ,Serializable {
 				+ ", source=" + source + ", spot=" + spot + "]";
 	}
 
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		dest.writeInt(aqi);
-		dest.writeString(aqi_desc);
-		dest.writeString(aqi_level);
-		dest.writeString(city_code);
-		dest.writeInt(co);
-		dest.writeInt(no2);
-		dest.writeInt(o3);
-		dest.writeInt(pm10);
-		dest.writeInt(pm25);
-		dest.writeLong(pub_time);
-		dest.writeInt(so2);
-		dest.writeString(source);
-		dest.writeString(spot);
-	}
-
-	public static final Parcelable.Creator<AQI> CREATOR = new Creator<AQI>() {
-
-		@Override
-		public AQI[] newArray(int size) {
-			return new AQI[size];
-		}
-
-		@Override
-		public AQI createFromParcel(Parcel source) {
-			AQI aqi = new AQI();
-			aqi.aqi = source.readInt();
-			aqi.aqi_desc = source.readString();
-			aqi.aqi_level = source.readString();
-			aqi.city_code = source.readString();
-			aqi.co = source.readInt();
-			aqi.no2 = source.readInt();
-			aqi.o3 = source.readInt();
-			aqi.pm10 = source.readInt();
-			aqi.pm25 = source.readInt();
-			aqi.pub_time = source.readLong();
-			aqi.so2 = source.readInt();
-			aqi.source = source.readString();
-			aqi.spot = source.readString();
-			return aqi;
-		}
-	};
 }

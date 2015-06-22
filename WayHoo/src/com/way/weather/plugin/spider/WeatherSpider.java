@@ -3,6 +3,9 @@ package com.way.weather.plugin.spider;
 import java.io.File;
 import java.util.Locale;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -20,95 +23,31 @@ import com.way.weather.plugin.util.Tools;
 public class WeatherSpider {
 
 	private static final String WEATHER_ALL = "http://weatherapi.market.xiaomi.com/wtr-v2/weather?cityId=%s";
-	private static final int FORCAST_FROM_ALL = 0;
-	private static final int REALTIME_FROM_ALL = 1;
-	private static final int AQI_FROM_ALL = 2;
-	private static final int ALERT_FROM_ALL = 3;
 
-	private static WeatherSpider mInstance = null;
-
-	private WeatherSpider() {
-	}
-
-	public synchronized static WeatherSpider getInstance() {
-		if (mInstance == null)
-			mInstance = new WeatherSpider();
-		return mInstance;
-	}
-
-	private String generatePartWeatherInfo(String weatherResult, int type) {
-		switch (type) {
-		case FORCAST_FROM_ALL:
-			return weatherResult.replace("forecast", "weatherinfo");
-		case REALTIME_FROM_ALL:
-			return weatherResult.replace("realtime", "weatherinfo");
-		case AQI_FROM_ALL:
-			return weatherResult;
-		case ALERT_FROM_ALL:
-			return weatherResult.replace("alert", "weatherinfo");
-		default:
-			return null;
-		}
-
-	}
-
-	private WeatherInfo generateWeatherStruct(Context context, String postID,
-			String forecastInfo, String realTimeInfo, String aqiInfo,
-			String alertInfo) {
-
+	public static WeatherInfo getWeatherInfo(Context context, String postID,
+			String result) throws JSONException {
 		String language = context.getResources().getConfiguration().locale
 				.toString();
-		language = Locale.CHINA.toString();
-		Forecast forecast = WeatherController.convertToNewForecast(
-				forecastInfo, language, postID);
-		RealTime realTime = WeatherController.convertToNewRealTime(
-				realTimeInfo, language, postID);
-		Alerts alerts = WeatherController.convertToNewAlert(alertInfo, postID);
-		Index index = WeatherController.convertToNewIndex(forecastInfo,
+		JSONObject response = new JSONObject(result);
+		Forecast forecast = WeatherController.convertToNewForecast(response,
 				language, postID);
-		AQI aqi = WeatherController.convertToNewAQI(aqiInfo, language, postID);
-		WeatherInfo weatherInfo = new WeatherInfo(realTime, forecast, aqi,
-				index, alerts);
-		return weatherInfo;
-	}
+		// Log.i("way", "jsonObjectRequest forecast = " + forecast);
 
-	public WeatherInfo getWeatherInfo(Context context, String postID,
-			boolean forceRefresh) {
-		isNewDatas = false;
-		String url = generateUrl(context, postID);
-		String weatherResult = getResult(context, url, forceRefresh);
-		WeatherInfo weatherInfo = generateWeatherStruct(context, postID,
-				generatePartWeatherInfo(weatherResult, FORCAST_FROM_ALL),
-				generatePartWeatherInfo(weatherResult, REALTIME_FROM_ALL),
-				generatePartWeatherInfo(weatherResult, AQI_FROM_ALL),
-				generatePartWeatherInfo(weatherResult, ALERT_FROM_ALL));
-		weatherInfo.setIsNewDatas(isNewDatas ? 1 : 0);
-		if (!isEmpty(weatherInfo))
-			ConfigCache.setUrlCache(context, weatherResult, url);// 信息不为空时保存到文件
-		return weatherInfo;
-	}
+		RealTime realTime = WeatherController.convertToNewRealTime(
+				response.getJSONObject("realtime"), language, postID);
+		// Log.i("way", "realTime = " + realTime);
 
-	private boolean isNewDatas = false;
+		Alerts alerts = WeatherController.convertToNewAlert(
+				response.getJSONArray("alert"), postID);
+		// Log.i("way", "alerts = " + alerts);
 
-	/**
-	 * 获取返回数据
-	 * 
-	 * @param context
-	 * @param url
-	 * @param forceRefresh
-	 * @return
-	 */
-	private String getResult(Context context, String url, boolean forceRefresh) {
-		String result = ConfigCache.getUrlCache(context, url);
-		// 如果没有网络，则返回文件缓存
-		if (NetUtil.getNetworkState(context) == NetUtil.NETWORN_NONE)
-			return result;
-		// 如果有网络，不是强制刷新，则先判断是否有缓存，有就直接返回文件缓存
-		if (!forceRefresh && !TextUtils.isEmpty(result))
-			return result;
-		// 其他条件均不满足，从网上下载
-		isNewDatas = true;
-		return HttpUtils.getText(url);
+		Index index = WeatherController.convertToNewIndex(response, language,
+				postID);
+		// Log.i("way", "index = " + index);
+
+		AQI aqi = WeatherController.convertToNewAQI(
+				response.getJSONObject("aqi"), language, postID);
+		return new WeatherInfo(realTime, forecast, aqi, index, alerts);
 	}
 
 	public static boolean isEmpty(WeatherInfo info) {
@@ -156,13 +95,6 @@ public class WeatherSpider {
 				|| info.getArryAlert().get(0) == null)
 			return true;
 		return false;
-	}
-
-	public static void deleteCacheFile(Context context, String postID) {
-		String url = generateUrl(context, postID);
-		File file = new File(ConfigCache.getCacheDir(context) + File.separator
-				+ ConfigCache.replaceUrlWithPlus(url));
-		ConfigCache.clearCache(context, file);
 	}
 
 	private static String generateUrl(Context context, String postID) {

@@ -44,7 +44,9 @@ public class SystemUtils {
 					.getColumnIndex(CityConstants.REFRESH_TIME));
 			int isLocation = c.getInt(c
 					.getColumnIndex(CityConstants.ISLOCATION));
-			City item = new City(name, postID, refreshTime, isLocation);
+			long pubTime = c.getLong(c.getColumnIndex(CityConstants.PUB_TIME));
+			String weatherInfoStr = c.getString(c.getColumnIndex(CityConstants.WEATHER_INFO));
+			City item = new City(name, postID, refreshTime, isLocation, pubTime, weatherInfoStr);
 			// L.i("liweiping", "TmpCity  " + item.toString());
 			if (!list.contains(item))// 如果不存在再添加
 				list.add(item);

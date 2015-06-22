@@ -91,29 +91,4 @@ public class BaseActivity extends SwipeBackActivity {
 				tmpContentValues);
 	}
 
-	public WeatherInfo getWeatherInfo(String postID, boolean isForce) {
-		try {
-			WeatherInfo weatherInfo = WeatherSpider.getInstance()
-					.getWeatherInfo(BaseActivity.this, postID, isForce);
-			if (WeatherSpider.isEmpty(weatherInfo)) {
-				Toast.makeText(this, R.string.get_weatherifo_fail,
-						Toast.LENGTH_SHORT).show();
-				return null;
-			}
-			// 将刷新时间存储到数据库
-			if (weatherInfo.getIsNewDatas()) {
-				ContentValues contentValues = new ContentValues();
-				contentValues.put(CityConstants.REFRESH_TIME,
-						System.currentTimeMillis());
-				mContentResolver.update(CityProvider.TMPCITY_CONTENT_URI,
-						contentValues, CityConstants.POST_ID + "=?",
-						new String[] { postID });
-			}
-			App.mMainMap.put(postID, weatherInfo);// 保存到全局变量
-			return weatherInfo;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 }

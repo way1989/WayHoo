@@ -1,15 +1,7 @@
 package com.way.weather.plugin.bean;
 
-import java.io.Serializable;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class RealTime implements Parcelable,Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class RealTime {
 	private int animation_type;
 	private String city_code;
 	private long falling_tide;
@@ -120,48 +112,4 @@ public class RealTime implements Parcelable,Serializable {
 				+ ", wind=" + wind + "]";
 	}
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(animation_type);
-		dest.writeString(city_code);
-		dest.writeLong(falling_tide);
-		dest.writeInt(humidity);
-		dest.writeDouble(pressure);
-		dest.writeLong(pub_time);
-		dest.writeLong(rising_tide);
-		dest.writeInt(temp);
-		dest.writeInt(water);
-		dest.writeString(weather_name);
-		dest.writeString(wind);
-	}
-	public static final Parcelable.Creator<RealTime> CREATOR = new Creator<RealTime>() {
-		
-		@Override
-		public RealTime[] newArray(int size) {
-			return new RealTime[size];
-		}
-		
-		@Override
-		public RealTime createFromParcel(Parcel source) {
-			RealTime realTime = new RealTime();
-			realTime.animation_type = source.readInt();
-			realTime.city_code = source.readString();
-			realTime.falling_tide = source.readLong();
-			realTime.humidity = source.readInt();
-			realTime.pressure = source.readDouble();
-			realTime.pub_time = source.readLong();
-			realTime.rising_tide = source.readLong();
-			realTime.temp = source.readInt();
-			realTime.water = source.readInt();
-			realTime.weather_name = source.readString();
-			realTime.wind = source.readString();
-			return realTime;
-		}
-	};
-	
 }

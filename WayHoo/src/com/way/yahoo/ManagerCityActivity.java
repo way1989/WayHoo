@@ -3,10 +3,14 @@ package com.way.yahoo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +22,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.way.beans.City;
 import com.way.common.util.L;
 import com.way.common.util.NetUtil;
@@ -39,13 +46,13 @@ public class ManagerCityActivity extends BaseActivity implements
 	private LayoutInflater mInflater;
 	private List<City> mTmpCitys;
 	private static boolean isRefreshMode;
-	private GridCityRefreshTask mGridCityRefreshTask;
+	//private GridCityRefreshTask mGridCityRefreshTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.city_manager_layout);
-		initDatas();
+		mTmpCitys = getTmpCities();
 		initViews();
 	}
 
@@ -61,10 +68,6 @@ public class ManagerCityActivity extends BaseActivity implements
 	protected void onStop() {
 		super.onStop();
 		L.i("liweiping", "ManagerCityActivity onStop...");
-	}
-
-	private void initDatas() {
-		mTmpCitys = getTmpCities();
 	}
 
 	private void initViews() {
@@ -128,12 +131,10 @@ public class ManagerCityActivity extends BaseActivity implements
 		// 开一个异步线程去更新天气或者取消更新
 
 		if (isRefresh) {
-			mGridCityRefreshTask = new GridCityRefreshTask(null);
-			mGridCityRefreshTask.execute();
+			getAllWeather();
 		} else {
 			mAdapter.setRefreshingIndex(-1);
-			if (mGridCityRefreshTask != null)
-				mGridCityRefreshTask.cancel(true);
+			App.getVolleyRequestQueue().stop();
 		}
 
 	}
@@ -202,7 +203,7 @@ public class ManagerCityActivity extends BaseActivity implements
 	private void deleteCityFromTable(int position) {
 		City city = mAdapter.getItem(position);
 		// 从全局变量中删除
-		App.mMainMap.remove(city);
+		//App.mMainMap.remove(city);
 		// 从临时城市表中删除
 		mContentResolver
 				.delete(CityProvider.TMPCITY_CONTENT_URI, CityConstants.POST_ID
@@ -214,7 +215,6 @@ public class ManagerCityActivity extends BaseActivity implements
 		// mContentResolver.update(CityProvider.HOTCITY_CONTENT_URI,
 		// contentValues, CityConstants.POST_ID + "=?",
 		// new String[] { city.getPostID() });
-		WeatherSpider.deleteCacheFile(this, city.getPostID());
 		updateUI(false);
 		if (mTmpCitys.isEmpty())// 如果全部被删除完了，更新一下编辑状态
 			changeEditMode();
@@ -235,8 +235,7 @@ public class ManagerCityActivity extends BaseActivity implements
 							.show();
 					return;
 				}
-				mGridCityRefreshTask = new GridCityRefreshTask(city);
-				mGridCityRefreshTask.execute();
+				getWeather(city);
 			}
 
 		}
@@ -371,12 +370,22 @@ public class ManagerCityActivity extends BaseActivity implements
 			bindViewData(viewHolder, position);
 			return convertView;
 		}
-
+		
 		private void bindViewData(ViewHolder holder, final int position) {
 			City city = mTmpCitys.get(position);
 			WeatherInfo weatherInfo = null;
-			if (!App.mMainMap.isEmpty() && city != null)
-				weatherInfo = App.mMainMap.get(city.getPostID());
+			try {
+				if(city != null){
+				weatherInfo = WeatherSpider
+						.getWeatherInfo(ManagerCityActivity.this, city.getPostID(), city.getWeatherInfoStr());
+				Log.i("way", "bindViewData position = " + position
+				       + "  city.getPostID() = " + city.getPostID());
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 			switch (getItemViewType(position)) {
 			case NORMAL_CITY_TYPE:
 				if (refreshingIndex == position) {
@@ -478,7 +487,118 @@ public class ManagerCityActivity extends BaseActivity implements
 		ImageView deleteIV;
 		View addView;
 	}
+	
+	private static final String WEATHER_ALL = "http://weatherapi.market.xiaomi.com/wtr-v2/weather?cityId=%s";
+	private void getWeather(City city) {
+		if (city == null)
+			return;
+		int index = mTmpCitys.indexOf(city);
+		mAdapter.setRefreshingIndex(index);// 开始刷新
+		
+		final String postID = city.getPostID();
+		StringRequest sr = new StringRequest(String.format(WEATHER_ALL,
+				postID), new Response.Listener<String>() {
 
+			@Override
+			public void onResponse(String response) {
+				//sr.getTag();
+				try {
+					WeatherInfo weatherInfo = WeatherSpider
+							.getWeatherInfo(mActivity, postID, response);
+					if (!WeatherSpider.isEmpty(weatherInfo)) {
+						save2Database(postID, response, weatherInfo);
+						mTmpCitys = getTmpCities();
+					}
+				} catch (JSONException e) {
+					
+				}
+				mAdapter.setRefreshingIndex(-1);// 重置
+				updateRefreshMode(false);// 结束刷新
+			}
+		}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				mAdapter.setRefreshingIndex(-1);// 重置
+				updateRefreshMode(false);// 结束刷新
+			}
+		});
+		sr.setTag(postID);
+		App.getVolleyRequestQueue().add(sr);
+
+	}
+	protected void save2Database(String postID, String response, WeatherInfo weatherInfo) {
+		long pubTime = weatherInfo.getRealTime().getPub_time();
+		long savePubTime = getPubTime(postID);
+		if (pubTime != savePubTime) {
+			ContentValues contentValues = new ContentValues();
+			contentValues.put(CityConstants.REFRESH_TIME,
+					System.currentTimeMillis());
+			contentValues.put(CityConstants.PUB_TIME, pubTime);
+			contentValues.put(CityConstants.WEATHER_INFO, response);
+			mContentResolver.update(CityProvider.TMPCITY_CONTENT_URI,
+					contentValues, CityConstants.POST_ID + "=?",
+					new String[] { postID });
+		}
+	}		
+	
+	private long getPubTime(String postID){
+		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
+				new String[] { CityConstants.REFRESH_TIME },
+				CityConstants.POST_ID + "=?",
+				new String[] { postID }, null);
+
+		long time = 0L;
+		if (c.moveToFirst())
+			time = c.getLong(c.getColumnIndex(CityConstants.REFRESH_TIME));
+		return time;
+	}
+
+	private int mIndex;
+
+	private void getAllWeather() {
+		if (mTmpCitys == null || mTmpCitys.size() < 1)
+			return;
+		for (City city : mTmpCitys) {
+			final String postID = city.getPostID();
+			StringRequest sr = new StringRequest(String.format(WEATHER_ALL,
+					postID), new Response.Listener<String>() {
+
+				@Override
+				public void onResponse(String response) {
+					try {
+						WeatherInfo weatherInfo = WeatherSpider.getWeatherInfo(
+								mActivity, postID, response);
+						if (!WeatherSpider.isEmpty(weatherInfo)) {
+							save2Database(postID, response, weatherInfo);
+							mTmpCitys = getTmpCities();
+						}
+					} catch (JSONException e) {
+
+					}
+					mIndex++;
+					if (mIndex >= mTmpCitys.size() - 1) {
+						mIndex = -1;
+						updateRefreshMode(false);// 结束刷新
+					}
+					mAdapter.setRefreshingIndex(mIndex);// 重置
+				}
+			}, new Response.ErrorListener() {
+
+				@Override
+				public void onErrorResponse(VolleyError error) {
+					mIndex++;
+					if (mIndex >= mTmpCitys.size() - 1) {
+						mIndex = -1;
+						updateRefreshMode(false);// 结束刷新
+					}
+					mAdapter.setRefreshingIndex(mIndex);// 重置
+				}
+			});
+			sr.setTag(postID);
+			App.getVolleyRequestQueue().add(sr);
+		}
+	}
 	private final class GridCityRefreshTask extends
 			AsyncTask<Void, Integer, WeatherInfo> {
 		private City mTaskCity;
@@ -501,19 +621,19 @@ public class ManagerCityActivity extends BaseActivity implements
 
 		@Override
 		protected WeatherInfo doInBackground(Void... params) {
-			if (mTaskCity != null) {
-				WeatherInfo result = getWeatherInfo(mTaskCity.getPostID(), true);
-				return result;
-			} else {
-				List<City> tmpCities = new ArrayList<City>();
-				tmpCities.addAll(mTmpCitys);
-				for (City city : tmpCities) {
-					mTaskIndex++;
-					if (city != null)
-						getWeatherInfo(city.getPostID(), true);
-					publishProgress(mTaskIndex);// 下载完数据之后再更新界面
-				}
-			}
+//			if (mTaskCity != null) {
+//				WeatherInfo result = getWeatherInfo(mTaskCity.getPostID(), true);
+//				return result;
+//			} else {
+//				List<City> tmpCities = new ArrayList<City>();
+//				tmpCities.addAll(mTmpCitys);
+//				for (City city : tmpCities) {
+//					mTaskIndex++;
+//					if (city != null)
+//						getWeatherInfo(city.getPostID(), true);
+//					publishProgress(mTaskIndex);// 下载完数据之后再更新界面
+//				}
+//			}
 			return null;
 		}
 

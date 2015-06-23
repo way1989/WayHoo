@@ -29,11 +29,13 @@ public class SplashActivity extends Activity {
 		mHandler.sendEmptyMessageDelayed(ACTIVITY_TIMEOUT_GOTO_NEXT,
 				ACTIVITY_TIME);
 	}
-
+	@Override
+	public void onBackPressed() {
+		//super.onBackPressed();
+	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-
 		mHandler.removeMessages(ACTIVITY_TIMEOUT_GOTO_NEXT);
 	}
 

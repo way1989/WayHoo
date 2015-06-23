@@ -154,6 +154,7 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 		tmpContentValues.put(CityConstants.POST_ID, city.getPostID());
 		tmpContentValues.put(CityConstants.REFRESH_TIME, 0L);// 无刷新时间
 		tmpContentValues.put(CityConstants.ISLOCATION, 0);// 手动选择的城市存储为0
+		tmpContentValues.put(CityConstants.ORDER_INDEX, mTmpCitys.size());
 		mContentResolver.insert(CityProvider.TMPCITY_CONTENT_URI,
 				tmpContentValues);
 

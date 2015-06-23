@@ -148,28 +148,28 @@ public class ManagerCityActivity extends BaseActivity implements
 			mAdapter.reorder(fromPosition, toPosition);
 
 			// 暂时使用全部删除再插入的办法，效率肯定时有影响了
-			mContentResolver.delete(CityProvider.TMPCITY_CONTENT_URI, null,
-					null);
-			for (City c : mTmpCitys) {
-				ContentValues contentValues = new ContentValues();
-				contentValues.put(CityConstants.NAME, c.getName());
-				contentValues.put(CityConstants.POST_ID, c.getPostID());
-				contentValues.put(CityConstants.REFRESH_TIME,
-						c.getRefreshTime());
-				contentValues.put(CityConstants.ISLOCATION,
-						c.getIsLocation() ? 1 : 0);
-				mContentResolver.insert(CityProvider.TMPCITY_CONTENT_URI,
-						contentValues);
-			}
+//			mContentResolver.delete(CityProvider.TMPCITY_CONTENT_URI, null,
+//					null);
+//			for (City c : mTmpCitys) {
+//				ContentValues contentValues = new ContentValues();
+//				contentValues.put(CityConstants.NAME, c.getName());
+//				contentValues.put(CityConstants.POST_ID, c.getPostID());
+//				contentValues.put(CityConstants.REFRESH_TIME,
+//						c.getRefreshTime());
+//				contentValues.put(CityConstants.ISLOCATION,
+//						c.getIsLocation() ? 1 : 0);
+//				mContentResolver.insert(CityProvider.TMPCITY_CONTENT_URI,
+//						contentValues);
+//			}
 
 			// 主键不允许修改，暂时保留。
-			// String fromPostID = mAdapter.getItem(fromPosition).getPostID();
-			// ContentValues idContentValues = new ContentValues();
-			// idContentValues.put(CityConstants.ID, toPosition);
-			// int result =
-			// mContentResolver.update(CityProvider.TMPCITY_CONTENT_URI,
-			// idContentValues, CityConstants.POST_ID + "=?",
-			// new String[] { fromPostID });//更新位置
+//			 String fromPostID = mAdapter.getItem(fromPosition).getPostID();
+//			 ContentValues idContentValues = new ContentValues();
+//			 idContentValues.put(CityConstants.CITY_INDEX, toPosition);
+//			 int result =
+//			 mContentResolver.update(CityProvider.TMPCITY_CONTENT_URI,
+//			 idContentValues, CityConstants.POST_ID + "=?",
+//			 new String[] { fromPostID });//更新位置
 			// L.i("liweiping", "result = " + result);
 		}
 

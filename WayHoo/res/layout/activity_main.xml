@@ -3,7 +3,7 @@
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_addcity" >
+    android:background="@drawable/start_bg" >
 
     <Button
         android:id="@+id/add_city_btn"

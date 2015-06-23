@@ -33,6 +33,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.way.adapter.WeatherListAdapter;
 import com.way.beans.City;
+import com.way.common.util.NetUtil;
 import com.way.common.util.SystemUtils;
 import com.way.common.util.TimeUtils;
 import com.way.common.util.WeatherIconUtils;
@@ -46,6 +47,7 @@ import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.weather.plugin.spider.WeatherSpider;
 import com.way.yahoo.App;
 import com.way.yahoo.BaseActivity;
+import com.way.yahoo.ManagerCityActivity;
 import com.way.yahoo.R;
 
 public class WeatherFragment extends Fragment implements OnRefreshListener,
@@ -155,22 +157,61 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		} else {
 			switch (mAsynState) {
 			case INIT:
-				mAsynState = AsynTaskState.PROCESSING;
 				// mGetDataTask = new GetDataTask();
 				// mGetDataTask.execute();
-				getWeather(mCurCity.getPostID());
-				mPullRefreshScrollView.setRefreshing();
+				if(isNeedRequestNet()){
+					mAsynState = AsynTaskState.PROCESSING;
+					getWeather(mCurCity.getPostID());
+					if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
+						mPullRefreshScrollView.setRefreshing();
+				}else{
+					loadWeatherInfoFromLocal();
+				}
 				break;
 			case PROCESSING:
+				if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
 				mPullRefreshScrollView.setRefreshing();
 				break;
 			case RPOCESSED:
+				if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
 				mPullRefreshScrollView.setRefreshing();
 				break;
 			case COMPLETE:
 				updateWeatherView();
 				break;
 			}
+		}
+	}
+	private boolean isNeedRequestNet(){
+		int netState = NetUtil.getNetworkState(getActivity());
+		if(netState == NetUtil.NETWORN_NONE){
+			return false;
+		}
+		long refreshTime = getRefreshTime();
+		if(netState == NetUtil.NETWORN_WIFI){
+			return ((System.currentTimeMillis() - refreshTime) > (1000 * 60 * 30));//wifi网络30分钟过期
+		}
+		if(netState == NetUtil.NETWORN_MOBILE){
+			return ((System.currentTimeMillis() - refreshTime) > (1000 * 60 * 60 * 2));//移动网络两个小时过期
+		}
+		
+		return false;
+	}
+	
+	private void loadWeatherInfoFromLocal(){
+		if(mCurCity == null)
+			return;
+		try {
+			mWeatherInfo = WeatherSpider
+				.getWeatherInfo(mActivity, mCurCity.getPostID(), mCurCity.getWeatherInfoStr());
+			if(!WeatherSpider.isEmpty(mWeatherInfo)){
+				isLoaded = true;
+				updateWeatherView();
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}catch (Exception e){
+			e.printStackTrace();
 		}
 	}
 
@@ -181,16 +222,17 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			mRootView = inflater.inflate(R.layout.weather_fragment, container,
 					false);
 			initViews(mRootView);
-			if (isVisible) {
-				// mGetDataTask = new GetDataTask();
-				// mGetDataTask.execute();
-				getWeather(mCurCity.getPostID());
-				mPullRefreshScrollView.setRefreshing();
-			} else {
-
-			}
 			isPrepared = true;
 			isLoaded = false;
+			if (isVisible) {
+				if(isNeedRequestNet()){
+					getWeather(mCurCity.getPostID());
+				}else{
+					loadWeatherInfoFromLocal();
+				}
+			} else {
+				loadWeatherInfoFromLocal();
+			}
 		} else {
 			ViewGroup mRootParent = (ViewGroup) mRootView.getParent();
 			if (mRootParent != null) {
@@ -202,16 +244,21 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 				if (isVisible) {
 					switch (mAsynState) {
 					case INIT:
-						mAsynState = AsynTaskState.PROCESSING;
-						// mGetDataTask = new GetDataTask();
-						// mGetDataTask.execute();
-						getWeather(mCurCity.getPostID());
-						mPullRefreshScrollView.setRefreshing();
+						if(isNeedRequestNet()){
+							mAsynState = AsynTaskState.PROCESSING;
+							getWeather(mCurCity.getPostID());
+							if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
+							mPullRefreshScrollView.setRefreshing();
+						}else{
+							loadWeatherInfoFromLocal();
+						}
 						break;
 					case PROCESSING:
+						if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
 						mPullRefreshScrollView.setRefreshing();
 						break;
 					case RPOCESSED:
+						if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
 						mPullRefreshScrollView.setRefreshing();
 						break;
 					case COMPLETE:
@@ -483,6 +530,18 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	
 	private long getPubTime(){
 		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
+				new String[] { CityConstants.PUB_TIME },
+				CityConstants.POST_ID + "=?",
+				new String[] { mCurCity.getPostID() }, null);
+
+		long time = 0L;
+		if (c.moveToFirst())
+			time = c.getLong(c.getColumnIndex(CityConstants.PUB_TIME));
+		return time;
+	}
+	
+	private long getRefreshTime(){
+		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
 				new String[] { CityConstants.REFRESH_TIME },
 				CityConstants.POST_ID + "=?",
 				new String[] { mCurCity.getPostID() }, null);
@@ -533,7 +592,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			Mode direction) {
 		// 开始下拉时更新上次刷新时间
 		if (state == State.PULL_TO_REFRESH) {
-			long time = getPubTime();
+			long time = getRefreshTime();
 			String label = String.format(
 					getResources().getString(
 							R.string.pull_to_refresh_pull_sub_label),

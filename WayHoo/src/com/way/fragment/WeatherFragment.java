@@ -564,14 +564,14 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		Index index = weatherInfo.getIndex();
 
 		int type = realTime.getAnimation_type();
-		// mNormalImageView.setImageResource(WeatherIconUtils
-		// .getWeatherNromalBg(type));
-		// mBlurredImageView.setImageResource(WeatherIconUtils
-		// .getWeatherBlurBg(type));
-		mNormalImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
-				WeatherIconUtils.getRawNromalBg(type)));
-		mBlurredImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
-				WeatherIconUtils.getRawBlurBg(type)));
+		 mNormalImageView.setImageResource(WeatherIconUtils
+		 .getWeatherNromalBg(type));
+		 mBlurredImageView.setImageResource(WeatherIconUtils
+		 .getWeatherBlurBg(type));
+//		mNormalImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
+//				WeatherIconUtils.getRawNromalBg(type)));
+//		mBlurredImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
+//				WeatherIconUtils.getRawBlurBg(type)));
 		mCurWeatherIV.setImageResource(WeatherIconUtils.getWeatherIcon(type));
 		mCurWeatherTV.setText(realTime.getWeather_name());
 		mCurFeelsTempTV.setText(realTime.getTemp() + "");

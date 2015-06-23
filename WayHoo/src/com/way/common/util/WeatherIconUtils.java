@@ -267,9 +267,9 @@ public class WeatherIconUtils {
 		if (isNight(System.currentTimeMillis()))
 			switch (type) {
 			case Constants.SUNNY:
-				return R.raw.bg_fine_night;
+				return R.drawable.bg_fine_night;
 			case Constants.CLOUDY:
-				return R.raw.bg_cloudy_night;
+				return R.drawable.bg_cloudy_night;
 //			case Constants.FOGGY:
 //				return R.raw.foggy_n;
 //			case Constants.HEAVY_RAIN:
@@ -280,57 +280,57 @@ public class WeatherIconUtils {
 //				return R.raw.rain_n;
 //			case Constants.STORM:
 //				return R.raw.storm_n;
-//			case Constants.SNOWSTORM:
-//			case Constants.LIGHT_SNOW:
-//			case Constants.MODERATE_SNOW:
-//			case Constants.HEAVY_SNOW:
-//			case Constants.SNOW_SHOWER:
-//				return R.raw.snow_n;
+			case Constants.SNOWSTORM:
+			case Constants.LIGHT_SNOW:
+			case Constants.MODERATE_SNOW:
+			case Constants.HEAVY_SNOW:
+			case Constants.SNOW_SHOWER:
+				return R.drawable.snow_n;
 			default:
 				break;
 			}
 		// 如果是白天
 		switch (type) {
 		case Constants.SUNNY:
-			return R.raw.bg_fine_day;
+			return R.drawable.bg_fine_day;
 		case Constants.CLOUDY:
-			return R.raw.bg_cloudy_day;
+			return R.drawable.bg_cloudy_day;
 		case Constants.OVERCAST:
-			return R.raw.bg_overcast;
+			return R.drawable.bg_overcast;
 		case Constants.FOGGY:
-			return R.raw.bg_fog;
+			return R.drawable.bg_fog;
 		case Constants.SEVERE_STORM:
 		case Constants.HEAVY_STORM:
 //		case Constants.STORM:
 //			return R.raw.storm_d;
 		case Constants.THUNDERSHOWER:
-			return R.raw.bg_thunder_storm;
+			return R.drawable.bg_thunder_storm;
 		case Constants.STORM:
 		case Constants.SHOWER:
 		case Constants.HEAVY_RAIN:
 		case Constants.MODERATE_RAIN:
 		case Constants.LIGHT_RAIN:
 		case Constants.SLEET:
-			return R.raw.bg_rain;
+			return R.drawable.bg_rain;
 		case Constants.SNOWSTORM:
 		case Constants.SNOW_SHOWER:
 		case Constants.HEAVY_SNOW:
 		case Constants.MODERATE_SNOW:
 		case Constants.LIGHT_SNOW:
-			return R.raw.bg_snow;
+			return R.drawable.bg_snow;
 		case Constants.STRONGSANDSTORM:
 		case Constants.SANDSTORM:
 		case Constants.SAND:
 		case Constants.BLOWING_SAND:
-			return R.raw.bg_sand_storm;
+			return R.drawable.bg_sand_storm;
 		case Constants.ICE_RAIN:
-			return R.raw.bg_rain;
+			return R.drawable.bg_rain;
 		case Constants.DUST:
 		case Constants.HAZE:
-			return R.raw.bg_haze;
+			return R.drawable.bg_haze;
 
 		default:
-			return R.raw.bg_na;
+			return R.drawable.bg_na;
 		}
 	}
 	/**
@@ -342,9 +342,9 @@ public class WeatherIconUtils {
 		if (isNight(System.currentTimeMillis()))
 			switch (type) {
 			case Constants.SUNNY:
-				return R.raw.bg_fine_night_blur;
+				return R.drawable.bg_fine_night_blur;
 			case Constants.CLOUDY:
-				return R.raw.bg_cloudy_night_blur;
+				return R.drawable.bg_cloudy_night_blur;
 //			case Constants.FOGGY:
 //				return R.raw.foggy_n_blur;
 //			case Constants.HEAVY_RAIN:
@@ -355,56 +355,56 @@ public class WeatherIconUtils {
 //				return R.raw.rain_n_blur;
 //			case Constants.STORM:
 //				return R.raw.storm_n_blur;
-//			case Constants.SNOWSTORM:
-//			case Constants.LIGHT_SNOW:
-//			case Constants.MODERATE_SNOW:
-//			case Constants.HEAVY_SNOW:
-//			case Constants.SNOW_SHOWER:
-//				return R.raw.snow_n_blur;
+			case Constants.SNOWSTORM:
+			case Constants.LIGHT_SNOW:
+			case Constants.MODERATE_SNOW:
+			case Constants.HEAVY_SNOW:
+			case Constants.SNOW_SHOWER:
+				return R.drawable.snow_n_blur;
 			default:
 				break;
 			}
 		// 如果是白天
 		switch (type) {
 		case Constants.SUNNY:
-			return R.raw.bg_fine_day_blur;
+			return R.drawable.bg_fine_day_blur;
 		case Constants.CLOUDY:
-			return R.raw.bg_cloudy_day_blur;
+			return R.drawable.bg_cloudy_day_blur;
 		case Constants.OVERCAST:
-			return R.raw.bg_overcast_blur;
+			return R.drawable.bg_overcast_blur;
 		case Constants.FOGGY:
-			return R.raw.bg_fog_blur;
+			return R.drawable.bg_fog_blur;
 		case Constants.SEVERE_STORM:
 		case Constants.HEAVY_STORM:
 //		case Constants.STORM:
 //			return R.raw.storm_d_blur;
 		case Constants.THUNDERSHOWER:
-			return R.raw.bg_thunder_storm_blur;
+			return R.drawable.bg_thunder_storm_blur;
 		case Constants.STORM:
 		case Constants.SHOWER:
 		case Constants.HEAVY_RAIN:
 		case Constants.MODERATE_RAIN:
 		case Constants.LIGHT_RAIN:
 		case Constants.SLEET:
-			return R.raw.bg_rain_blur;
+			return R.drawable.bg_rain_blur;
 		case Constants.SNOWSTORM:
 		case Constants.SNOW_SHOWER:
 		case Constants.HEAVY_SNOW:
 		case Constants.MODERATE_SNOW:
 		case Constants.LIGHT_SNOW:
-			return R.raw.bg_snow_blur;
+			return R.drawable.bg_snow_blur;
 		case Constants.STRONGSANDSTORM:
 		case Constants.SANDSTORM:
 		case Constants.SAND:
 		case Constants.BLOWING_SAND:
-			return R.raw.bg_sand_storm_blur;
+			return R.drawable.bg_sand_storm_blur;
 		case Constants.ICE_RAIN:
-			return R.raw.bg_rain_blur;
+			return R.drawable.bg_rain_blur;
 		case Constants.DUST:
 		case Constants.HAZE:
-			return R.raw.bg_haze_blur;
+			return R.drawable.bg_haze_blur;
 		default:
-			return R.raw.bg_na_blur;
+			return R.drawable.bg_na_blur;
 		}
 	}
 }

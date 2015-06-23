@@ -31,7 +31,6 @@ import com.way.adapter.QueryCityAdapter;
 import com.way.beans.City;
 import com.way.common.util.L;
 import com.way.common.util.LocationUtils.LocationListener;
-import com.way.common.util.PreferenceUtils;
 import com.way.common.util.SystemUtils;
 import com.way.common.util.T;
 import com.way.db.CityProvider;
@@ -50,7 +49,6 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 	private EditText mQueryCityET;
 	private ImageButton mQueryCityExitBtn;
 	private ListView mQueryCityListView;
-	// private TextView mEmptyCityView;
 	private GridView mHotCityGridView;
 	private List<City> mTmpCitys;
 	private List<City> mHotCitys;
@@ -100,13 +98,23 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 		mQueryCityExitBtn.setOnClickListener(this);
 		mQueryCityET.addTextChangedListener(this);
 
-		String cityName = PreferenceUtils.getPrefString(this,
-				AUTO_LOCATION_CITY_KEY, "");
+		String cityName = getCityName();
 		if (TextUtils.isEmpty(cityName)) {
 			startLocation(mCityNameStatus);
 		} else {
 			mLocationTV.setText(cityName);
 		}
+	}
+
+	private String getCityName() {
+		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
+				new String[] { CityConstants.NAME }, CityConstants.ISLOCATION
+						+ "=?", new String[] { "1" }, null);
+
+		String name = "";
+		if (c.moveToFirst())
+			name = c.getString(c.getColumnIndex(CityConstants.NAME));
+		return name;
 	}
 
 	private void initDatas() {
@@ -158,16 +166,9 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 		mContentResolver.insert(CityProvider.TMPCITY_CONTENT_URI,
 				tmpContentValues);
 
-		// 更新热门城市表已选择
-		// ContentValues hotContentValues = new ContentValues();
-		// hotContentValues.put(CityConstants.ISSELECTED, 1);
-		// mContentResolver.update(CityProvider.HOTCITY_CONTENT_URI,
-		// hotContentValues, CityConstants.POST_ID + "=?",
-		// new String[] { city.getPostID() });
 		Intent i = new Intent();
 		i.putExtra(CITY_EXTRA_KEY, city);
 		setResult(RESULT_OK, i);
-		// setResult(RESULT_OK);
 		finish();
 	}
 
@@ -283,7 +284,6 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 
 		@Override
 		public void succeed(String name) {
-			// TODO Auto-generated method stub
 			L.i("liweiping", name);
 			dismissCountDownView();
 
@@ -292,8 +292,6 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 				Toast.makeText(QueryCityActivity.this, R.string.no_this_city,
 						Toast.LENGTH_SHORT).show();
 			} else {
-				PreferenceUtils.setPrefString(QueryCityActivity.this,
-						AUTO_LOCATION_CITY_KEY, name);
 				L.i("liweiping", "location" + city.toString());
 				addOrUpdateLocationCity(city);
 				T.showShort(

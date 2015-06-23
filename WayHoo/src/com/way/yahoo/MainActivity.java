@@ -5,24 +5,19 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
 
-import org.json.JSONException;
-
 import net.simonvt.menudrawer.MenuDrawer;
 import net.simonvt.menudrawer.MenuDrawer.OnDrawerStateChangeListener;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
+
+import org.json.JSONException;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,7 +45,6 @@ import com.way.util.blur.jni.FrostedGlassUtil;
 import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.weather.plugin.spider.WeatherSpider;
 
-@SuppressLint("NewApi")
 public class MainActivity extends BaseActivity implements OnClickListener,
 		OnPageChangeListener {
 	private static final String INSTANCESTATE_TAB = "tab_index";
@@ -58,7 +52,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 	private String mAqiShareStr = "空气质量指数(AQI):%s μg/m³,等级[%s];PM2.5浓度值:%s μg/m³。%s ";// aqi、等级、pm2.5、建议
 	private String mShareEndStr = "（请关注博客：http://blog.csdn.net/way_ping_li）";
 	private MenuDrawer mMenuDrawer;
-	private Handler mHandler;
 	private SideMenuAdapter mMenuAdapter;
 	private int mPagerOffsetPixels;
 	private int mPagerPosition;
@@ -75,15 +68,9 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 	private WeatherPagerAdapter mFragmentAdapter;
 	private List<City> mTmpCities;
 
-	// 提供接口给fragment
-	public MenuDrawer getMenuDrawer() {
-		return mMenuDrawer;
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initDatas();
 		initMenuDrawer();
 		mMenuDrawer.setContentView(R.layout.activity_main);
 		initViews();
@@ -108,18 +95,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		}
 	}
 
-	private void initDatas() {
-		mHandler = new Handler();
-		// mTmpCities = getTmpCities();
-		// 第一次进来无定位城市
-		if (TextUtils.isEmpty(PreferenceUtils.getPrefString(this,
-				AUTO_LOCATION_CITY_KEY, ""))) {
-			//startLocation(mCityNameStatus);
-			Intent i = new Intent(MainActivity.this, QueryCityActivity.class);
-			startActivity(i);
-		}
-	}
-
 	private void initViews() {
 		setSwipeBackEnable(false);
 		mBlurImageView = (ImageView) findViewById(R.id.blur_overlay_img);
@@ -129,15 +104,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		mTitleTextView = (TextView) findViewById(R.id.location_city_textview);
 		mLocationIV = (ImageView) findViewById(R.id.curr_loc_icon);
 		mMainViewPager = (ViewPager) findViewById(R.id.main_viewpager);
-		// 设置viewpager缓存view的个数，默认为1个，理论上是越多越好，但是比较耗内存，
-		// 我这里设置两个，性能上有点改善
-		// mMainViewPager.setOffscreenPageLimit(2);
-		mFragmentAdapter = new WeatherPagerAdapter(this);
-		mMainViewPager.setAdapter(mFragmentAdapter);
-		mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
 		mCirclePageIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
-		mCirclePageIndicator.setViewPager(mMainViewPager);
-		mCirclePageIndicator.setOnPageChangeListener(this);
 
 		mTitleTextView.setOnClickListener(this);
 		findViewById(R.id.sidebarButton).setOnClickListener(this);
@@ -153,7 +120,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 			updateUI();
 		} else {
 			// 需要定位
-			visibleAddCityBtn();
+			startActivity(new Intent(MainActivity.this, QueryCityActivity.class));
 		}
 	}
 
@@ -163,6 +130,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		// 保存默认选择页
 		PreferenceUtils.setPrefInt(this, INSTANCESTATE_TAB,
 				mMainViewPager.getCurrentItem());
+		if(mFragmentAdapter != null)
+			mFragmentAdapter.clearItems();
 	}
 
 	private void visibleAddCityBtn() {
@@ -174,24 +143,20 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 	}
 
 	private void updateUI() {
-		// 修复一个bug，当所有城市被删除之后，再进来不刷新界面
-//		if (mFragmentAdapter.getCount() == 0) {
-//			mFragmentAdapter = new WeatherPagerAdapter(this);
-//			mMainViewPager.setAdapter(mFragmentAdapter);
-//			mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
-//			mCirclePageIndicator.setViewPager(mMainViewPager);
-//			mCirclePageIndicator.setOnPageChangeListener(this);
-//		}
-		mFragmentAdapter.addAllItems(mTmpCities);
 		L.i("MainActivity updateUI...");
-		mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
-		mMenuAdapter.addContent(mTmpCities);
-		mCirclePageIndicator.notifyDataSetChanged();
 		// 第一次进来没有数据
 		if (mTmpCities.isEmpty()) {
 			visibleAddCityBtn();
 			return;
 		}
+		mFragmentAdapter = new WeatherPagerAdapter(this);
+		mFragmentAdapter.addAllItems(mTmpCities);
+		mMainViewPager.setAdapter(mFragmentAdapter);
+		mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
+		mCirclePageIndicator.setViewPager(mMainViewPager);
+		mCirclePageIndicator.setOnPageChangeListener(this);
+		
+		mMenuAdapter.addContent(mTmpCities);
 		if (mAddCityBtn.getVisibility() == View.VISIBLE)
 			mAddCityBtn.setVisibility(View.GONE);
 		if (mTmpCities.size() > 1)
@@ -394,7 +359,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		mMenuListView.setOnItemClickListener(mItemClickListener);
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void changeBlurImageViewAlpha(float slideOffset) {
 		if (slideOffset <= 0) {
 			mBlurImageView.setImageBitmap(null);

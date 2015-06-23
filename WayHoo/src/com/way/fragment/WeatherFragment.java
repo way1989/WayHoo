@@ -91,7 +91,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		super.onCreate(savedInstanceState);
 		mContentResolver = getActivity().getContentResolver();
 	}
-
+	
 	private View mRootView;
 	// 分别表示当前Fragment是否可见,是否已准备(表示已经走过onCreateView方法)以及是否数据已加载
 	private boolean isVisible = false;
@@ -205,7 +205,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			mWeatherInfo = WeatherSpider
 				.getWeatherInfo(mActivity, mCurCity.getPostID(), mCurCity.getWeatherInfoStr());
 			if(!WeatherSpider.isEmpty(mWeatherInfo)){
-				isLoaded = true;
+				//isLoaded = true;
 				updateWeatherView();
 			}
 		} catch (JSONException e) {
@@ -297,12 +297,6 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		return false;
 	}
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		// initViews(view);
-	}
-
 	/**
 	 * 初始化所有的view
 	 * 
@@ -322,6 +316,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		mPullRefreshScrollView.setOnRefreshListener(this);
 		// 添加下拉刷新状态事件，以便及时现实刷新时间
 		mPullRefreshScrollView.setOnPullEventListener(this);
+		//mPullRefreshScrollView.setMode(Mode.PULL_FROM_START);// 可以下拉刷新
 		mListHeaderView = LayoutInflater.from(getActivity()).inflate(
 				R.layout.weather_current_condition, null);
 		// 获取屏幕高度
@@ -346,7 +341,6 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		mListView.setAdapter(mWeatherAdapter);
 		mListView.setOnScrollListener(mOnScrollListener);// 监听滑动
 		initCurWeatherViews(view);
-		mListView.setSelection(0);// 默认选中最上面一个view
 
 		// 本来是想点击headerview可以滑动到下一个view，但是效果不好，就干脆不要了
 		// mListHeaderView.setOnClickListener(new OnClickListener() {
@@ -541,6 +535,8 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	}
 	
 	private long getRefreshTime(){
+		if(mCurCity == null)
+			return -1;
 		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
 				new String[] { CityConstants.REFRESH_TIME },
 				CityConstants.POST_ID + "=?",

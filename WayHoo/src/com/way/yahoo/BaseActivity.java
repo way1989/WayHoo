@@ -21,7 +21,7 @@ import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.weather.plugin.spider.WeatherSpider;
 
 public class BaseActivity extends SwipeBackActivity {
-	public static final String AUTO_LOCATION_CITY_KEY = "auto_location";
+	//public static final String AUTO_LOCATION_CITY_KEY = "auto_location";
 	protected ContentResolver mContentResolver;
 	protected Activity mActivity;
 	protected LocationUtils mLocationUtils;

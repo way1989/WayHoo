@@ -3,23 +3,21 @@ package com.way.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.support.v13.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 import com.way.beans.City;
+import com.way.common.util.L;
 import com.way.fragment.WeatherFragment;
 import com.way.yahoo.BaseActivity;
 
-@SuppressLint("NewApi")
 public class WeatherPagerAdapter extends FragmentStatePagerAdapter {
 	private final BaseActivity mActivity;
 	private final ArrayList<ItemInfo> mItemInfos;
 
 	static final class ItemInfo {
 		private final City city;
-		private Fragment fragment;
+		private WeatherFragment fragment;
 
 		ItemInfo(City city) {
 			this.city = city;
@@ -33,7 +31,7 @@ public class WeatherPagerAdapter extends FragmentStatePagerAdapter {
 	}
 
 	public void addItem(City city) {
-		Log.i("liweiping", "addItem city = " + city);
+		L.i("liweiping", "addItem city = " + city);
 		ItemInfo info = new ItemInfo(city);
 		mItemInfos.add(info);
 		notifyDataSetChanged();
@@ -50,7 +48,7 @@ public class WeatherPagerAdapter extends FragmentStatePagerAdapter {
 
 	public void clearItems() {
 		mItemInfos.clear();
-		// notifyDataSetChanged();
+		notifyDataSetChanged();
 	}
 
 	@Override

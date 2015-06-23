@@ -1,7 +1,5 @@
 package com.way.yahoo;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.json.JSONException;
@@ -9,7 +7,6 @@ import org.json.JSONException;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +44,6 @@ public class ManagerCityActivity extends BaseActivity implements
 	private LayoutInflater mInflater;
 	private List<City> mTmpCitys;
 	private static boolean isRefreshMode;
-	//private GridCityRefreshTask mGridCityRefreshTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -124,17 +120,15 @@ public class ManagerCityActivity extends BaseActivity implements
 				: View.INVISIBLE);
 		mRefreshCityBtn
 				.setVisibility(isRefresh ? View.INVISIBLE : View.VISIBLE);
-		// mEditCityBtn.setVisibility(isRefresh ? View.INVISIBLE :
-		// View.VISIBLE);
 		mEditCityBtn.setEnabled(!isRefresh && (mTmpCitys.size() > 1));
 		mGridView.setEnabled(!isRefresh);
 		mGridView.setOnReorderingListener(isRefresh ? null : dragSortListener);
 		// 开一个异步线程去更新天气或者取消更新
-
 		if (isRefresh) {
 			getAllWeather();
 		} else {
-			mAdapter.setRefreshingIndex(-1);
+			mIndex = -1;
+			mAdapter.setRefreshingIndex(mIndex);
 			App.getVolleyRequestQueue().cancelAll("All");
 		}
 
@@ -147,15 +141,7 @@ public class ManagerCityActivity extends BaseActivity implements
 			L.d("liweiping", "onReordering fromPosition:" + fromPosition
 					+ ",toPosition:" + toPosition);
 			mAdapter.reorder(fromPosition, toPosition);
-			for (int i = 0; i < mTmpCitys.size(); i++) {
-				ContentValues contentValues = new ContentValues();
-				contentValues.put(CityConstants.ORDER_INDEX, i);
-				String postID = mTmpCitys.get(i).getPostID();
-				mContentResolver.update(CityProvider.TMPCITY_CONTENT_URI,
-						contentValues, CityConstants.POST_ID + "=?",
-						 new String[] { postID });//更新位置
-			}
-
+			changeSortIndex();
 		}
 
 		@Override
@@ -185,24 +171,28 @@ public class ManagerCityActivity extends BaseActivity implements
 		updateBtnStates();
 	}
 
+	private void changeSortIndex() {
+		for (int i = 0; i < mTmpCitys.size(); i++) {
+			ContentValues contentValues = new ContentValues();
+			contentValues.put(CityConstants.ORDER_INDEX, i);
+			String postID = mTmpCitys.get(i).getPostID();
+			mContentResolver.update(CityProvider.TMPCITY_CONTENT_URI,
+					contentValues, CityConstants.POST_ID + "=?",
+					new String[] { postID });// 更新位置
+		}
+	}
+
 	private void deleteCityFromTable(int position) {
 		City city = mAdapter.getItem(position);
-		// 从全局变量中删除
-		//App.mMainMap.remove(city);
 		// 从临时城市表中删除
 		mContentResolver
 				.delete(CityProvider.TMPCITY_CONTENT_URI, CityConstants.POST_ID
 						+ "=?", new String[] { city.getPostID() });
 
-		// 更新已选择的热门城市表
-		// ContentValues contentValues = new ContentValues();
-		// contentValues.put(CityConstants.ISSELECTED, 0);
-		// mContentResolver.update(CityProvider.HOTCITY_CONTENT_URI,
-		// contentValues, CityConstants.POST_ID + "=?",
-		// new String[] { city.getPostID() });
 		updateUI(false);
 		if (mTmpCitys.isEmpty())// 如果全部被删除完了，更新一下编辑状态
 			changeEditMode();
+		changeSortIndex();
 	}
 
 	@Override
@@ -355,20 +345,21 @@ public class ManagerCityActivity extends BaseActivity implements
 			bindViewData(viewHolder, position);
 			return convertView;
 		}
-		
+
 		private void bindViewData(ViewHolder holder, final int position) {
 			City city = mTmpCitys.get(position);
 			WeatherInfo weatherInfo = null;
 			try {
-				if(city != null){
-				weatherInfo = WeatherSpider
-						.getWeatherInfo(ManagerCityActivity.this, city.getPostID(), city.getWeatherInfoStr());
-				Log.i("way", "bindViewData position = " + position
-				       + "  city.getPostID() = " + city.getPostID());
+				if (city != null) {
+					weatherInfo = WeatherSpider.getWeatherInfo(
+							ManagerCityActivity.this, city.getPostID(),
+							city.getWeatherInfoStr());
+					//Log.i("way", "bindViewData position = " + position
+					//		+ "  city.getPostID() = " + city.getPostID());
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
-			}catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			switch (getItemViewType(position)) {
@@ -472,47 +463,51 @@ public class ManagerCityActivity extends BaseActivity implements
 		ImageView deleteIV;
 		View addView;
 	}
-	
+
 	private static final String WEATHER_ALL = "http://weatherapi.market.xiaomi.com/wtr-v2/weather?cityId=%s";
+
 	private void getWeather(City city) {
 		if (city == null)
 			return;
 		int index = mTmpCitys.indexOf(city);
 		mAdapter.setRefreshingIndex(index);// 开始刷新
-		
+
 		final String postID = city.getPostID();
-		StringRequest sr = new StringRequest(String.format(WEATHER_ALL,
-				postID), new Response.Listener<String>() {
+		StringRequest sr = new StringRequest(
+				String.format(WEATHER_ALL, postID),
+				new Response.Listener<String>() {
 
-			@Override
-			public void onResponse(String response) {
-				//sr.getTag();
-				try {
-					WeatherInfo weatherInfo = WeatherSpider
-							.getWeatherInfo(mActivity, postID, response);
-					if (!WeatherSpider.isEmpty(weatherInfo)) {
-						save2Database(postID, response, weatherInfo);
-						mTmpCitys = getTmpCities();
+					@Override
+					public void onResponse(String response) {
+						// sr.getTag();
+						try {
+							WeatherInfo weatherInfo = WeatherSpider
+									.getWeatherInfo(mActivity, postID, response);
+							if (!WeatherSpider.isEmpty(weatherInfo)) {
+								save2Database(postID, response, weatherInfo);
+								mTmpCitys = getTmpCities();
+							}
+						} catch (JSONException e) {
+
+						}
+						mAdapter.setRefreshingIndex(-1);// 重置
+						updateRefreshMode(false);// 结束刷新
 					}
-				} catch (JSONException e) {
-					
-				}
-				mAdapter.setRefreshingIndex(-1);// 重置
-				updateRefreshMode(false);// 结束刷新
-			}
-		}, new Response.ErrorListener() {
+				}, new Response.ErrorListener() {
 
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				mAdapter.setRefreshingIndex(-1);// 重置
-				updateRefreshMode(false);// 结束刷新
-			}
-		});
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						mAdapter.setRefreshingIndex(-1);// 重置
+						updateRefreshMode(false);// 结束刷新
+					}
+				});
 		sr.setTag(postID);
 		App.getVolleyRequestQueue().add(sr);
 
 	}
-	protected void save2Database(String postID, String response, WeatherInfo weatherInfo) {
+
+	protected void save2Database(String postID, String response,
+			WeatherInfo weatherInfo) {
 		long pubTime = weatherInfo.getRealTime().getPub_time();
 		long savePubTime = getPubTime(postID);
 		if (pubTime != savePubTime) {
@@ -525,13 +520,12 @@ public class ManagerCityActivity extends BaseActivity implements
 					contentValues, CityConstants.POST_ID + "=?",
 					new String[] { postID });
 		}
-	}		
-	
-	private long getPubTime(String postID){
+	}
+
+	private long getPubTime(String postID) {
 		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
 				new String[] { CityConstants.REFRESH_TIME },
-				CityConstants.POST_ID + "=?",
-				new String[] { postID }, null);
+				CityConstants.POST_ID + "=?", new String[] { postID }, null);
 
 		long time = 0L;
 		if (c.moveToFirst())
@@ -545,6 +539,9 @@ public class ManagerCityActivity extends BaseActivity implements
 		if (mTmpCitys == null || mTmpCitys.size() < 1)
 			return;
 		for (City city : mTmpCitys) {
+			Log.i("way", "getAllWeather city = " + city);
+			if (city == null)
+				continue;
 			final String postID = city.getPostID();
 			StringRequest sr = new StringRequest(String.format(WEATHER_ALL,
 					postID), new Response.Listener<String>() {
@@ -559,6 +556,8 @@ public class ManagerCityActivity extends BaseActivity implements
 							mTmpCitys = getTmpCities();
 						}
 					} catch (JSONException e) {
+
+					} catch (Exception e) {
 
 					}
 					mIndex++;
@@ -584,59 +583,5 @@ public class ManagerCityActivity extends BaseActivity implements
 			App.getVolleyRequestQueue().add(sr);
 		}
 	}
-	private final class GridCityRefreshTask extends
-			AsyncTask<Void, Integer, WeatherInfo> {
-		private City mTaskCity;
-		private int mTaskIndex = -1;
 
-		public GridCityRefreshTask(City city) {
-			this.mTaskCity = city;
-			mTaskIndex = 0;
-			if (city != null)
-				mTaskIndex = mTmpCitys.indexOf(city);
-			L.i("liweiping", "GridCityRefreshTask index = " + mTaskIndex);
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			mAdapter.setRefreshingIndex(mTaskIndex);// 开始
-			L.i("liweiping", "onPreExecute begin refreshing index = 0");
-		}
-
-		@Override
-		protected WeatherInfo doInBackground(Void... params) {
-//			if (mTaskCity != null) {
-//				WeatherInfo result = getWeatherInfo(mTaskCity.getPostID(), true);
-//				return result;
-//			} else {
-//				List<City> tmpCities = new ArrayList<City>();
-//				tmpCities.addAll(mTmpCitys);
-//				for (City city : tmpCities) {
-//					mTaskIndex++;
-//					if (city != null)
-//						getWeatherInfo(city.getPostID(), true);
-//					publishProgress(mTaskIndex);// 下载完数据之后再更新界面
-//				}
-//			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(WeatherInfo result) {
-			super.onPostExecute(result);
-			mTaskIndex = -1;
-			mAdapter.setRefreshingIndex(mTaskIndex);// 重置
-			L.i("liweiping", "onPostExecute reset refreshing index = -1");
-			updateRefreshMode(false);// 结束刷新
-
-		}
-
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-			super.onProgressUpdate(values);
-			L.i("liweiping", "refreshing index = " + values[0]);
-			mAdapter.setRefreshingIndex(values[0]);
-		}
-	}
 }

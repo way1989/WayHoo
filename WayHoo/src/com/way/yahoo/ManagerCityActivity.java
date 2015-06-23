@@ -418,9 +418,6 @@ public class ManagerCityActivity extends BaseActivity implements
 					@Override
 					public void onClick(View v) {
 						if (isRefreshMode) {
-							Toast.makeText(ManagerCityActivity.this,
-									R.string.please_stop_refresh_first,
-									Toast.LENGTH_SHORT).show();
 							return;
 						}
 						L.i("liweiping", "addView.onClickListener...");

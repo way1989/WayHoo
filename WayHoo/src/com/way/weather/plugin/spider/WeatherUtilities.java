@@ -21,7 +21,7 @@ public class WeatherUtilities {
 	}
 
 	public static int getAnimationType(String weatherStr) {
-		Integer type = -1;
+		int type = -1;
 		String[] strs = weatherStr.split("转");
 		if (strs.length > 1) {
 			String[] arrayOfString3 = strs[0].split("到");

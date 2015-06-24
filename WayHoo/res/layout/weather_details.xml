@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.way.ui.view.WeatherDetailsView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:weather="http://schemas.android.com/apk/res-auto"
     style="@style/WeatherModule" >
 
@@ -183,4 +183,4 @@
         android:textSize="@dimen/text_md"
         weather:typeface="fonts/Roboto-Light.ttf" />
 
-</RelativeLayout>
+</com.way.ui.view.WeatherDetailsView>

@@ -12,12 +12,11 @@ import com.way.fragment.WeatherFragment;
 import com.way.yahoo.BaseActivity;
 
 public class WeatherPagerAdapter extends FragmentStatePagerAdapter {
-	private final BaseActivity mActivity;
 	private final ArrayList<ItemInfo> mItemInfos;
 
 	static final class ItemInfo {
 		private final City city;
-		private WeatherFragment fragment;
+		private Fragment fragment;
 
 		ItemInfo(City city) {
 			this.city = city;
@@ -26,7 +25,6 @@ public class WeatherPagerAdapter extends FragmentStatePagerAdapter {
 
 	public WeatherPagerAdapter(BaseActivity activity) {
 		super(activity.getFragmentManager());
-		this.mActivity = activity;
 		mItemInfos = new ArrayList<ItemInfo>();
 	}
 
@@ -50,12 +48,16 @@ public class WeatherPagerAdapter extends FragmentStatePagerAdapter {
 		mItemInfos.clear();
 		notifyDataSetChanged();
 	}
-
+	@Override
+	public int getItemPosition(Object object) {
+		//return super.getItemPosition(object);
+		return POSITION_NONE;
+	}
 	@Override
 	public Fragment getItem(int position) {
 		ItemInfo info = mItemInfos.get(position);
 		if (info.fragment == null) {
-			info.fragment = new WeatherFragment(mActivity, info.city);
+			info.fragment = WeatherFragment.newInstance(info.city);
 		}
 		return info.fragment;
 	}

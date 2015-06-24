@@ -104,7 +104,11 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		mTitleTextView = (TextView) findViewById(R.id.location_city_textview);
 		mLocationIV = (ImageView) findViewById(R.id.curr_loc_icon);
 		mMainViewPager = (ViewPager) findViewById(R.id.main_viewpager);
+		mFragmentAdapter = new WeatherPagerAdapter(this);
+		mMainViewPager.setAdapter(mFragmentAdapter);
 		mCirclePageIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+		mCirclePageIndicator.setViewPager(mMainViewPager);
+		mCirclePageIndicator.setOnPageChangeListener(this);
 
 		mTitleTextView.setOnClickListener(this);
 		findViewById(R.id.sidebarButton).setOnClickListener(this);
@@ -130,8 +134,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		// 保存默认选择页
 		PreferenceUtils.setPrefInt(this, INSTANCESTATE_TAB,
 				mMainViewPager.getCurrentItem());
-		if(mFragmentAdapter != null)
-			mFragmentAdapter.clearItems();
+		//if(mFragmentAdapter != null)
+		//	mFragmentAdapter.clearItems();
 	}
 
 	private void visibleAddCityBtn() {
@@ -149,12 +153,12 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 			visibleAddCityBtn();
 			return;
 		}
-		mFragmentAdapter = new WeatherPagerAdapter(this);
+		//mFragmentAdapter = new WeatherPagerAdapter(this);
 		mFragmentAdapter.addAllItems(mTmpCities);
-		mMainViewPager.setAdapter(mFragmentAdapter);
-		mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
-		mCirclePageIndicator.setViewPager(mMainViewPager);
-		mCirclePageIndicator.setOnPageChangeListener(this);
+		//mMainViewPager.setAdapter(mFragmentAdapter);
+		//mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
+		//mCirclePageIndicator.setViewPager(mMainViewPager);
+		//mCirclePageIndicator.setOnPageChangeListener(this);
 		
 		mMenuAdapter.addContent(mTmpCities);
 		if (mAddCityBtn.getVisibility() == View.VISIBLE)

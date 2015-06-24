@@ -6,8 +6,6 @@ import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.AsyncTask;
-import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,16 +44,12 @@ import com.way.weather.plugin.bean.RealTime;
 import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.weather.plugin.spider.WeatherSpider;
 import com.way.yahoo.App;
-import com.way.yahoo.BaseActivity;
-import com.way.yahoo.ManagerCityActivity;
+import com.way.yahoo.MainActivity;
 import com.way.yahoo.R;
 
 public class WeatherFragment extends Fragment implements OnRefreshListener,
 		OnPullEventListener {
 	public static final String ARG_CITY = "city";
-	public static final String ARG_WEATHERINFO = "weatherInfo";
-	public static final String REFRESH_TIME_KEY = "refreshTime";
-	// private GetDataTask mGetDataTask;
 	private ListView mListView;
 	private PullToRefreshScrollView mPullRefreshScrollView;
 	private WeatherListAdapter mWeatherAdapter;
@@ -75,23 +69,27 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	private TextView mCurWeatherCopyTV;
 
 	private ContentResolver mContentResolver;
-	private BaseActivity mActivity;
+	private MainActivity mActivity;
 	private City mCurCity;
 
 	public WeatherFragment() {
 	}
 
-	public WeatherFragment(BaseActivity activity, City city) {
-		mActivity = activity;
-		mCurCity = city;
+	public static Fragment newInstance(City city) {
+		WeatherFragment fragment = new WeatherFragment();
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(ARG_CITY, city);
+		fragment.setArguments(bundle);
+		return fragment;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mActivity = (MainActivity) getActivity();
 		mContentResolver = getActivity().getContentResolver();
 	}
-	
+
 	private View mRootView;
 	// 分别表示当前Fragment是否可见,是否已准备(表示已经走过onCreateView方法)以及是否数据已加载
 	private boolean isVisible = false;
@@ -143,6 +141,8 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			// onFragmentVisible();
 		} else {
 			// onFragmentInvisible();
+			if(mPullRefreshScrollView != null && mPullRefreshScrollView.isRefreshing())
+				mPullRefreshScrollView.onRefreshComplete();
 		}
 	}
 
@@ -150,6 +150,9 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	 * 在Fragment可见时进行判断是否载入数据
 	 */
 	private void onLoadedData() {
+		mCurCity = getArguments().getParcelable(ARG_CITY);
+		Log.i("way", "onLoadedData..." + " city = " + mCurCity.getName() +", isLoaded = "+  isLoaded + ", mAsynState = " + mAsynState
+				+ ", isPrepared = " + isPrepared  + ", isVisible = " + isVisible);
 		if (!isPrepared)
 			return;
 		if (isLoaded) {
@@ -160,21 +163,15 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 				// mGetDataTask = new GetDataTask();
 				// mGetDataTask.execute();
 				if(isNeedRequestNet()){
-					mAsynState = AsynTaskState.PROCESSING;
 					getWeather(mCurCity.getPostID());
-					if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
-						mPullRefreshScrollView.setRefreshing();
 				}else{
 					loadWeatherInfoFromLocal();
 				}
 				break;
 			case PROCESSING:
-				if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
-				mPullRefreshScrollView.setRefreshing();
-				break;
 			case RPOCESSED:
-				if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
-				mPullRefreshScrollView.setRefreshing();
+				if(!mPullRefreshScrollView.isRefreshing())
+					mPullRefreshScrollView.setRefreshing();
 				break;
 			case COMPLETE:
 				updateWeatherView();
@@ -188,6 +185,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			return false;
 		}
 		long refreshTime = getRefreshTime();
+		Log.i("way",  "city = " + mCurCity.getName() + ", refreshTime = " + refreshTime + ",   past time = " + (System.currentTimeMillis() - refreshTime) / (1000 * 60)  + "min");
 		if(netState == NetUtil.NETWORN_WIFI){
 			return ((System.currentTimeMillis() - refreshTime) > (1000 * 60 * 30));//wifi网络30分钟过期
 		}
@@ -201,6 +199,9 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	private void loadWeatherInfoFromLocal(){
 		if(mCurCity == null)
 			return;
+		// Call setRefreshing when the list begin to refresh.
+		if(isVisible && !mPullRefreshScrollView.isRefreshing())
+				mPullRefreshScrollView.setRefreshing();
 		try {
 			mWeatherInfo = WeatherSpider
 				.getWeatherInfo(mActivity, mCurCity.getPostID(), mCurCity.getWeatherInfoStr());
@@ -213,11 +214,16 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		}catch (Exception e){
 			e.printStackTrace();
 		}
+		if(isVisible && mPullRefreshScrollView.isRefreshing())
+			mPullRefreshScrollView.onRefreshComplete();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+			mCurCity = getArguments().getParcelable(ARG_CITY);
+		Log.i("way", "onCreateView... " + ", city = " + mCurCity.getName() + ", mRootView = " + mRootView + ", isVisible = " + isVisible
+				+ ", isLoaded = " + isLoaded);
 		if (mRootView == null) {
 			mRootView = inflater.inflate(R.layout.weather_fragment, container,
 					false);
@@ -245,21 +251,15 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 					switch (mAsynState) {
 					case INIT:
 						if(isNeedRequestNet()){
-							mAsynState = AsynTaskState.PROCESSING;
 							getWeather(mCurCity.getPostID());
-							if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
-							mPullRefreshScrollView.setRefreshing();
 						}else{
 							loadWeatherInfoFromLocal();
 						}
 						break;
 					case PROCESSING:
-						if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
-						mPullRefreshScrollView.setRefreshing();
-						break;
 					case RPOCESSED:
-						if(mPullRefreshScrollView.getState() != State.MANUAL_REFRESHING)
-						mPullRefreshScrollView.setRefreshing();
+						if(!mPullRefreshScrollView.isRefreshing())
+							mPullRefreshScrollView.setRefreshing();
 						break;
 					case COMPLETE:
 						updateWeatherView();
@@ -269,21 +269,20 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 				}
 			}
 		}
-		// L.i("liweiping","Fragment onCreateView");
 		return mRootView;
 	}
 
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
+		Log.i("way", "onDestroyView..." + ", city = " + mCurCity.getName());
 		if (isNeedDestroy()) {
 			mRootView = null;
 			isVisible = false;
 			isPrepared = false;
 			isLoaded = false;
-
-			mAsynState = AsynTaskState.INIT;
 		}
+		mAsynState = AsynTaskState.INIT;
 	}
 
 	/**
@@ -417,10 +416,10 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 				mPullRefreshScrollView.setMode(Mode.DISABLED);
 			} else if (scrollPosition > mHeaderHeight / 2) {
 				// 上滑距离超过HeaderView高度一半时，取消刷新，同时要注意停止异步任务
-				mPullRefreshScrollView.onRefreshComplete();
-				// if (mGetDataTask != null)
-				// mGetDataTask.cancel(true);
-				App.getVolleyRequestQueue().cancelAll(mCurCity.getPostID());
+				if(mPullRefreshScrollView.isRefreshing()){
+					mPullRefreshScrollView.onRefreshComplete();
+					App.getVolleyRequestQueue().cancelAll(mCurCity.getPostID());
+				}
 			}
 		}
 
@@ -451,7 +450,8 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	private void getWeather(final String postID) {
 		mAsynState = AsynTaskState.PROCESSING;
 		// Call setRefreshing when the list begin to refresh.
-		mPullRefreshScrollView.setRefreshing();
+		if(!mPullRefreshScrollView.isRefreshing())
+			mPullRefreshScrollView.setRefreshing();
 
 		StringRequest sr = new StringRequest(
 				String.format(WEATHER_ALL, postID),
@@ -460,7 +460,8 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 					@Override
 					public void onResponse(String response) {
 						mAsynState = AsynTaskState.RPOCESSED;
-						mPullRefreshScrollView.onRefreshComplete();
+						if(mPullRefreshScrollView.isRefreshing())
+							mPullRefreshScrollView.onRefreshComplete();
 						try {
 							WeatherInfo weatherInfo = WeatherSpider
 									.getWeatherInfo(mActivity, postID, response);
@@ -495,7 +496,8 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 					@Override
 					public void onErrorResponse(VolleyError error) {
 						mAsynState = AsynTaskState.RPOCESSED;
-						mPullRefreshScrollView.onRefreshComplete();
+						if(mPullRefreshScrollView.isRefreshing())
+							mPullRefreshScrollView.onRefreshComplete();
 						if (getActivity() != null)
 							Toast.makeText(getActivity(),
 									"刷新失败:" + mCurCity.getName(),
@@ -564,14 +566,14 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		Index index = weatherInfo.getIndex();
 
 		int type = realTime.getAnimation_type();
-		 mNormalImageView.setImageResource(WeatherIconUtils
-		 .getWeatherNromalBg(type));
-		 mBlurredImageView.setImageResource(WeatherIconUtils
-		 .getWeatherBlurBg(type));
-//		mNormalImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
-//				WeatherIconUtils.getRawNromalBg(type)));
-//		mBlurredImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
-//				WeatherIconUtils.getRawBlurBg(type)));
+//		 mNormalImageView.setImageResource(WeatherIconUtils
+//		 .getWeatherNromalBg(type));
+//		 mBlurredImageView.setImageResource(WeatherIconUtils
+//		 .getWeatherBlurBg(type));
+		mNormalImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
+				WeatherIconUtils.getRawNromalBg(type)));
+		mBlurredImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
+				WeatherIconUtils.getRawBlurBg(type)));
 		mCurWeatherIV.setImageResource(WeatherIconUtils.getWeatherIcon(type));
 		mCurWeatherTV.setText(realTime.getWeather_name());
 		mCurFeelsTempTV.setText(realTime.getTemp() + "");

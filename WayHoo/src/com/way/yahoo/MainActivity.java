@@ -154,7 +154,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 			return;
 		}
 		//mFragmentAdapter = new WeatherPagerAdapter(this);
-		mFragmentAdapter.addAllItems(mTmpCities);
+		mFragmentAdapter.setData(mTmpCities);
 		//mMainViewPager.setAdapter(mFragmentAdapter);
 		//mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
 		//mCirclePageIndicator.setViewPager(mMainViewPager);

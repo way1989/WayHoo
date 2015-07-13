@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.way.ui.view.LoadingEmptyContainer xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loading_empty_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center"
+    android:gravity="center" >
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <include layout="@layout/no_results_message" />
+
+</com.way.ui.view.LoadingEmptyContainer>

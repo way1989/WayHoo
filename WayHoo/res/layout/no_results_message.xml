@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.way.ui.view.NoResultsContainer xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/no_results_container"
+    android:layout_width="260dip"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:visibility="gone" >
+
+    <TextView
+        android:id="@+id/no_results_main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:maxLines="2"
+        android:text=""
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</com.way.ui.view.NoResultsContainer>

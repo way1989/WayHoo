@@ -142,6 +142,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			onLoadedData();
 			// onFragmentVisible();
 		} else {
+			mHandler.removeCallbacks(delayRefresh);
 			// onFragmentInvisible();
 		}
 	}
@@ -163,7 +164,8 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 				// mGetDataTask = new GetDataTask();
 				// mGetDataTask.execute();
 				if(isNeedRequestNet()){
-					mHandler.postDelayed(delayRefresh, 200);
+					mHandler.removeCallbacks(delayRefresh);
+					mHandler.postDelayed(delayRefresh, 500);
 				}else{
 					loadWeatherInfoFromLocal();
 				}
@@ -228,11 +230,12 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			if (isVisible) {
 				loadWeatherInfoFromLocal();
 				if(isNeedRequestNet()){
-					mHandler.postDelayed(delayRefresh, 200);
+					mHandler.removeCallbacks(delayRefresh);
+					mHandler.postDelayed(delayRefresh, 500);
 				}
 				
 			} else {
-				loadWeatherInfoFromLocal();
+				//loadWeatherInfoFromLocal();
 			}
 		} else {
 			ViewGroup mRootParent = (ViewGroup) mRootView.getParent();
@@ -532,20 +535,21 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		if (WeatherSpider.isEmpty(weatherInfo)) {
 			return;
 		}
+		//mListView.addHeaderView(mListHeaderView, null, false);// 给ListView添加HeaderView
 		RealTime realTime = weatherInfo.getRealTime();
 		AQI aqi = weatherInfo.getAqi();
 		Forecast forecast = weatherInfo.getForecast();
 		Index index = weatherInfo.getIndex();
 
 		int type = realTime.getAnimation_type();
-//		 mNormalImageView.setImageResource(WeatherIconUtils
-//		 .getWeatherNromalBg(type));
-//		 mBlurredImageView.setImageResource(WeatherIconUtils
-//		 .getWeatherBlurBg(type));
-		mNormalImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
-				WeatherIconUtils.getRawNromalBg(type)));
-		mBlurredImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
-				WeatherIconUtils.getRawBlurBg(type)));
+		 mNormalImageView.setImageResource(WeatherIconUtils
+		 .getWeatherNromalBg(type));
+		 mBlurredImageView.setImageResource(WeatherIconUtils
+		 .getWeatherBlurBg(type));
+//		mNormalImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
+//				WeatherIconUtils.getRawNromalBg(type)));
+//		mBlurredImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
+//				WeatherIconUtils.getRawBlurBg(type)));
 		mCurWeatherIV.setImageResource(WeatherIconUtils.getWeatherIcon(type));
 		mCurWeatherTV.setText(realTime.getWeather_name());
 		mCurFeelsTempTV.setText(realTime.getTemp() + "");

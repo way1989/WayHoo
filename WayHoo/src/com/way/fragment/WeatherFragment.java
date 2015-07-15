@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnPullEventListener;
@@ -77,12 +78,19 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	public WeatherFragment() {
 	}
 
-	public static Fragment newInstance(City city) {
+	public static WeatherFragment newInstance(City city) {
 		WeatherFragment fragment = new WeatherFragment();
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(ARG_CITY, city);
 		fragment.setArguments(bundle);
 		return fragment;
+	}
+	public void setCity(City city){
+		mCurCity = city;
+	}
+	
+	public City getCity(){
+		return mCurCity;
 	}
 
 	@Override
@@ -542,10 +550,22 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		Index index = weatherInfo.getIndex();
 
 		int type = realTime.getAnimation_type();
-		 mNormalImageView.setImageResource(WeatherIconUtils
-		 .getWeatherNromalBg(type));
-		 mBlurredImageView.setImageResource(WeatherIconUtils
-		 .getWeatherBlurBg(type));
+		Glide.with(this).load(WeatherIconUtils.getWeatherNromalBg(type))
+				//.centerCrop()
+				.placeholder(R.drawable.bg_na)
+				.error(R.drawable.bg_na)
+//				.crossFade()
+				.into(mNormalImageView);
+		Glide.with(this).load(WeatherIconUtils.getWeatherBlurBg(type))
+				//.centerCrop()
+				.placeholder(R.drawable.bg_na_blur)
+				.error(R.drawable.bg_na_blur)
+				// .crossFade()
+				.into(mBlurredImageView);
+//		 mNormalImageView.setImageResource(WeatherIconUtils
+//		 .getWeatherNromalBg(type));
+//		 mBlurredImageView.setImageResource(WeatherIconUtils
+//		 .getWeatherBlurBg(type));
 //		mNormalImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,
 //				WeatherIconUtils.getRawNromalBg(type)));
 //		mBlurredImageView.setImageBitmap(SystemUtils.readBitMap(mActivity,

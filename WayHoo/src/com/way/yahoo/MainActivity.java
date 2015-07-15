@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		//mFragmentAdapter = new WeatherPagerAdapter(this);
 		mFragmentAdapter.setData(mTmpCities);
 		//mMainViewPager.setAdapter(mFragmentAdapter);
-		//mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
+		mMainViewPager.setOffscreenPageLimit(mFragmentAdapter.getCount() - 1);
 		//mCirclePageIndicator.setViewPager(mMainViewPager);
 		//mCirclePageIndicator.setOnPageChangeListener(this);
 		

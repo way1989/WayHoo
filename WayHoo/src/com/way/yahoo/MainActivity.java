@@ -305,8 +305,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
 	@Override
 	public void onPageSelected(int position) {
-		if (position < mFragmentAdapter.getCount())
+		if (position < mFragmentAdapter.getCount()){
 			mTitleTextView.setText(mFragmentAdapter.getPageTitle(position));
+			mFragmentAdapter.setCurrentPage(position);
+		}
 		if (position >= mTmpCities.size()) {
 			mLocationIV.setVisibility(View.GONE);
 			return;

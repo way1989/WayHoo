@@ -552,7 +552,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		int type = realTime.getAnimation_type();
 		Glide.with(this).load(WeatherIconUtils.getWeatherNromalBg(type))
 				//.centerCrop()
-				.placeholder(R.drawable.bg_na)
+				.placeholder(R.drawable.bg_na_blur)
 				.error(R.drawable.bg_na)
 //				.crossFade()
 				.into(mNormalImageView);
@@ -613,5 +613,14 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		// return;
 		// mGetDataTask = new GetDataTask();
 		// mGetDataTask.execute();
+	}
+
+	public void refreshUI() {
+		//setUserVisibleHint(true);
+	}
+
+	public void releaseImageViewByIds() {
+		// TODO Auto-generated method stub
+		
 	}
 }

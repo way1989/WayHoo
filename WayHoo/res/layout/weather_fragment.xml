@@ -15,7 +15,8 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_na" />
+             android:src="@drawable/bg_na_blur" 
+            />
 
         <ImageView
             android:id="@+id/weather_background_blurred"
@@ -23,7 +24,7 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_na_blur" />
+           />
     </FrameLayout>
 
     <com.way.ui.view.TouchDispatchView

@@ -3,7 +3,6 @@ package com.way.yahoo;
 import java.util.List;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -108,22 +107,26 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 			mLocationTV.setText(formatBigMessage(cityName));
 		}
 	}
-    // This is the message string used in bigText and bigPicture notifications.
-    public CharSequence formatBigMessage(String city) {
-        final TextAppearanceSpan notificationSubjectSpan = new TextAppearanceSpan(
-                this, R.style.NotificationPrimaryText);
 
-        // Change multiple newlines (with potential white space between), into a single new line
-        final String message =
-                !TextUtils.isEmpty(city) ? city : "";
-        String afterStr = "(点击重新定位)";
-        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(city);
-        if (!TextUtils.isEmpty(afterStr)) {
-            spannableStringBuilder.append(afterStr);
-            spannableStringBuilder.setSpan(notificationSubjectSpan, city.length(), city.length() + afterStr.length(), 0);
-        }
-        return spannableStringBuilder;
-    }
+	// This is the message string used in bigText and bigPicture notifications.
+	public CharSequence formatBigMessage(String city) {
+		final TextAppearanceSpan notificationSubjectSpan = new TextAppearanceSpan(
+				this, R.style.NotificationPrimaryText);
+
+		// Change multiple newlines (with potential white space between), into a
+		// single new line
+		final String message = !TextUtils.isEmpty(city) ? city : "";
+		String afterStr = "(点击重新定位)";
+		SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(
+				message);
+		if (!TextUtils.isEmpty(afterStr)) {
+			spannableStringBuilder.append(afterStr);
+			spannableStringBuilder.setSpan(notificationSubjectSpan,
+					message.length(), message.length() + afterStr.length(), 0);
+		}
+		return spannableStringBuilder;
+	}
+
 	private String getCityName() {
 		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
 				new String[] { CityConstants.NAME }, CityConstants.ISLOCATION
@@ -321,7 +324,7 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 			}
 		}
 
-		@Override 
+		@Override
 		public void failed() {
 			Toast.makeText(QueryCityActivity.this, R.string.getlocation_fail,
 					Toast.LENGTH_SHORT).show();

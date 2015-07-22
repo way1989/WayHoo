@@ -48,6 +48,7 @@ import com.way.weather.plugin.spider.WeatherSpider;
 
 public class MainActivity extends BaseActivity implements OnClickListener,
 		OnPageChangeListener {
+	public static final String FIRST_RUN_APP = "firstRunApp";
 	private static final String INSTANCESTATE_TAB = "tab_index";
 	private String mShareNormalStr = "#威震天气#提醒您:今天%s,%s,%s,%s,";// 日期、城市、天气、温度
 	private String mAqiShareStr = "空气质量指数(AQI):%s μg/m³,等级[%s];PM2.5浓度值:%s μg/m³。%s ";// aqi、等级、pm2.5、建议
@@ -128,8 +129,11 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		if (!mTmpCities.isEmpty()) {
 			updateUI();
 		} else {
-			// 需要定位
-			startActivity(new Intent(MainActivity.this, QueryCityActivity.class));
+			//如果第一次运行应用就需要定位
+			if(PreferenceUtils.getPrefBoolean(this, FIRST_RUN_APP, true)){
+				startActivity(new Intent(MainActivity.this, QueryCityActivity.class));
+				PreferenceUtils.setPrefBoolean(this, FIRST_RUN_APP, false);
+			}
 		}
 	}
 
@@ -139,8 +143,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		// 保存默认选择页
 		PreferenceUtils.setPrefInt(this, INSTANCESTATE_TAB,
 				mMainViewPager.getCurrentItem());
-		//if(mFragmentAdapter != null)
-		//	mFragmentAdapter.clearItems();
 	}
 
 	private void visibleAddCityBtn() {

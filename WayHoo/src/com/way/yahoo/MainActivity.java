@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.viewpagerindicator.CirclePageIndicator;
+import com.way.adapter.ParallaxPagerTransformer;
 import com.way.adapter.SideMenuAdapter;
 import com.way.adapter.WeatherPagerAdapter;
 import com.way.beans.Category;
@@ -104,6 +105,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		mTitleTextView = (TextView) findViewById(R.id.location_city_textview);
 		mLocationIV = (ImageView) findViewById(R.id.curr_loc_icon);
 		mMainViewPager = (ViewPager) findViewById(R.id.main_viewpager);
+		ParallaxPagerTransformer pt = new ParallaxPagerTransformer((R.id.top_part));
+        //pt.setBorder(20);
+        pt.setSpeed(0.5f);
+        mMainViewPager.setPageTransformer(false, pt);
 		mFragmentAdapter = new WeatherPagerAdapter(this);
 		mMainViewPager.setAdapter(mFragmentAdapter);
 		mCirclePageIndicator = (CirclePageIndicator) findViewById(R.id.indicator);

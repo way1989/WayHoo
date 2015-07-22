@@ -1,13 +1,9 @@
 package com.way.weather.plugin.spider;
 
-import java.io.File;
-import java.util.Locale;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.way.weather.plugin.bean.AQI;
 import com.way.weather.plugin.bean.Alerts;
@@ -15,14 +11,10 @@ import com.way.weather.plugin.bean.Forecast;
 import com.way.weather.plugin.bean.Index;
 import com.way.weather.plugin.bean.RealTime;
 import com.way.weather.plugin.bean.WeatherInfo;
-import com.way.weather.plugin.util.ConfigCache;
-import com.way.weather.plugin.util.HttpUtils;
-import com.way.weather.plugin.util.NetUtil;
-import com.way.weather.plugin.util.Tools;
 
 public class WeatherSpider {
 
-	private static final String WEATHER_ALL = "http://weatherapi.market.xiaomi.com/wtr-v2/weather?cityId=%s";
+	public static final String WEATHER_ALL = "http://weatherapi.market.xiaomi.com/wtr-v2/weather?cityId=%s";
 
 	public static WeatherInfo getWeatherInfo(Context context, String postID,
 			String result) throws JSONException {
@@ -95,12 +87,6 @@ public class WeatherSpider {
 				|| info.getArryAlert().get(0) == null)
 			return true;
 		return false;
-	}
-
-	private static String generateUrl(Context context, String postID) {
-		String url = String.format(WEATHER_ALL, new Object[] { postID });
-		url += Tools.getDeviceInfo(context);
-		return url;
 	}
 
 }

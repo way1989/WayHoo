@@ -461,7 +461,6 @@ public class ManagerCityActivity extends BaseActivity implements
 		View addView;
 	}
 
-	private static final String WEATHER_ALL = "http://weatherapi.market.xiaomi.com/wtr-v2/weather?cityId=%s";
 
 	private void getWeather(City city) {
 		if (city == null)
@@ -471,7 +470,7 @@ public class ManagerCityActivity extends BaseActivity implements
 
 		final String postID = city.getPostID();
 		StringRequest sr = new StringRequest(
-				String.format(WEATHER_ALL, postID),
+				String.format(WeatherSpider.WEATHER_ALL, postID),
 				new Response.Listener<String>() {
 
 					@Override
@@ -540,7 +539,7 @@ public class ManagerCityActivity extends BaseActivity implements
 			if (city == null)
 				continue;
 			final String postID = city.getPostID();
-			StringRequest sr = new StringRequest(String.format(WEATHER_ALL,
+			StringRequest sr = new StringRequest(String.format(WeatherSpider.WEATHER_ALL,
 					postID), new Response.Listener<String>() {
 
 				@Override

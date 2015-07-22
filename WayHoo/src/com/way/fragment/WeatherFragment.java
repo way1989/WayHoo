@@ -420,7 +420,6 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	 * 异步任务获取天气信息
 	 * 
 	 */
-	private static final String WEATHER_ALL = "http://weatherapi.market.xiaomi.com/wtr-v2/weather?cityId=%s";
 
 	private void getWeather() {
 		if(mCurCity == null)
@@ -449,7 +448,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			
 		
 		StringRequest sr = new StringRequest(
-				String.format(WEATHER_ALL, postID),
+				String.format(WeatherSpider.WEATHER_ALL, postID),
 				new Response.Listener<String>() {
 
 					@Override

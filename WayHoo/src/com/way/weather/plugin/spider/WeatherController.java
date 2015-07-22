@@ -4,11 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.Log;
 
 import com.way.weather.plugin.bean.AQI;
 import com.way.weather.plugin.bean.Alerts;
@@ -20,42 +23,52 @@ import com.way.weather.plugin.bean.RealTime;
 
 public class WeatherController {
 	public static AQI convertToNewAQI(JSONObject aqiJSONObject,
-			String language, String pid) throws JSONException {
+			String language, String pid) {
 		AQI aqi = new AQI();
 		aqi.setCity_code(pid);
-		aqi.setPub_time(getAQITime(aqiJSONObject.getString("pub_time")));
-		int aqiValue = WeatherUtilities.getAqi(aqiJSONObject.getString("aqi"));
-		aqi.setAqi(aqiValue);
-		aqi.setPm25(WeatherUtilities.getAqi(aqiJSONObject.getString("pm25")));
-		aqi.setPm10(WeatherUtilities.getAqi(aqiJSONObject.getString("pm10")));
-		aqi.setNo2(WeatherUtilities.getAqi(aqiJSONObject.getString("no2")));
-		aqi.setSo2(WeatherUtilities.getAqi(aqiJSONObject.getString("so2")));
-		aqi.setCo(WeatherConstants.NO_VALUE_FLAG);
-		aqi.setO3(WeatherConstants.NO_VALUE_FLAG);
-		aqi.setAqi_level(WeatherUtilities.getAqiLevel(aqiValue, language));
-		aqi.setAqi_desc(WeatherUtilities.getAqiDesc(aqiValue, language));
-		aqi.setSource(WeatherUtilities.getAQISource(language));
-		aqi.setSpot(aqiJSONObject.getString("spot"));
+		try {
+			aqi.setPub_time(getAQITime(aqiJSONObject.getString("pub_time")));
+
+			int aqiValue = WeatherUtilities.getAqi(aqiJSONObject
+					.getString("aqi"));
+			aqi.setAqi(aqiValue);
+			aqi.setPm25(WeatherUtilities.getAqi(aqiJSONObject.getString("pm25")));
+			aqi.setPm10(WeatherUtilities.getAqi(aqiJSONObject.getString("pm10")));
+			aqi.setNo2(WeatherUtilities.getAqi(aqiJSONObject.getString("no2")));
+			aqi.setSo2(WeatherUtilities.getAqi(aqiJSONObject.getString("so2")));
+			aqi.setCo(WeatherConstants.NO_VALUE_FLAG);
+			aqi.setO3(WeatherConstants.NO_VALUE_FLAG);
+			aqi.setAqi_level(WeatherUtilities.getAqiLevel(aqiValue, language));
+			aqi.setAqi_desc(WeatherUtilities.getAqiDesc(aqiValue, language));
+			aqi.setSource(WeatherUtilities.getAQISource(language));
+			aqi.setSpot(aqiJSONObject.getString("spot"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return aqi;
 	}
 
 	public static Alerts convertToNewAlert(JSONArray alertJSONArray,
-			String language) throws JSONException {
+			String language) {
 		ArrayList<Alert> alertLists = new ArrayList<Alert>();
 		Alerts alerts = new Alerts();
-		for (int i = 0; i < alertJSONArray.length(); ++i) {
-			JSONObject jsonObject = alertJSONArray.getJSONObject(i);
-			Alerts.Alert alert = new Alerts.Alert();
-			alert.setAbnormal(jsonObject.getString("abnormal"));
-			alert.setDetail(jsonObject.getString("detail"));
-			alert.setHoliday(jsonObject.getString("holiday"));
-			alert.setLevel(jsonObject.getString("level"));
-			alert.setPubTime(Long.valueOf(jsonObject.getLong("pub_time")));
-			alert.setTitle(jsonObject.getString("title"));
-			alertLists.add(alert);
+		try {
+			for (int i = 0; i < alertJSONArray.length(); ++i) {
+				JSONObject jsonObject = alertJSONArray.getJSONObject(i);
+				Alerts.Alert alert = new Alerts.Alert();
+				alert.setAbnormal(jsonObject.getString("abnormal"));
+				alert.setDetail(jsonObject.getString("detail"));
+				alert.setHoliday(jsonObject.getString("holiday"));
+				alert.setLevel(jsonObject.getString("level"));
+				alert.setPubTime(Long.valueOf(jsonObject.getLong("pub_time")));
+				alert.setTitle(jsonObject.getString("title"));
+				alertLists.add(alert);
+			}
+			alerts.setPid(language);
+			alerts.setArryAlert(alertLists);
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		alerts.setPid(language);
-		alerts.setArryAlert(alertLists);
 		return alerts;
 	}
 
@@ -239,17 +252,12 @@ public class WeatherController {
 	}
 
 	private static long parseTime(String timeStr) {
-		String[] times = timeStr.split(":");
-		int hour = Integer.parseInt(times[0]);
-		int minute = Integer.parseInt(times[1]);
-		Long localTime = Calendar.getInstance().getTimeInMillis();
-		if (hour - Calendar.getInstance().get(11) > 2)
-			localTime = Long.valueOf(localTime.longValue() - 24 * 60 * 60
-					* 1000L);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(localTime.longValue());
-		calendar.set(11, hour);
-		calendar.set(12, minute);
-		return calendar.getTimeInMillis();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String data = simpleDateFormat.format(new Date(System
+				.currentTimeMillis()));
+		timeStr = data + " " + timeStr;
+		long realTime = getAQITime(timeStr);
+		Log.i("HeHe", "timeStr = " + timeStr + ", realTime = " + realTime);
+		return realTime;
 	}
 }

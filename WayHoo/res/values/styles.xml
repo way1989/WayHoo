@@ -1,11 +1,11 @@
 <resources>
 
-    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
-    </style>
+    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen"></style>
 
     <style name="SecondAppTheme" parent="@style/AppTheme">
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
     <!-- 从下往上弹出风格的dialog -->
     <style name="menu_dialog" parent="@android:style/Theme.DeviceDefault.Dialog">
         <item name="android:windowFrame">@null</item>
@@ -60,6 +60,11 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <!-- 设置屏幕变暗 -->
         <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="NotificationPrimaryText">
+        <item name="android:textColor">#cccccc</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="Shade">

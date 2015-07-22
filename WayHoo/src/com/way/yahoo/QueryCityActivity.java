@@ -3,12 +3,15 @@ package com.way.yahoo;
 import java.util.List;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -102,10 +105,25 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 		if (TextUtils.isEmpty(cityName)) {
 			startLocation(mCityNameStatus);
 		} else {
-			mLocationTV.setText(cityName);
+			mLocationTV.setText(formatBigMessage(cityName));
 		}
 	}
+    // This is the message string used in bigText and bigPicture notifications.
+    public CharSequence formatBigMessage(String city) {
+        final TextAppearanceSpan notificationSubjectSpan = new TextAppearanceSpan(
+                this, R.style.NotificationPrimaryText);
 
+        // Change multiple newlines (with potential white space between), into a single new line
+        final String message =
+                !TextUtils.isEmpty(city) ? city : "";
+        String afterStr = "(点击重新定位)";
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(city);
+        if (!TextUtils.isEmpty(afterStr)) {
+            spannableStringBuilder.append(afterStr);
+            spannableStringBuilder.setSpan(notificationSubjectSpan, city.length(), city.length() + afterStr.length(), 0);
+        }
+        return spannableStringBuilder;
+    }
 	private String getCityName() {
 		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
 				new String[] { CityConstants.NAME }, CityConstants.ISLOCATION
@@ -299,11 +317,11 @@ public class QueryCityActivity extends BaseActivity implements OnClickListener,
 						String.format(
 								getResources().getString(
 										R.string.get_location_scuess), name));
-				mLocationTV.setText(name);
+				mLocationTV.setText(formatBigMessage(name));
 			}
 		}
 
-		@Override
+		@Override 
 		public void failed() {
 			Toast.makeText(QueryCityActivity.this, R.string.getlocation_fail,
 					Toast.LENGTH_SHORT).show();

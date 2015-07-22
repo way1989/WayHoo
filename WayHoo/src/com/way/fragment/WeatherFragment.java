@@ -1,5 +1,9 @@
 package com.way.fragment;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.json.JSONException;
 
 import android.app.Fragment;
@@ -21,8 +25,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -428,6 +434,20 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		if (!mPullRefreshScrollView.isRefreshing())
 			mPullRefreshScrollView.setRefreshing();
 		final String postID = mCurCity.getPostID();
+//		RequestFuture<String> future = RequestFuture.newFuture();
+//		StringRequest request = new StringRequest(String.format(WEATHER_ALL, postID), future, future);
+//		App.getVolleyRequestQueue().add(request);
+//		try {
+//			String result = future.get(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			e.printStackTrace();
+//		} catch (TimeoutException e) {
+//			e.printStackTrace();
+//		}
+			
+		
 		StringRequest sr = new StringRequest(
 				String.format(WEATHER_ALL, postID),
 				new Response.Listener<String>() {

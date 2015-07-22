@@ -310,7 +310,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
 	@Override
 	public void onPageSelected(int position) {
-		if (position < mFragmentAdapter.getCount()){
+		if (position < mFragmentAdapter.getCount() && position >= 0){
 			mTitleTextView.setText(mFragmentAdapter.getPageTitle(position));
 			mFragmentAdapter.setCurrentPage(position);
 		}

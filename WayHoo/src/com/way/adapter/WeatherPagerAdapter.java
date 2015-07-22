@@ -109,15 +109,26 @@ public class WeatherPagerAdapter extends FragmentPagerAdapter {
 	 */
 	public void setCurrentPage(final int currentPage) {
 		mCurrentPage = currentPage;
+		Log.i("refreshUI", "setCurrentPage mCurrentPage = " + currentPage);
+		if (mCurrentPage < 0 || mCurrentPage >= getCount())
+			return;
+		final WeakReference<Fragment> weakFragment = mFragmentArray
+				.get(currentPage);
+		Log.i("refreshUI", "weakFragment = " + weakFragment);
+		if (weakFragment != null && weakFragment.get() != null) {
+			WeatherFragment fragment = (WeatherFragment) weakFragment.get();
+			Log.i("refreshUI", "WeatherFragment = " + fragment);
+			fragment.refreshUI();
+		}
 	}
 
 	@Override
 	public int getItemPosition(Object object) {
 		Log.i(TAG, "getItemPosition...");
-//		if (!TextUtils.equals(((Fragment) object).getTag(),
-//				makeFragmentName(mCurrentPage)))
-			return POSITION_NONE;
-//		return super.getItemPosition(object);
+		// if (!TextUtils.equals(((Fragment) object).getTag(),
+		// makeFragmentName(mCurrentPage)))
+		return POSITION_NONE;
+		// return super.getItemPosition(object);
 	}
 
 	@Override

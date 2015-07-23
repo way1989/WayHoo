@@ -13,6 +13,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,18 +58,19 @@ import com.way.yahoo.App;
 import com.way.yahoo.MainActivity;
 import com.way.yahoo.R;
 
-public class WeatherFragment extends Fragment implements ITaskManager,
-		OnRefreshListener, OnPullEventListener {
+public class WeatherFragment extends Fragment implements ITaskManager,SwipeRefreshLayout.OnRefreshListener {
 	public static final String ARG_CITY = "city";
+	public static final String ALPHA_KEY = "alpha";
 	private Handler mHandler = new Handler();
+	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private ListView mListView;
-	private PullToRefreshScrollView mPullRefreshScrollView;
 	private WeatherListAdapter mWeatherAdapter;
+	//private View mBackgroundView;
 	private ImageView mNormalImageView;
 	private ImageView mBlurredImageView;
 	private View mListHeaderView;
 
-	private int mLastDampedScroll;
+	//private int mLastDampedScroll;
 	private int mHeaderHeight = -1;
 
 	// 当前天气的View
@@ -166,7 +168,7 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		if (mRootView == null) {
 			mRootView = inflater.inflate(R.layout.weather_fragment, container,
 					false);
-			initViews(mRootView);
+			initViews(mRootView, savedInstanceState);
 			isPrepared = true;
 			isLoaded = false;
 			if (isVisible) {
@@ -198,16 +200,16 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 
 		@Override
 		public void run() {
-			if (!mPullRefreshScrollView.isRefreshing())
-				mPullRefreshScrollView.setRefreshing();
+			if (!mSwipeRefreshLayout.isRefreshing())
+				mSwipeRefreshLayout.setRefreshing(true);
 		}
 	};
 	Runnable stopRefreshAnim = new Runnable() {
 
 		@Override
 		public void run() {
-			if (mPullRefreshScrollView.isRefreshing())
-				mPullRefreshScrollView.onRefreshComplete();
+			if (mSwipeRefreshLayout.isRefreshing())
+				mSwipeRefreshLayout.setRefreshing(false);
 		}
 	};
 
@@ -238,7 +240,9 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 	 * 
 	 * @param view
 	 */
-	private void initViews(View view) {
+	private void initViews(View view, Bundle savedInstanceState) {
+		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+		mSwipeRefreshLayout.setOnRefreshListener(this);
 		mListView = (ListView) view.findViewById(R.id.drag_list);
 		mWeatherAdapter = new WeatherListAdapter(getActivity());
 		mListView.setAdapter(mWeatherAdapter);
@@ -246,14 +250,13 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 				.findViewById(R.id.weather_background);
 		mBlurredImageView = (ImageView) view
 				.findViewById(R.id.weather_background_blurred);
-		mBlurredImageView.setAlpha(0f);// 设置默认模糊背景为透明
+		if(savedInstanceState != null){
+			float alpha = savedInstanceState.getFloat(ALPHA_KEY);
+			mBlurredImageView.setAlpha(alpha);
+		}else{
+			mBlurredImageView.setAlpha(0f);// 设置默认模糊背景为透明
+		}
 
-		mPullRefreshScrollView = (PullToRefreshScrollView) view
-				.findViewById(R.id.pull_refresh_scrollview);
-		// 添加下拉刷新事件
-		mPullRefreshScrollView.setOnRefreshListener(this);
-		// 添加下拉刷新状态事件，以便及时现实刷新时间
-		mPullRefreshScrollView.setOnPullEventListener(this);
 		// mPullRefreshScrollView.setMode(Mode.PULL_FROM_START);// 可以下拉刷新
 		mListHeaderView = LayoutInflater.from(getActivity()).inflate(
 				R.layout.weather_current_condition, null);
@@ -268,11 +271,11 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 				LayoutParams.MATCH_PARENT, mHeaderHeight));
 		// 计算背景View的高度，适当比屏幕高度多一点，
 		// 之所以多1/8是为了后面滑动ListView时背景能跟随滑动。
-		int backgroundHeight = displayHeight + mHeaderHeight / 8;
-		mNormalImageView.setLayoutParams(new FrameLayout.LayoutParams(
-				FrameLayout.LayoutParams.MATCH_PARENT, backgroundHeight));
-		mBlurredImageView.setLayoutParams(new FrameLayout.LayoutParams(
-				FrameLayout.LayoutParams.MATCH_PARENT, backgroundHeight));
+//		int backgroundHeight = displayHeight + mHeaderHeight / 8;
+//		mNormalImageView.setLayoutParams(new FrameLayout.LayoutParams(
+//				FrameLayout.LayoutParams.MATCH_PARENT, backgroundHeight));
+//		mBlurredImageView.setLayoutParams(new FrameLayout.LayoutParams(
+//				FrameLayout.LayoutParams.MATCH_PARENT, backgroundHeight));
 
 		mListView.addHeaderView(mListHeaderView, null, false);// 给ListView添加HeaderView
 		// mWeatherAdapter = new WeatherListAdapter(getActivity());
@@ -340,15 +343,6 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 	 * @param scrollPosition
 	 */
 	private void onNewScroll(int scrollPosition) {
-		// 控制是否可以下拉刷新
-		if (scrollPosition == 0) {
-			mPullRefreshScrollView.setMode(Mode.PULL_FROM_START);// 可以下拉刷新
-		} else {
-			if (mPullRefreshScrollView.getState() == State.RESET) {
-				mPullRefreshScrollView.setMode(Mode.DISABLED);
-			}
-		}
-
 		// 控制模糊背景的alpha值
 		float ratio = Math.min(1.5f * (-mListHeaderView.getTop())
 				/ mHeaderHeight, 1.0f);
@@ -359,12 +353,12 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		mBlurredImageView.setAlpha(ratio);
 
 		// 控制背景滑动距离
-		int dampedScroll = Math.round(scrollPosition * 0.125f);
-		int offset = mLastDampedScroll - dampedScroll;
-		mBlurredImageView.offsetTopAndBottom(offset);
-		mNormalImageView.offsetTopAndBottom(offset);
+		//int dampedScroll = Math.round(scrollPosition * 0.125f);
+		//int offset = mLastDampedScroll - dampedScroll;
+		//mBlurredImageView.offsetTopAndBottom(offset);
+		//mNormalImageView.offsetTopAndBottom(offset);
 		// L.i("liweiping", "offset = " + offset);
-		mLastDampedScroll = dampedScroll;
+		//mLastDampedScroll = dampedScroll;
 	}
 
 	private WeatherInfo loadWeatherInfoFromLocal() throws TaskException {
@@ -502,30 +496,9 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		mWeatherAdapter.setWeather(realTime, aqi, forecast, index);
 	}
 
-	@Override
-	public void onPullEvent(PullToRefreshBase refreshView, State state,
-			Mode direction) {
-		// 开始下拉时更新上次刷新时间
-		if (state == State.PULL_TO_REFRESH) {
-			long time = getRefreshTime();
-			String label = String.format(
-					getResources().getString(
-							R.string.pull_to_refresh_pull_sub_label),
-					getResources().getString(
-							R.string.pull_to_refresh_pull_sub_label_none));
-			if (time > 0)
-				label = String.format(
-						getResources().getString(
-								R.string.pull_to_refresh_pull_sub_label),
-						TimeUtils.getListTime(getResources(), time));
-			// 更新下拉刷新时间显示
-			mPullRefreshScrollView.getLoadingLayoutProxy().setLastUpdatedLabel(
-					label);
-		}
-	}
 
 	@Override
-	public void onRefresh(PullToRefreshBase refreshView) {
+	public void onRefresh() {
 		requestData(true);
 	}
 
@@ -600,28 +573,28 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		// 开始Task
 		if (state == ABaseTaskState.prepare) {
 			mHandler.removeCallbacks(startRefreshAnim);
-			mHandler.postDelayed(startRefreshAnim, 200);
+			mHandler.post(startRefreshAnim);
 		}
 		// Task成功
 		else if (state == ABaseTaskState.success) {
 			mHandler.removeCallbacks(stopRefreshAnim);
-			mHandler.postDelayed(stopRefreshAnim, 500);
+			mHandler.postDelayed(stopRefreshAnim, 1000);
 		}
 		// 取消Task
 		else if (state == ABaseTaskState.canceled) {
 			mHandler.removeCallbacks(stopRefreshAnim);
-			mHandler.postDelayed(stopRefreshAnim, 500);
+			mHandler.postDelayed(stopRefreshAnim, 1000);
 		}
 		// Task失败
 		else if (state == ABaseTaskState.falid) {
 			Toast.makeText(mActivity, "刷新失败..." + tag, Toast.LENGTH_SHORT).show();
 			mHandler.removeCallbacks(stopRefreshAnim);
-			mHandler.postDelayed(stopRefreshAnim, 500);
+			mHandler.postDelayed(stopRefreshAnim, 1000);
 		}
 		// Task结束
 		else if (state == ABaseTaskState.finished) {
 			mHandler.removeCallbacks(stopRefreshAnim);
-			mHandler.postDelayed(stopRefreshAnim, 500);
+			mHandler.postDelayed(stopRefreshAnim, 1000);
 
 		}
 	}
@@ -632,8 +605,10 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
-		if (taskManager != null)
+		if (taskManager != null){
 			taskManager.save(outState);
+			outState.putFloat(ALPHA_KEY, mBlurredImageView.getAlpha());
+		}
 	}
 
 	protected ITaskManager getTaskManager() {

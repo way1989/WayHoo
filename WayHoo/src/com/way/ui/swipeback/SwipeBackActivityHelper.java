@@ -49,6 +49,11 @@ public class SwipeBackActivityHelper {
             public void onScrollOverThreshold() {
 
             }
+
+			@Override
+			public void onScrollLeftChange(int left) {
+				
+			}
         });
     }
 

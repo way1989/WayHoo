@@ -240,6 +240,8 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 	 */
 	private void initViews(View view) {
 		mListView = (ListView) view.findViewById(R.id.drag_list);
+		mWeatherAdapter = new WeatherListAdapter(getActivity());
+		mListView.setAdapter(mWeatherAdapter);
 		mNormalImageView = (ImageView) view
 				.findViewById(R.id.weather_background);
 		mBlurredImageView = (ImageView) view
@@ -496,8 +498,7 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		mCurLowTempTV.setText(forecast.getTmpLow(1) + "°");
 		mCurWeatherCopyTV.setText(TimeUtils.getDay(realTime.getPub_time())
 				+ "发布");
-		mWeatherAdapter = new WeatherListAdapter(getActivity());
-		mListView.setAdapter(mWeatherAdapter);
+		
 		mWeatherAdapter.setWeather(realTime, aqi, forecast, index);
 	}
 

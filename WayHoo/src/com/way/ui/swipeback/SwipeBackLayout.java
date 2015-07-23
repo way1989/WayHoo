@@ -271,6 +271,8 @@ public class SwipeBackLayout extends FrameLayout {
 		 */
 		public void onScrollStateChange(int state, float scrollPercent);
 
+		public void onScrollLeftChange(int left);
+
 		/**
 		 * Invoke when edge touched
 		 * 
@@ -506,7 +508,17 @@ public class SwipeBackLayout extends FrameLayout {
 				}
 				mIsScrollOverValid = true;
 			}
-			return ret;
+			boolean directionCheck = false;
+			if (mEdgeFlag == EDGE_LEFT || mEdgeFlag == EDGE_RIGHT) {
+				directionCheck = !mDragHelper.checkTouchSlop(
+						ViewDragHelper.DIRECTION_VERTICAL, i);
+			} else if (mEdgeFlag == EDGE_BOTTOM) {
+				directionCheck = !mDragHelper.checkTouchSlop(
+						ViewDragHelper.DIRECTION_HORIZONTAL, i);
+			} else if (mEdgeFlag == EDGE_ALL) {
+				directionCheck = true;
+			}
+			return ret & directionCheck;
 		}
 
 		@Override
@@ -522,6 +534,9 @@ public class SwipeBackLayout extends FrameLayout {
 		@Override
 		public void onViewPositionChanged(View changedView, int left, int top,
 				int dx, int dy) {
+			for (SwipeListener listener : mListeners) {
+				listener.onScrollLeftChange(left);
+			}
 			super.onViewPositionChanged(changedView, left, top, dx, dy);
 			if ((mTrackingEdge & EDGE_LEFT) != 0) {
 				mScrollPercent = Math.abs((float) left
@@ -552,8 +567,10 @@ public class SwipeBackLayout extends FrameLayout {
 			}
 
 			if (mScrollPercent >= 1) {
-				if (!mActivity.isFinishing())
+				if (!mActivity.isFinishing()) {
 					mActivity.finish();
+					mActivity.overridePendingTransition(0, 0);
+				}
 			}
 		}
 

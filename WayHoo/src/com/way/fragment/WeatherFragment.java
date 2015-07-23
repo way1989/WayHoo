@@ -458,8 +458,6 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		return time;
 	}
 
-	// private WeatherInfo mWeatherInfo;
-
 	/**
 	 * 更新天气信息界面
 	 */
@@ -473,6 +471,7 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		if (!isVisible)
 			return;
 		isLoaded = true;
+		if(weatherInfo.isNewData())
 		Toast.makeText(mActivity, mCurCity.getName() + " 刷新成功...",
 				Toast.LENGTH_SHORT).show();
 		RealTime realTime = weatherInfo.getRealTime();
@@ -481,17 +480,15 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		Index index = weatherInfo.getIndex();
 
 		int type = realTime.getAnimation_type();
-		Glide.with(this).load(WeatherIconUtils.getWeatherNromalBg(type))
-		// .centerCrop()
-				.placeholder(R.drawable.bg_na_blur).error(R.drawable.bg_na)
-				// .crossFade()
-				.into(mNormalImageView);
-		Glide.with(this).load(WeatherIconUtils.getWeatherBlurBg(type))
-				// .centerCrop()
-				.placeholder(R.drawable.bg_na_blur)
-				.error(R.drawable.bg_na_blur)
-				// .crossFade()
-				.into(mBlurredImageView);
+		mNormalImageView.setImageResource(WeatherIconUtils.getWeatherNromalBg(type));
+		mBlurredImageView.setImageResource(WeatherIconUtils.getWeatherBlurBg(type));
+//		Glide.with(this).load(WeatherIconUtils.getWeatherNromalBg(type))
+//				.placeholder(R.drawable.bg_na_blur).error(R.drawable.bg_na)
+//				.into(mNormalImageView);
+//		Glide.with(this).load(WeatherIconUtils.getWeatherBlurBg(type))
+//				.placeholder(R.drawable.bg_na_blur)
+//				.error(R.drawable.bg_na_blur)
+//				.into(mBlurredImageView);
 		mCurWeatherIV.setImageResource(WeatherIconUtils.getWeatherIcon(type));
 		mCurWeatherTV.setText(realTime.getWeather_name());
 		mCurFeelsTempTV.setText(realTime.getTemp() + "");
@@ -554,10 +551,20 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 			boolean isForce = params[0];
 			WeatherInfo weatherInfo = null;
 			if (isNeedRequestNet() || isForce) {
-				weatherInfo = loadWeatherInfoFromNetwork();
+				try{
+					weatherInfo = loadWeatherInfoFromNetwork();
+				}catch(Exception e){}
+				if(WeatherSpider.isEmpty(weatherInfo)){
+					weatherInfo = loadWeatherInfoFromLocal();
+					weatherInfo.setNewData(false);
+				}else{
+					weatherInfo.setNewData(true);
+				}
 			} else {
 				weatherInfo = loadWeatherInfoFromLocal();
 			}
+			if(WeatherSpider.isEmpty(weatherInfo))
+				weatherInfo = loadWeatherInfoFromLocal();
 			return weatherInfo;
 		}
 
@@ -606,6 +613,7 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		}
 		// Task失败
 		else if (state == ABaseTaskState.falid) {
+			Toast.makeText(mActivity, "刷新失败..." + tag, Toast.LENGTH_SHORT).show();
 			mHandler.removeCallbacks(stopRefreshAnim);
 			mHandler.postDelayed(stopRefreshAnim, 500);
 		}

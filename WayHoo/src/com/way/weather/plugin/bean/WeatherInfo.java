@@ -1,7 +1,7 @@
 package com.way.weather.plugin.bean;
 
 public class WeatherInfo {
-
+	private boolean isNewData;
 	private RealTime realTime;
 	private Forecast forecast;
 	private AQI aqi;
@@ -20,6 +20,14 @@ public class WeatherInfo {
 		this.aqi = aqi;
 		this.index = index;
 		this.alerts = alerts;
+	}
+
+	public boolean isNewData() {
+		return isNewData;
+	}
+
+	public void setNewData(boolean isNewData) {
+		this.isNewData = isNewData;
 	}
 
 	public RealTime getRealTime() {
@@ -64,9 +72,10 @@ public class WeatherInfo {
 
 	@Override
 	public String toString() {
-		return "WeatherInfo [realTime=" + realTime + ", forecast=" + forecast
-				+ ", aqi=" + aqi + ", index=" + index + ", alerts=" + alerts
-				+ "]";
+		return "WeatherInfo [isNewData=" + isNewData + ", realTime=" + realTime
+				+ ", forecast=" + forecast + ", aqi=" + aqi + ", index="
+				+ index + ", alerts=" + alerts + "]";
 	}
+
 
 }

@@ -40,6 +40,9 @@
     <string name="all_rights_reserved">Copyright © 2012-2015 way. All Rights Reserved.</string>
     <string name="get_weatherinfo_scuessed">刷新成功</string>
     <string name="widget_loading_tips">正在加载,请稍侯...</string>
+        <string name="comm_error_noneNetwork">没有网络连接</string>
+    <string name="comm_error_resultIllegal">数据解析出错</string>
+    <string name="comm_error_timeout">网络不给力</string>
     <!-- lunar -->
     <string name="nongli">农历</string>
     <string name="nian">年</string>

@@ -1,5 +1,6 @@
 package com.way.fragment;
 
+import java.io.Serializable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -12,6 +13,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,8 +57,8 @@ import com.way.yahoo.App;
 import com.way.yahoo.MainActivity;
 import com.way.yahoo.R;
 
-public class WeatherFragment extends Fragment implements OnRefreshListener,
-		OnPullEventListener {
+public class WeatherFragment extends Fragment implements ITaskManager,
+		OnRefreshListener, OnPullEventListener {
 	public static final String ARG_CITY = "city";
 	private Handler mHandler = new Handler();
 	private ListView mListView;
@@ -95,6 +97,9 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		taskManager = new TaskManager();
+		if (savedInstanceState != null)
+			taskManager.restore(savedInstanceState);
 		mActivity = (MainActivity) getActivity();
 		mContentResolver = getActivity().getContentResolver();
 	}
@@ -104,34 +109,6 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 	private boolean isVisible = false;
 	private boolean isPrepared = false;
 	private boolean isLoaded = false;
-	private AsynTaskState mAsynState = AsynTaskState.INIT;
-
-	/**
-	 * 异步数据处理的状态枚举
-	 */
-	private enum AsynTaskState {
-
-		/**
-		 * 初始化，应该进行异步数据加载，应继续使用Loading布局
-		 */
-		INIT,
-
-		/**
-		 * 处理中，继续使用Loading布局
-		 */
-		PROCESSING,
-
-		/**
-		 * 处理完成，可以加载UI，执行加载内容布局
-		 */
-		RPOCESSED,
-
-		/**
-		 * 加载完成，继续使用内容布局
-		 */
-		COMPLETE
-
-	}
 
 	/**
 	 * 不提供覆写，需监听可见性的子类可覆写{@link #onFragmentVisible()}和
@@ -146,7 +123,7 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 
 		isVisible = isVisibleToUser;
 		if (getUserVisibleHint()) {
-			//onLoadedData();
+			// onLoadedData();
 			mHandler.removeCallbacks(delayRefresh);
 			mHandler.postDelayed(delayRefresh, 500);
 		} else {
@@ -162,25 +139,8 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			return;
 		if (isLoaded && !isNeedRequestNet()) {
 			return;
-			//updateWeatherView();
 		} else {
-			switch (mAsynState) {
-			case INIT:
-				if (isNeedRequestNet()) {
-					getWeather();
-				} else {
-					loadWeatherInfoFromLocal();
-				}
-				break;
-			case PROCESSING:
-			case RPOCESSED:
-				if (!mPullRefreshScrollView.isRefreshing())
-					mPullRefreshScrollView.setRefreshing();
-				break;
-			case COMPLETE:
-				updateWeatherView();
-				break;
-			}
+			requestData(false);
 		}
 	}
 
@@ -200,22 +160,6 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		return false;
 	}
 
-	private void loadWeatherInfoFromLocal() {
-		if (mCurCity == null)
-			mCurCity = getArguments().getParcelable(ARG_CITY);
-		try {
-			mWeatherInfo = WeatherSpider.getWeatherInfo(mActivity,
-					mCurCity.getPostID(), mCurCity.getWeatherInfoStr());
-			if (!WeatherSpider.isEmpty(mWeatherInfo)) {
-				updateWeatherView();
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -226,18 +170,18 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			isPrepared = true;
 			isLoaded = false;
 			if (isVisible) {
-					mHandler.removeCallbacks(delayRefresh);
-					mHandler.post(delayRefresh);
+				mHandler.removeCallbacks(delayRefresh);
+				mHandler.post(delayRefresh);
 
 			} else {
-				//loadWeatherInfoFromLocal();
+				// loadWeatherInfoFromLocal();
 			}
 		} else {
-			ViewGroup mRootParent = (ViewGroup) mRootView.getParent();
-			if (mRootParent != null) {
-				mRootParent.removeView(mRootView);
-			}
-			onLoadedData();
+			// ViewGroup mRootParent = (ViewGroup) mRootView.getParent();
+			// if (mRootParent != null) {
+			// mRootParent.removeView(mRootView);
+			// }
+			// onLoadedData();
 		}
 		return mRootView;
 	}
@@ -249,7 +193,15 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			onLoadedData();
 		}
 	};
-	
+
+	Runnable startRefreshAnim = new Runnable() {
+
+		@Override
+		public void run() {
+			if (!mPullRefreshScrollView.isRefreshing())
+				mPullRefreshScrollView.setRefreshing();
+		}
+	};
 	Runnable stopRefreshAnim = new Runnable() {
 
 		@Override
@@ -258,8 +210,6 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 				mPullRefreshScrollView.onRefreshComplete();
 		}
 	};
-	
-
 
 	@Override
 	public void onDestroyView() {
@@ -270,7 +220,6 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 			isPrepared = false;
 			isLoaded = false;
 		}
-		mAsynState = AsynTaskState.INIT;
 	}
 
 	/**
@@ -416,85 +365,62 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		mLastDampedScroll = dampedScroll;
 	}
 
-	/**
-	 * 异步任务获取天气信息
-	 * 
-	 */
-
-	private void getWeather() {
-		if(mCurCity == null)
+	private WeatherInfo loadWeatherInfoFromLocal() throws TaskException {
+		if (mCurCity == null)
 			mCurCity = getArguments().getParcelable(ARG_CITY);
-		if (NetUtil.getNetworkState(getActivity()) == NetUtil.NETWORN_NONE) {
-			Toast.makeText(getActivity(), "网络异常...", Toast.LENGTH_SHORT).show();
-			return;
+		try {
+			WeatherInfo weatherInfo = WeatherSpider.getWeatherInfo(mActivity,
+					mCurCity.getPostID(), mCurCity.getWeatherInfoStr());
+			if (!WeatherSpider.isEmpty(weatherInfo)) {
+				return weatherInfo;
+			}
+		} catch (JSONException e) {
+			throw new TaskException(
+					TaskException.TaskError.resultIllegal.toString());
 		}
-		mAsynState = AsynTaskState.PROCESSING;
-		// Call setRefreshing when the list begin to refresh.
-		if (!mPullRefreshScrollView.isRefreshing())
-			mPullRefreshScrollView.setRefreshing();
-		final String postID = mCurCity.getPostID();
-//		RequestFuture<String> future = RequestFuture.newFuture();
-//		StringRequest request = new StringRequest(String.format(WEATHER_ALL, postID), future, future);
-//		App.getVolleyRequestQueue().add(request);
-//		try {
-//			String result = future.get(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			e.printStackTrace();
-//		} catch (TimeoutException e) {
-//			e.printStackTrace();
-//		}
-			
-		
-		StringRequest sr = new StringRequest(
-				String.format(WeatherSpider.WEATHER_ALL, postID),
-				new Response.Listener<String>() {
-
-					@Override
-					public void onResponse(String response) {
-						mAsynState = AsynTaskState.RPOCESSED;
-						try {
-							WeatherInfo weatherInfo = WeatherSpider
-									.getWeatherInfo(mActivity, postID, response);
-
-							if (!WeatherSpider.isEmpty(weatherInfo)) {
-								mWeatherInfo = weatherInfo;
-								save2Database(postID, response);
-
-								updateWeatherView();
-							}
-						} catch (JSONException e) {
-							if (getActivity() != null)
-								Toast.makeText(getActivity(),
-										"刷新失败:" + e.getMessage(),
-										Toast.LENGTH_SHORT).show();
-						}
-						mAsynState = AsynTaskState.COMPLETE;
-						mHandler.removeCallbacks(stopRefreshAnim);
-						mHandler.postDelayed(stopRefreshAnim, 500);
-					}
-				}, new Response.ErrorListener() {
-
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						mAsynState = AsynTaskState.RPOCESSED;
-						if (getActivity() != null)
-							Toast.makeText(getActivity(),
-									"刷新失败:" + error.getMessage(),
-									Toast.LENGTH_SHORT).show();
-						mAsynState = AsynTaskState.COMPLETE;
-						mHandler.removeCallbacks(stopRefreshAnim);
-						mHandler.postDelayed(stopRefreshAnim, 500);
-					}
-				});
-		sr.setTag(postID);
-		App.getVolleyRequestQueue().add(sr);
+		return null;
 	}
 
-	protected void save2Database(String postID, String response) {
-		long pubTime = mWeatherInfo.getRealTime().getPub_time();
-		long savePubTime = getPubTime();
+	private WeatherInfo loadWeatherInfoFromNetwork() throws TaskException {
+		if (NetUtil.getNetworkState(mActivity) == NetUtil.NETWORN_NONE)
+			throw new TaskException(
+					TaskException.TaskError.noneNetwork.toString());
+		if (mCurCity == null)
+			mCurCity = getArguments().getParcelable(ARG_CITY);
+		final String postID = mCurCity.getPostID();
+		RequestFuture<String> future = RequestFuture.newFuture();
+		StringRequest request = new StringRequest(String.format(
+				WeatherSpider.WEATHER_ALL, postID), future, future);
+		App.getVolleyRequestQueue().add(request);
+		try {
+			String result = future.get(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+					TimeUnit.MILLISECONDS);
+			WeatherInfo weatherInfo = WeatherSpider.getWeatherInfo(mActivity,
+					postID, result);
+			if (!WeatherSpider.isEmpty(weatherInfo)) {
+				save2Database(weatherInfo, postID, result);// 保存到数据库
+				return weatherInfo;
+			}
+		} catch (InterruptedException e) {
+			throw new TaskException(TextUtils.isEmpty(e.getMessage()) ? ""
+					: e.getMessage());
+		} catch (ExecutionException e) {
+			throw new TaskException(TextUtils.isEmpty(e.getMessage()) ? ""
+					: e.getMessage());
+		} catch (TimeoutException e) {
+			throw new TaskException(TaskException.TaskError.timeout.toString());
+		} catch (JSONException e) {
+			throw new TaskException(
+					TaskException.TaskError.resultIllegal.toString());
+		}
+		return null;
+
+	}
+
+	protected void save2Database(WeatherInfo weatherInfo, String postID,
+			String response) {
+		long pubTime = weatherInfo.getRealTime().getPub_time();
+		long savePubTime = getPubTime(postID);
 		if (pubTime != savePubTime) {
 			ContentValues contentValues = new ContentValues();
 			contentValues.put(CityConstants.REFRESH_TIME,
@@ -507,10 +433,10 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		}
 	}
 
-	private long getPubTime() {
+	private long getPubTime(String postID) {
 		Cursor c = mContentResolver.query(CityProvider.TMPCITY_CONTENT_URI,
 				new String[] { CityConstants.PUB_TIME }, CityConstants.POST_ID
-						+ "=?", new String[] { mCurCity.getPostID() }, null);
+						+ "=?", new String[] { postID }, null);
 
 		long time = 0L;
 		if (c.moveToFirst())
@@ -532,19 +458,23 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 		return time;
 	}
 
-	private WeatherInfo mWeatherInfo;
+	// private WeatherInfo mWeatherInfo;
 
 	/**
 	 * 更新天气信息界面
 	 */
-	private void updateWeatherView() {
-		mHandler.removeCallbacks(stopRefreshAnim);
-		mHandler.postDelayed(stopRefreshAnim, 500);
-		WeatherInfo weatherInfo = mWeatherInfo;
+	private void updateWeatherView(WeatherInfo weatherInfo) {
+
+		// WeatherInfo weatherInfo = mWeatherInfo;
 		if (WeatherSpider.isEmpty(weatherInfo)) {
+			Toast.makeText(mActivity, "刷新失败...", Toast.LENGTH_SHORT).show();
 			return;
 		}
+		if (!isVisible)
+			return;
 		isLoaded = true;
+		Toast.makeText(mActivity, mCurCity.getName() + " 刷新成功...",
+				Toast.LENGTH_SHORT).show();
 		RealTime realTime = weatherInfo.getRealTime();
 		AQI aqi = weatherInfo.getAqi();
 		Forecast forecast = weatherInfo.getForecast();
@@ -598,17 +528,142 @@ public class WeatherFragment extends Fragment implements OnRefreshListener,
 
 	@Override
 	public void onRefresh(PullToRefreshBase refreshView) {
-		// 如果正在刷新，则返回
-		getWeather();
+		requestData(true);
+	}
+
+	public void requestData(boolean force) {
+		if (mCurCity == null)
+			mCurCity = getArguments().getParcelable(ARG_CITY);
+		new WeatherTask(mCurCity.getPostID()).execute(force);
+	}
+
+	class WeatherTask extends WorkTask<Boolean, Void, WeatherInfo> {
+		public WeatherTask(String postID) {
+			super(postID, WeatherFragment.this);
+		}
+
+		@Override
+		protected void onPrepare() {
+			super.onPrepare();
+			taskStateChanged(ABaseTaskState.prepare, null);
+		}
+
+		@Override
+		public WeatherInfo workInBackground(Boolean... params)
+				throws TaskException {
+			boolean isForce = params[0];
+			WeatherInfo weatherInfo = null;
+			if (isNeedRequestNet() || isForce) {
+				weatherInfo = loadWeatherInfoFromNetwork();
+			} else {
+				weatherInfo = loadWeatherInfoFromLocal();
+			}
+			return weatherInfo;
+		}
+
+		@Override
+		protected void onSuccess(WeatherInfo result) {
+			super.onSuccess(result);
+			updateWeatherView(result);
+			taskStateChanged(ABaseTaskState.success, null);
+		}
+
+		@Override
+		protected void onFailure(TaskException exception) {
+			super.onFailure(exception);
+			taskStateChanged(ABaseTaskState.falid, exception.getMessage());
+		}
+
+		@Override
+		protected void onFinished() {
+			super.onFinished();
+			taskStateChanged(ABaseTaskState.finished, null);
+		}
+	}
+
+	/**
+	 * 根据{@link ABaseTask} 的加载状态，刷新视图
+	 *
+	 * @param state
+	 *
+	 * @param tag
+	 */
+	protected void taskStateChanged(ABaseTaskState state, Serializable tag) {
+		// 开始Task
+		if (state == ABaseTaskState.prepare) {
+			mHandler.removeCallbacks(startRefreshAnim);
+			mHandler.postDelayed(startRefreshAnim, 200);
+		}
+		// Task成功
+		else if (state == ABaseTaskState.success) {
+			mHandler.removeCallbacks(stopRefreshAnim);
+			mHandler.postDelayed(stopRefreshAnim, 500);
+		}
+		// 取消Task
+		else if (state == ABaseTaskState.canceled) {
+			mHandler.removeCallbacks(stopRefreshAnim);
+			mHandler.postDelayed(stopRefreshAnim, 500);
+		}
+		// Task失败
+		else if (state == ABaseTaskState.falid) {
+			mHandler.removeCallbacks(stopRefreshAnim);
+			mHandler.postDelayed(stopRefreshAnim, 500);
+		}
+		// Task结束
+		else if (state == ABaseTaskState.finished) {
+			mHandler.removeCallbacks(stopRefreshAnim);
+			mHandler.postDelayed(stopRefreshAnim, 500);
+
+		}
+	}
+
+	private TaskManager taskManager;// 管理线程
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		if (taskManager != null)
+			taskManager.save(outState);
+	}
+
+	protected ITaskManager getTaskManager() {
+		return taskManager;
+	}
+
+	@Override
+	public void addTask(WorkTask task) {
+		taskManager.addTask(task);
+	}
+
+	@Override
+	public void removeTask(String taskId, boolean cancelIfRunning) {
+		taskManager.removeTask(taskId, cancelIfRunning);
+	}
+
+	@Override
+	public void removeAllTask(boolean cancelIfRunning) {
+		taskManager.removeAllTask(cancelIfRunning);
+	}
+
+	@Override
+	public int getTaskCount(String taskId) {
+		return taskManager.getTaskCount(taskId);
+	}
+
+	protected enum ABaseTaskState {
+		none, prepare, falid, success, finished, canceled
 	}
 
 	public void refreshUI() {
-		Log.i("refreshUI", "refreshUI isVisible = " + isVisible  + ", isPrepared = " + isPrepared);
-		//onLoadedData();
+		Log.i("refreshUI", "refreshUI isVisible = " + isVisible
+				+ ", isPrepared = " + isPrepared);
+		// onLoadedData();
 	}
 
 	public void releaseImageViewByIds() {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 }

@@ -16,6 +16,10 @@ public class App extends Application {
 		return mVolleyRequestQueue;
 	}
 
+	public static synchronized App getApplication() {
+		return mApplication;
+	}
+
 	@Override
 	public void onCreate() {
 		super.onCreate();

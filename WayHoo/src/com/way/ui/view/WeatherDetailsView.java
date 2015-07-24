@@ -11,9 +11,10 @@ import com.way.common.util.LunarCalendar;
 import com.way.common.util.LunarCalendarConvertUtil;
 import com.way.common.util.WeatherIconUtils;
 import com.way.weather.plugin.bean.RealTime;
+import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.yahoo.R;
 
-public class WeatherDetailsView extends RelativeLayout {
+public class WeatherDetailsView extends WeatherBaseView {
 	// 详细信息
 	ImageView detailsWeatherIV;
 	TextView weatherNameTV;
@@ -81,5 +82,10 @@ public class WeatherDetailsView extends RelativeLayout {
 				+ mLunarCalendar.animalsYear(mLunarCalendar.lunarYear)
 				+ ")年"
 				+ str[1] + str[2]);
+	}
+
+	@Override
+	public void setWeatherInfo(WeatherInfo weatherInfo) {
+		setWeatherInfo(weatherInfo.getRealTime());
 	}
 }

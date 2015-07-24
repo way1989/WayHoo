@@ -12,9 +12,10 @@ import android.widget.TextView;
 
 import com.way.weather.plugin.bean.Index;
 import com.way.weather.plugin.bean.IndexDetail;
+import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.yahoo.R;
 
-public class WeatherIndexView extends RelativeLayout {
+public class WeatherIndexView extends WeatherBaseView {
 	// 指数
 	View windIndexView;
 	View uaIndexView;// 紫外线指数
@@ -203,5 +204,10 @@ public class WeatherIndexView extends RelativeLayout {
 		insolationIndexDetail.setText(lists.get(5).getDetail());
 		sportIndexDetail.setText(lists.get(6).getDetail());
 		travelIndexDetail.setText(lists.get(7).getDetail());
+	}
+
+	@Override
+	public void setWeatherInfo(WeatherInfo weatherInfo) {
+		setWeatherInfo(weatherInfo.getIndex());
 	}
 }

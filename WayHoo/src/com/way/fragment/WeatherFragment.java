@@ -490,10 +490,10 @@ public class WeatherFragment extends Fragment implements ITaskManager,SwipeRefre
 		mCurFeelsTempTV.setText(realTime.getTemp() + "");
 		mCurHighTempTV.setText(forecast.getTmpHigh(1) + "°");
 		mCurLowTempTV.setText(forecast.getTmpLow(1) + "°");
-		mCurWeatherCopyTV.setText(TimeUtils.getDay(realTime.getPub_time())
+		mCurWeatherCopyTV.setText(TimeUtils.getDay(getPubTime(mCurCity.getPostID()))
 				+ "发布");
 		
-		mWeatherAdapter.setWeather(realTime, aqi, forecast, index);
+		mWeatherAdapter.setWeather(weatherInfo);
 	}
 
 

@@ -9,14 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.way.ui.view.WeatherAqiView;
-import com.way.ui.view.WeatherDetailsView;
+import com.way.ui.view.WeatherBaseView;
 import com.way.ui.view.WeatherForecastView;
-import com.way.ui.view.WeatherIndexView;
 import com.way.weather.plugin.bean.AQI;
-import com.way.weather.plugin.bean.Forecast;
-import com.way.weather.plugin.bean.Index;
-import com.way.weather.plugin.bean.RealTime;
+import com.way.weather.plugin.bean.WeatherInfo;
+import com.way.weather.plugin.spider.WeatherSpider;
 import com.way.yahoo.R;
 
 public class WeatherListAdapter extends BaseAdapter {
@@ -27,7 +24,7 @@ public class WeatherListAdapter extends BaseAdapter {
 
 	private LayoutInflater mLayoutInflater;
 	private List<Integer> mTypes;
-	private List<View> mTypeViews;
+	private WeatherInfo mWeatherInfo;
 
 	public WeatherListAdapter(Context context) {
 		mTypes = new ArrayList<Integer>();
@@ -36,33 +33,16 @@ public class WeatherListAdapter extends BaseAdapter {
 		mTypes.add(AQI_TYPE);
 		mTypes.add(INDEX_TYPE);
 		mLayoutInflater = LayoutInflater.from(context);
-		mTypeViews = new ArrayList<View>();
-		WeatherForecastView forecastView = (WeatherForecastView) mLayoutInflater
-				.inflate(R.layout.weather_forecast, null);
-		WeatherDetailsView detailsView = (WeatherDetailsView) mLayoutInflater
-				.inflate(R.layout.weather_details, null);
-		WeatherAqiView aqiView = (WeatherAqiView) mLayoutInflater.inflate(
-				R.layout.weather_aqi, null);
-		WeatherIndexView indexView = (WeatherIndexView) mLayoutInflater
-				.inflate(R.layout.weather_index, null);
-		mTypeViews.add(FORECAST_TYPE, forecastView);
-		mTypeViews.add(WEATHER_DETAILS_TYPE, detailsView);
-		mTypeViews.add(AQI_TYPE, aqiView);
-		mTypeViews.add(INDEX_TYPE, indexView);
-
 	}
 
-	public void setWeather(RealTime realTime, AQI aqi, Forecast forecast,
-			Index index) {
+	public void setWeather(WeatherInfo weatherInfo) {
+		if(WeatherSpider.isEmpty(weatherInfo))
+			return;
+		mWeatherInfo = weatherInfo;
+		AQI aqi = weatherInfo.getAqi();
 		if ((aqi == null || aqi.getAqi() == -999) && mTypes.contains(AQI_TYPE))// 如果没有空气质量信息，则移除该选项。
 			mTypes.remove(AQI_TYPE);
 
-		((WeatherForecastView) mTypeViews.get(FORECAST_TYPE))
-				.setWeatherInfo(forecast);
-		((WeatherDetailsView) mTypeViews.get(WEATHER_DETAILS_TYPE))
-				.setWeatherInfo(realTime);
-		((WeatherAqiView) mTypeViews.get(AQI_TYPE)).setWeatherInfo(aqi);
-		((WeatherIndexView) mTypeViews.get(INDEX_TYPE)).setWeatherInfo(index);
 		notifyDataSetChanged();
 	}
 
@@ -99,21 +79,29 @@ public class WeatherListAdapter extends BaseAdapter {
 		if (convertView == null)
 			switch (itemType) {
 			case FORECAST_TYPE:
-				convertView = mTypeViews.get(FORECAST_TYPE);
+				convertView = (WeatherForecastView) mLayoutInflater
+						.inflate(R.layout.weather_forecast, parent,	false);
 				break;
 			case WEATHER_DETAILS_TYPE:
-				convertView = mTypeViews.get(WEATHER_DETAILS_TYPE);
+				convertView = mLayoutInflater
+						.inflate(R.layout.weather_details, parent, false);
 				break;
 			case AQI_TYPE:
-				convertView = mTypeViews.get(AQI_TYPE);
+				convertView = mLayoutInflater.inflate(
+						R.layout.weather_aqi, parent, false);
 				break;
 			case INDEX_TYPE:
-				convertView = mTypeViews.get(INDEX_TYPE);
+				convertView = mLayoutInflater
+						.inflate(R.layout.weather_index,  parent, false);
 				break;
 			default:
 				break;
 			}
+		if(convertView instanceof WeatherBaseView && !WeatherSpider.isEmpty(mWeatherInfo)){
+			WeatherBaseView baseView = (WeatherBaseView) convertView;
+			baseView.setWeatherInfo(mWeatherInfo);
+			return baseView;
+		}
 		return convertView;
 	}
-
 }

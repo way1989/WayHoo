@@ -7,9 +7,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.way.weather.plugin.bean.AQI;
+import com.way.weather.plugin.bean.WeatherInfo;
 import com.way.yahoo.R;
 
-public class WeatherAqiView extends RelativeLayout {
+public class WeatherAqiView extends WeatherBaseView {
 	// 空气质量
 	ImageView aqiIV;
 	TextView aqiLevelTV;
@@ -69,5 +70,10 @@ public class WeatherAqiView extends RelativeLayout {
 			aqi_img = R.drawable.biz_plugin_weather_0_50;
 		}
 		return aqi_img;
+	}
+
+	@Override
+	public void setWeatherInfo(WeatherInfo weatherInfo) {
+		setWeatherInfo(weatherInfo.getAqi());
 	}
 }

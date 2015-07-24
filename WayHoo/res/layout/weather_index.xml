@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <com.way.ui.view.WeatherTypefacedTextView
-         android:id="@+id/index_label"
+        android:id="@+id/index_label"
         style="@style/Label"
         android:layout_marginTop="@dimen/negative_margin_md"
         android:text="指数"
@@ -149,9 +149,9 @@
         android:layout_width="fill_parent"
         android:layout_height="30dip"
         android:layout_below="@id/divider10"
-        android:paddingTop="4dip"
         android:drawableRight="@drawable/wunderground_logo"
         android:gravity="bottom|right"
+        android:paddingTop="4dip"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_md"
         weather:typeface="fonts/Roboto-Light.ttf" />

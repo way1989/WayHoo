@@ -1,18 +1,18 @@
 package com.way.ui.view;
 
-import com.way.common.util.TimeUtils;
-import com.way.common.util.WeatherIconUtils;
-import com.way.weather.plugin.bean.Forecast;
-import com.way.yahoo.R;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class WeatherForecastView extends RelativeLayout {
+import com.way.common.util.TimeUtils;
+import com.way.common.util.WeatherIconUtils;
+import com.way.weather.plugin.bean.Forecast;
+import com.way.weather.plugin.bean.WeatherInfo;
+import com.way.yahoo.R;
+
+public class WeatherForecastView extends WeatherBaseView {
 	// 预报
 	View forecastViewDay1;
 	View forecastViewDay2;
@@ -149,5 +149,10 @@ public class WeatherForecastView extends RelativeLayout {
 		lowTempDay5.setText(forecast.getTmpLow(5) + "°");
 
 		forecastFootView.setText("");
+	}
+
+	@Override
+	public void setWeatherInfo(WeatherInfo weatherInfo) {
+		setWeatherInfo(weatherInfo.getForecast());
 	}
 }

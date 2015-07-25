@@ -330,7 +330,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
 	private void initMenuDrawer() {
 		// 覆盖在View之前的侧边栏菜单
-		mMenuDrawer = MenuDrawer.attach(this, MenuDrawer.Type.OVERLAY);
+		mMenuDrawer = MenuDrawer.attach(this, MenuDrawer.Type.BEHIND);
 		mMenuDrawer.setMenuSize(Math.round(0.6f * SystemUtils
 				.getDisplayWidth(this)));
 		// View之后的侧边栏菜单

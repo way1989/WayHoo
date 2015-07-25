@@ -1,5 +1,6 @@
 package com.way.yahoo;
 
+import im.fir.sdk.FIR;
 import android.app.Application;
 
 import com.android.volley.RequestQueue;
@@ -22,6 +23,7 @@ public class App extends Application {
 
 	@Override
 	public void onCreate() {
+		FIR.init(this);
 		super.onCreate();
 		mApplication = this;
 		SystemUtils.copyDB(this);// 程序第一次运行将数据库copy过去

@@ -180,16 +180,10 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="Common_Loading4_Progress">
-        <item name="android:maxWidth">48.0dip</item>
-        <item name="android:maxHeight">48.0dip</item>
-        <item name="android:indeterminateDrawable">@drawable/common_loading4</item>
-        <item name="android:minWidth">48.0dip</item>
-        <item name="android:minHeight">48.0dip</item>
-    </style>
-
-    <style name="weather_widget_refresh_style" parent="@android:style/Widget.ProgressBar.Small">
+    <style name="weather_widget_refresh_style" parent="@android:style/Widget.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/refresh_icon_anim</item>
+        <item name="android:layout_width">48dip</item>
+        <item name="android:layout_height">48dip</item>
     </style>
 
     <style name="MenuDrawer" />

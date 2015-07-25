@@ -44,8 +44,7 @@
                 android:layout_below="@id/brand"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="3.0dip"
-                android:includeFontPadding="false"
-                android:text="@string/app_version" />
+                android:includeFontPadding="false" />
 
             <TextView
                 android:id="@+id/app_information"
@@ -57,15 +56,14 @@
                 android:layout_marginTop="20.0dip"
                 android:duplicateParentState="true"
                 android:linksClickable="true"
+                android:paddingBottom="5dip"
                 android:paddingLeft="10.0dip"
                 android:paddingRight="10.0dip"
-                android:paddingBottom="5dip"
                 android:paddingTop="5dip"
                 android:singleLine="false"
                 android:text="@string/app_information"
                 android:textSize="15sp" />
 
-                android:background="@drawable/settings_bg_city_item_up"
             <LinearLayout
                 android:id="@+id/upgradeLayout"
                 android:layout_width="fill_parent"

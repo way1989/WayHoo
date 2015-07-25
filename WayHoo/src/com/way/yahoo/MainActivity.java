@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 		OnPageChangeListener {
 	public static final String FIRST_RUN_APP = "firstRunApp";
 	private static final String INSTANCESTATE_TAB = "tab_index";
-	private String mShareNormalStr = "#威震天气#提醒您:今天%s,%s,%s,%s,";// 日期、城市、天气、温度
+	private String mShareNormalStr = "#简洁天气#提醒您:今天%s,%s,%s,%s,";// 日期、城市、天气、温度
 	private String mAqiShareStr = "空气质量指数(AQI):%s μg/m³,等级[%s];PM2.5浓度值:%s μg/m³。%s ";// aqi、等级、pm2.5、建议
 	private String mShareEndStr = "（请关注博客：http://blog.csdn.net/way_ping_li）";
 	private MenuDrawer mMenuDrawer;

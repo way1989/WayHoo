@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.way.yahoo"
-    android:versionCode="20150623"
-    android:versionName="@string/app_version" >
+    android:versionCode="20150725"
+    android:versionName="2.0.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -27,6 +27,9 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <!-- 允许应用读取低级别的系统日志文件 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
+    
+    <!-- 联网权限，更新apk使用 -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:name="com.way.yahoo.App"
@@ -81,6 +84,24 @@
             android:finishOnTaskLaunch="true"
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
+
+        <!-- 接受下载apk成功广播，更新apk使用 -->
+        <receiver android:name="com.way.upgrade.receiver.DownloadCompleteReveiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="BUG_HD_SDK_GENERAL_KEY"
+            android:value="d9be96d1d636733c2ddc1a1b4381e5b1" />
+        <meta-data
+            android:name="bundle_id"
+            android:value="55b382b8692d655ba7000001" />
+        <meta-data
+            android:name="api_token"
+            android:value="b6bb01fe261cafbabf03e16a9bdf33ad" />
 
         <service
             android:name="com.baidu.location.f"

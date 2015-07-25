@@ -180,14 +180,6 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="RefreshProgress">
-        <item name="android:maxWidth">48.0dip</item>
-        <item name="android:maxHeight">48.0dip</item>
-        <item name="android:indeterminateDrawable">@drawable/resource_circle_progressbar_indeterminate</item>
-        <item name="android:minWidth">48.0dip</item>
-        <item name="android:minHeight">48.0dip</item>
-    </style>
-
     <style name="Common_Loading4_Progress">
         <item name="android:maxWidth">48.0dip</item>
         <item name="android:maxHeight">48.0dip</item>

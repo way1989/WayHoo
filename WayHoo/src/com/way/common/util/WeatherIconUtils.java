@@ -108,22 +108,19 @@ public class WeatherIconUtils {
 				return R.drawable.bg_fine_night;
 			case Constants.CLOUDY:
 				return R.drawable.bg_cloudy_night;
-			case Constants.FOGGY:
-				return R.drawable.foggy_n;
 			case Constants.HEAVY_RAIN:
 			case Constants.LIGHT_RAIN:
 			case Constants.MODERATE_RAIN:
 			case Constants.SHOWER:
 			case Constants.ICE_RAIN:
-				return R.drawable.rain_n;
 			case Constants.STORM:
-				return R.drawable.storm_n;
+				return R.drawable.bg_rain;
 			case Constants.SNOWSTORM:
 			case Constants.LIGHT_SNOW:
 			case Constants.MODERATE_SNOW:
 			case Constants.HEAVY_SNOW:
 			case Constants.SNOW_SHOWER:
-				return R.drawable.snow_n;
+				return R.drawable.bg_snow_night;
 			default:
 				break;
 			}
@@ -140,7 +137,7 @@ public class WeatherIconUtils {
 		case Constants.SEVERE_STORM:
 		case Constants.HEAVY_STORM:
 		case Constants.STORM:
-			return R.drawable.storm_d;
+			return R.drawable.bg_rain;
 		case Constants.THUNDERSHOWER:
 			return R.drawable.bg_thunder_storm;
 		case Constants.SHOWER:
@@ -182,22 +179,20 @@ public class WeatherIconUtils {
 				return R.drawable.bg_fine_night_blur;
 			case Constants.CLOUDY:
 				return R.drawable.bg_cloudy_night_blur;
-			case Constants.FOGGY:
-				return R.drawable.foggy_n_blur;
 			case Constants.HEAVY_RAIN:
 			case Constants.LIGHT_RAIN:
 			case Constants.MODERATE_RAIN:
 			case Constants.SHOWER:
 			case Constants.ICE_RAIN:
-				return R.drawable.rain_n_blur;
+				return R.drawable.bg_rain_blur;
 			case Constants.STORM:
-				return R.drawable.storm_n_blur;
+				return R.drawable.bg_rain_blur;
 			case Constants.SNOWSTORM:
 			case Constants.LIGHT_SNOW:
 			case Constants.MODERATE_SNOW:
 			case Constants.HEAVY_SNOW:
 			case Constants.SNOW_SHOWER:
-				return R.drawable.snow_n_blur;
+				return R.drawable.bg_snow_night_blur;
 			default:
 				break;
 			}
@@ -214,7 +209,7 @@ public class WeatherIconUtils {
 		case Constants.SEVERE_STORM:
 		case Constants.HEAVY_STORM:
 		case Constants.STORM:
-			return R.drawable.storm_d_blur;
+			return R.drawable.bg_rain_blur;
 		case Constants.THUNDERSHOWER:
 			return R.drawable.bg_thunder_storm_blur;
 		case Constants.SHOWER:
@@ -285,7 +280,7 @@ public class WeatherIconUtils {
 			case Constants.MODERATE_SNOW:
 			case Constants.HEAVY_SNOW:
 			case Constants.SNOW_SHOWER:
-				return R.drawable.snow_n;
+				return R.drawable.bg_snow_night;
 			default:
 				break;
 			}
@@ -360,7 +355,7 @@ public class WeatherIconUtils {
 			case Constants.MODERATE_SNOW:
 			case Constants.HEAVY_SNOW:
 			case Constants.SNOW_SHOWER:
-				return R.drawable.snow_n_blur;
+				return R.drawable.bg_snow_night_blur;
 			default:
 				break;
 			}

@@ -6,8 +6,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.ViewGroup;

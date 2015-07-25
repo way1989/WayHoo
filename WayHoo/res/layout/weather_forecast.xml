@@ -37,8 +37,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/divider3"
-              android:layout_marginTop="@dimen/margin_xxs"
-          android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
         layout="@layout/weather_forecast_item" />
 
     <ImageView
@@ -53,8 +53,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/divider4"
-              android:layout_marginTop="@dimen/margin_xxs"
-          android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
         layout="@layout/weather_forecast_item" />
 
     <ImageView
@@ -69,8 +69,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/divider5"
-              android:layout_marginTop="@dimen/margin_xxs"
-          android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
         layout="@layout/weather_forecast_item" />
 
     <ImageView
@@ -85,8 +85,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/divider6"
-              android:layout_marginTop="@dimen/margin_xxs"
-          android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:layout_marginTop="@dimen/margin_xxs"
         layout="@layout/weather_forecast_item" />
 
     <ImageView
@@ -101,9 +101,9 @@
         android:layout_width="fill_parent"
         android:layout_height="30dip"
         android:layout_below="@id/divider7"
-        android:paddingTop="4dip"
         android:drawableRight="@drawable/wunderground_logo"
         android:gravity="bottom|right"
+        android:paddingTop="4dip"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_md"
         weather:typeface="fonts/Roboto-Light.ttf" />

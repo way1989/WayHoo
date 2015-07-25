@@ -356,32 +356,7 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		if (mCurCity == null)
 			mCurCity = getArguments().getParcelable(ARG_CITY);
 		final String postID = mCurCity.getPostID();
-		RequestFuture<String> future = RequestFuture.newFuture();
-		StringRequest request = new StringRequest(String.format(
-				WeatherSpider.WEATHER_ALL, postID), future, future);
-		App.getVolleyRequestQueue().add(request);
-		try {
-			String result = future.get(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
-					TimeUnit.MILLISECONDS);
-			WeatherInfo weatherInfo = WeatherSpider.getWeatherInfo(mActivity,
-					postID, result);
-			if (!WeatherSpider.isEmpty(weatherInfo)) {
-				save2Database(weatherInfo, postID, result);// 保存到数据库
-				return weatherInfo;
-			}
-		} catch (InterruptedException e) {
-			throw new TaskException(TextUtils.isEmpty(e.getMessage()) ? ""
-					: e.getMessage());
-		} catch (ExecutionException e) {
-			throw new TaskException(TextUtils.isEmpty(e.getMessage()) ? ""
-					: e.getMessage());
-		} catch (TimeoutException e) {
-			throw new TaskException(TaskException.TaskError.timeout.toString());
-		} catch (JSONException e) {
-			throw new TaskException(
-					TaskException.TaskError.resultIllegal.toString());
-		}
-		return null;
+		return WeatherSpider.getWeatherInfo(postID);
 
 	}
 

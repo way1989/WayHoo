@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.way.yahoo"
     android:versionCode="20150725"
-    android:versionName="2.0.1" >
+    android:versionName="2.0.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -78,12 +78,6 @@
             android:theme="@style/SecondAppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
             android:windowSoftInputMode="stateHidden|adjustResize"
-        <activity
-            android:name="org.acra.CrashReportDialog"
-            android:excludeFromRecents="true"
-            android:finishOnTaskLaunch="true"
-            android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
 
         <!-- 接受下载apk成功广播，更新apk使用 -->
         <receiver android:name="com.way.upgrade.receiver.DownloadCompleteReveiver" >

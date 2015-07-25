@@ -1,11 +1,11 @@
 package com.way.adapter;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +18,7 @@ import com.way.weather.plugin.spider.WeatherSpider;
 import com.way.yahoo.R;
 
 public class WeatherListAdapter extends BaseAdapter {
-	private final HashMap<Integer, WeakReference<WeatherBaseView>> mWeatherBaseViews = new HashMap<Integer, WeakReference<WeatherBaseView>>();
+	private final HashMap<Integer, WeatherBaseView> mWeatherBaseViews = new HashMap<Integer, WeatherBaseView>();
 	public static final int FORECAST_TYPE = 0;
 	public static final int WEATHER_DETAILS_TYPE = 1;
 	public static final int AQI_TYPE = 2;
@@ -31,6 +31,23 @@ public class WeatherListAdapter extends BaseAdapter {
 	public WeatherListAdapter(Context context) {
 		mTypes = new ArrayList<Integer>();
 		mLayoutInflater = LayoutInflater.from(context);
+	}
+
+	public void initViews() {
+		if(!mWeatherBaseViews.isEmpty())
+			return;
+		WeatherBaseView convertView = (WeatherBaseView) mLayoutInflater
+				.inflate(R.layout.weather_forecast, null);
+		mWeatherBaseViews.put(FORECAST_TYPE, convertView);
+		convertView = (WeatherBaseView) mLayoutInflater.inflate(
+				R.layout.weather_details, null);
+		mWeatherBaseViews.put(WEATHER_DETAILS_TYPE, convertView);
+		convertView = (WeatherBaseView) mLayoutInflater.inflate(
+				R.layout.weather_aqi, null);
+		mWeatherBaseViews.put(AQI_TYPE, convertView);
+		convertView = (WeatherBaseView) mLayoutInflater.inflate(
+				R.layout.weather_index, null);
+		mWeatherBaseViews.put(INDEX_TYPE, convertView);
 	}
 
 	public void setWeather(WeatherInfo weatherInfo) {
@@ -83,10 +100,11 @@ public class WeatherListAdapter extends BaseAdapter {
 		if (convertView == null
 				|| !convertView.getTag().equals(
 						R.drawable.ic_launcher + itemType)) {
-			final WeakReference<WeatherBaseView> weakFragment = mWeatherBaseViews
+			final WeatherBaseView weakFragment = mWeatherBaseViews
 					.get(itemType);
-			if (weakFragment != null && weakFragment.get() != null) {
-				convertView = weakFragment.get();
+			if (weakFragment != null ) {
+				Log.i("liweiping", "getView..." + "weakFragment = " + weakFragment);
+				convertView = weakFragment;
 			} else {
 				switch (itemType) {
 				case FORECAST_TYPE:
@@ -110,8 +128,8 @@ public class WeatherListAdapter extends BaseAdapter {
 					break;
 				}
 				mWeatherBaseViews.put(itemType,
-						new WeakReference<WeatherBaseView>(
-								(WeatherBaseView) convertView));
+						
+								(WeatherBaseView) convertView);
 			}
 			convertView.setTag(R.drawable.ic_launcher + itemType);
 		}

@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.way.weather.plugin.bean.AQI;
 import com.way.weather.plugin.bean.Alerts;
@@ -20,7 +21,7 @@ public class WeatherSpider {
 			String result) throws JSONException {
 		String language = context.getResources().getConfiguration().locale
 				.toString();
-		JSONObject response = new JSONObject(result);
+		JSONObject response = new JSONObject(TextUtils.isEmpty(result)? "" : result);
 		Forecast forecast = WeatherController.convertToNewForecast(response,
 				language, postID);
 		// Log.i("way", "jsonObjectRequest forecast = " + forecast);

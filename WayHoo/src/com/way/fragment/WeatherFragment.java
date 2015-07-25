@@ -234,8 +234,7 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 				.findViewById(R.id.swiperefresh);
 		mSwipeRefreshLayout.setOnRefreshListener(this);
 		mListView = (ListView) view.findViewById(R.id.drag_list);
-		mWeatherAdapter = new WeatherListAdapter(getActivity());
-		mListView.setAdapter(mWeatherAdapter);
+
 		mNormalImageView = (ImageView) view
 				.findViewById(R.id.weather_background);
 		mBlurredImageView = (ImageView) view
@@ -266,6 +265,8 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		// FrameLayout.LayoutParams.MATCH_PARENT, backgroundHeight));
 
 		mListView.addHeaderView(mListHeaderView, null, false);// 给ListView添加HeaderView
+		mWeatherAdapter = new WeatherListAdapter(getActivity());
+		mListView.setAdapter(mWeatherAdapter);
 		mListView.setOnScrollListener(mOnScrollListener);// 监听滑动
 		initCurWeatherViews(view);
 
@@ -482,6 +483,7 @@ public class WeatherFragment extends Fragment implements ITaskManager,
 		@Override
 		public WeatherInfo workInBackground(Boolean... params)
 				throws TaskException {
+			mWeatherAdapter.initViews();
 			boolean isForce = params[0];
 			WeatherInfo weatherInfo = null;
 			if (isNeedRequestNet() || isForce) {
